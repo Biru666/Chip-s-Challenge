@@ -14,31 +14,46 @@ import javax.swing.JPanel;
  */
 public class Main extends JFrame {
 	private static final long serialVersionUID = 1L;
-	private MazePanel mazePanel = new MazePanel();
-	private GameInfo gameInfo = new GameInfo();
+	private GameController controller = new GameController();
+	private MazeView mazeView = new MazeView();
+	private GameInfoView gameInfoView = new GameInfoView();
+	private Menu menu = new Menu();
 
 	public Main() {
 	}
+
 	private void init() {
 		setTitle("Chap's Challenge");
 		setSize(800, 600);
-		setJMenuBar(new Menu());
+		setJMenuBar(menu);
 		setResizable(false);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setLocationByPlatform(true);
 		JPanel mazeContainer = new JPanel();
 		mazeContainer.setBackground(Color.GREEN);
-		mazeContainer.add(mazePanel);
+		mazeContainer.add(mazeView);
 		this.add(mazeContainer);
 		JPanel infoContainer = new JPanel();
 		infoContainer.setBackground(Color.GREEN);
-		infoContainer.add(gameInfo);
+		infoContainer.add(gameInfoView);
 		infoContainer.setPreferredSize(new Dimension(270, 600));
 		this.add(infoContainer, BorderLayout.EAST);
+	}
+
+	private void equiptController() {
+		menu.setController(controller);
+		mazeView.setController(controller);
+		gameInfoView.setController(controller);
+		controller.setMazePanel(mazeView);
+		controller.setGameInfo(gameInfoView);
+		GameInfoRendererImpl gameInfoRenderer = new GameInfoRendererImpl();
+		gameInfoRenderer.setView(gameInfoView);
+		controller.setGameInfoRenderer(gameInfoRenderer);
 	}
 	public static void main(String[] args) {
 		Main main = new Main();
 		main.init();
+		main.equiptController();
 		main.setVisible(true);
 	}
 }
