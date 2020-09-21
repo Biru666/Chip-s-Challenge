@@ -1,12 +1,22 @@
 package nz.ac.vuw.ecs.swen225.gp20.maze;
 
+/**
+ *  Maze class which stores the current level infomation of the game
+ *  
+ * @author wangding1
+ *
+ */
 public class Maze {
 
-	private Chap chap;
 	private Location[][] locations;
+	private Chap chap;
 
-	public Maze(Location[][] locations) {
-		this.locations = locations;
+
+	public Maze() {
+	}
+	
+	public void setLevel(Location[][] locations) {
+		this.locations=locations;
 	}
 
 	public void move(Actor actor, Direction direction) {
