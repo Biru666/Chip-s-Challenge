@@ -30,7 +30,7 @@ public class Location {
 	}
 
 	/**
-	 * Defualt Tile Location constructor
+	 * Defualt Tile  constructor
 	 * 
 	 * @param x        - the x coordinate in the 2D array
 	 * @param y        - the y coordinate in the 2D array
@@ -41,8 +41,15 @@ public class Location {
 		this.y = y;
 		this.actor = null;
 		this.tile = makeTile(tileName, variation);
-	}
+	} 
 
+	/**
+	 * Helper method for constructing the maze assets based on givin enums
+	 * 
+	 * @param tileName
+	 * @param variation
+	 * @return 
+	 */
 	private Tile makeTile(TileName tileName, Variation variation) {
 
 		switch (tileName) {
@@ -88,9 +95,6 @@ public class Location {
 		return null;
 	}
 
-	
-	
-	
 	public String toString() {
 		return x + " " + y + "\n";
 	}
