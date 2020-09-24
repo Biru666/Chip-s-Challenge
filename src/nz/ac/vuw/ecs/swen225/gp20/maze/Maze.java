@@ -1,5 +1,7 @@
 package nz.ac.vuw.ecs.swen225.gp20.maze;
 
+import java.util.HashMap;
+
 /**
  * Maze class which stores the current level infomation of the game
  * 
@@ -8,20 +10,22 @@ package nz.ac.vuw.ecs.swen225.gp20.maze;
  */
 public class Maze {
 
-	private Location[][] locations = null; // row,col
-	private Chap chap = null;
-
-	public Maze() {
-	}
+	private Location[][] locations; // 2D array of maze locations (row,col)
+	private HashMap<String, Integer> inventory;
+	private int chips;
+	private Chap chap;
 
 	/**
-	 * Sets the current level of the maze
+	 * Sets the current level of the maze with all fields being reset.
 	 * 
 	 * @param locations - 2d Array of Locations
 	 */
 	public void setLevel(Location[][] locations) {
 		this.locations = locations;
-		findChap();
+		this.inventory = new HashMap<>();
+		this.chips = 0;
+		this.chap = findChap(locations);
+		chap.setMaze(this);
 	}
 
 	/**
@@ -70,20 +74,26 @@ public class Maze {
 	/**
 	 * Helper method for finding Chap in the current level
 	 */
-	private void findChap() {
+	private Chap findChap(Location[][] level) {
 		// for each row array
-		for (Location[] row : locations) {
+		for (Location[] row : level) {
 
 			// for each location in row
 			for (Location loc : row) {
 
 				// if actor is chap, set chap
 				if (loc.actor.actorName == ActorName.CHAP)
-					chap = (Chap) loc.actor;
+					return (Chap) loc.actor;
 			}
 		}
+		return null;
 	}
 
+	/**
+	 * testing needs
+	 * 
+	 * @param args - testing
+	 */
 	public static void main(String[] args) {
 		new Maze();
 	}

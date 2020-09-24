@@ -16,10 +16,10 @@ public class Location {
 	Actor actor;
 
 	/**
-	 * Empty tile constructor
+	 * Empty tile constructor.
 	 * 
-	 * @param x - the x coordinate in the 2D array
-	 * @param y - the y coordinate in the 2D array
+	 * @param x - the x coordinate in the 2D array.
+	 * @param y - the y coordinate in the 2D array.
 	 */
 	public Location(int x, int y) {
 		this.x = x;
@@ -30,51 +30,45 @@ public class Location {
 	}
 
 	/**
-	 * Defualt Tile  constructor
+	 * Defualt Tile constructor.
 	 * 
-	 * @param x        - the x coordinate in the 2D array
-	 * @param y        - the y coordinate in the 2D array
-	 * @param tileName - the specified Enum TileName
+	 * @param x         - the x coordinate in the 2D array.
+	 * @param y         - the y coordinate in the 2D array.
+	 * @param tileName  - the specified Enum TileName.
+	 * @param variation - the specified Enum variation, null if no need.
 	 */
 	public Location(int x, int y, TileName tileName, Variation variation) {
 		this.x = x;
 		this.y = y;
 		this.actor = null;
-		this.tile = makeTile(tileName, variation);
-	} 
 
-	/**
-	 * Helper method for constructing the maze assets based on givin enums
-	 * 
-	 * @param tileName
-	 * @param variation
-	 * @return 
-	 */
-	private Tile makeTile(TileName tileName, Variation variation) {
-
+		// Creating Tile object: Tile("name","canMoveOn",canPickUp","variation")
 		switch (tileName) {
-
 		case WALL:
-			return new Wall(tileName, false, false);
+			this.tile = new Wall(tileName, false, false);
+			break;
 		case CHIP:
-			return new Chip(tileName, true, true);
+			this.tile = new Chip(tileName, true, true);
+			break;
 		case KEY:
-			return new Key(tileName, true, true, variation);
+			this.tile = new Key(tileName, true, true, variation);
+			break;
 		case DOOR:
-			return new Door(tileName, false, false, variation);
-
+			this.tile = new Door(tileName, false, false, variation);
+			break;
 		case GATE:
-			return new Gate(tileName, false, false);
-
+			this.tile = new Gate(tileName, false, false);
+			break;
 		case EXIT:
-			return new Exit(tileName, true, false);
-
+			this.tile = new Exit(tileName, true, false);
+			break;
+		default:
+			this.tile = null;
 		}
-		return null;
 	}
 
 	/**
-	 * Default Actor Location constructor
+	 * Default Actor Location constructor.
 	 * 
 	 * @param x         - the x coordinate in the 2D array
 	 * @param y         - the y coordinate in the 2D array
@@ -84,34 +78,22 @@ public class Location {
 		this.x = x;
 		this.y = y;
 		this.tile = null;
-		this.actor = makeActor(actorName);
-	}
 
-	private Actor makeActor(ActorName actorName) {
+		// Creating actor object
 		switch (actorName) {
 		case CHAP:
-			return new Chap(actorName, this);
+			this.actor = new Chap(actorName, this);
+			break;
+		default:
+			this.actor = null;
 		}
-		return null;
 	}
 
+	/**
+	 * testing for x and y location
+	 */
 	public String toString() {
 		return x + " " + y + "\n";
 	}
-
-//	/**
-//	 * Location constructor for both Tile and Actor
-//	 * 
-//	 * @param x         - the x coordinate in the 2D array
-//	 * @param y         - the y coordinate in the 2D array
-//	 * @param tileName  - the specified Enum TileName
-//	 * @param actorName - the specified Enum ActorName
-//	 */
-//	public Location(int x, int y, Tile tile, Actor actor) {
-//		this.x = x;
-//		this.y = y;
-//		this.tile = tile;
-//		this.actor = actor;
-//	}
 
 }

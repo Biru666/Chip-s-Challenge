@@ -1,6 +1,5 @@
 package nz.ac.vuw.ecs.swen225.gp20.maze;
 
-import java.util.HashMap;
 
 /**
  * Chap class which extends Actor which is our main protagonist. Chap will be
@@ -11,11 +10,11 @@ import java.util.HashMap;
  */
 public class Chap extends Actor {
 
-	protected HashMap<String, Integer> inventory = new HashMap<>();
-	protected int chips = 0;
+	Maze maze = null;
 
 	public Chap(ActorName actorName, Location loaction) {
 		super(actorName, loaction);
+
 	}
 
 	public void move(Location newLocation) {
@@ -31,6 +30,10 @@ public class Chap extends Actor {
 
 	private void updatePosition(Location newLocation) {
 
+	}
+
+	public void setMaze(Maze maze) {
+		this.maze = maze;
 	}
 
 //	public boolean moveTo(Location newL) {
