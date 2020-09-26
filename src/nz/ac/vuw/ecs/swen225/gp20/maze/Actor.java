@@ -23,25 +23,50 @@ public abstract class Actor {
 	}
 
 	/**
-	 * Interacts with the next Location with this current actor.
-	 * 
-	 * @param newLocation - exsisting Location
-	 */
-	public abstract void interact(Location newLocation);
-
-	/**
 	 * Moves the actor to the new Location if its valid
 	 * 
 	 * @param newLocation - exsisting Location
 	 */
 	public void move(Location newLocation) {
-		interact(newLocation);
-		
-		Tile tile = newLocation.getTile();
-		if (tile == null)
+		Actor a = newLocation.getActor();
+		Tile t = newLocation.getTile();
+		interact(t, a);
+
+		// if the actor nolonger exsist
+		if (location.getActor() == null)
+			return;
+		if (t == null)
 			doMove(newLocation);
-		else if (tile.canMoveOn())
+		else if (t.canMoveOn())
 			doMove(newLocation);
+	}
+
+	/**
+	 * Manages the interation between actors and tiles
+	 * 
+	 * @param t - Tile
+	 * @param a - Actor
+	 */
+	private void interact(Tile t, Actor a) {
+
+		// collided with another actor, kill each other
+		if (a != null) {
+			kill();
+			a.kill();
+		}
+		// has a tile
+		else if (t != null) {
+			t.interact(this);
+		}
+	}
+
+	/**
+	 * Kills an actor by remove its refrence
+	 * 
+	 */
+	private void kill() {
+		location.setActor(null);
+		location = null;
 	}
 
 	/**

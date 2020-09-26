@@ -9,21 +9,31 @@ package nz.ac.vuw.ecs.swen225.gp20.maze;
 public abstract class Tile {
 
 	private TileName tileName;
+	private Location location;
 	private boolean moveOn;
 	private boolean pickUp;
 
 	/**
 	 * Constructor for creating an Tile on a single location
 	 * 
-	 * @param tileName  - Name of the tile.
-	 * @param canMoveOn - boolean to check if an entity can move on.
-	 * @param canPickUp - boolean to check of Chap can pick it up.
+	 * @param tileName - Name of the tile.
+	 * @param location - Location of the tile.
+	 * @param moveOn   - boolean to check if an entity can move on.
+	 * @param pickUp   - boolean to check of Chap can pick it up.
 	 */
-	public Tile(TileName tileName, boolean moveOn, boolean pickUp) {
+	public Tile(TileName tileName, Location location, boolean moveOn, boolean pickUp) {
 		this.tileName = tileName;
+		this.location = location;
 		this.moveOn = moveOn;
 		this.pickUp = pickUp;
 	}
+
+	/**
+	 * Performs different interactions based on the current child class of Tile
+	 * 
+	 * @param actor - Actor
+	 */
+	protected abstract void interact(Actor actor);
 
 	/**
 	 * @return the tileName

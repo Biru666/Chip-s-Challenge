@@ -1,5 +1,7 @@
 package nz.ac.vuw.ecs.swen225.gp20.maze;
 
+import java.util.HashMap;
+
 /**
  * Chap class which extends Actor which is our main protagonist. Chap will be
  * able to tranverse through-out the maze, gather chips and finish each level.
@@ -9,39 +11,40 @@ package nz.ac.vuw.ecs.swen225.gp20.maze;
  */
 public class Chap extends Actor {
 
-	Maze maze = null;
+	private HashMap<String, Integer> inventory;
+	private int chips;
 
+	/**
+	 * Our protagonist constructor
+	 * 
+	 * @param actorName - Enum actorName
+	 * @param loaction  - Location
+	 */
 	public Chap(ActorName actorName, Location loaction) {
 		super(actorName, loaction);
-
-	}
-
-	@Override
-	public void interact(Location newLocation) {
-		Actor a = newLocation.getActor();
-		Tile t = newLocation.getTile();
-
-		// empty Location
-		if (t == null && a == null)
-			return;
-		// collided with another actor, kill the other
-		else if (a != null && die())
-			return;
-		// has a Tile
-		if(t.canMoveOn())
-	}
-
-	private boolean die() {
-		return true;
+		this.inventory = new HashMap<>();
+		this.chips = 0;
 	}
 
 	/**
-	 * Sets the current maze for chap, if thier is an Chap
-	 * 
-	 * @param maze - Maza class
+	 * @return the inventory
 	 */
-	public void setMaze(Maze maze) {
-		this.maze = maze;
+	public HashMap<String, Integer> getInventory() {
+		return inventory;
+	}
+
+	/**
+	 * @return the chips
+	 */
+	public int getChips() {
+		return chips;
+	}
+
+	/**
+	 * Add one chip
+	 */
+	public void addChips() {
+		chips++;
 	}
 
 //	public boolean moveTo(Location newL) {

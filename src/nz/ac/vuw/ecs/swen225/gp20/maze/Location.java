@@ -3,7 +3,7 @@ package nz.ac.vuw.ecs.swen225.gp20.maze;
 /**
  * Location class which represents a single grid in the game
  * 
- * @author wangding1
+ * @author wangding1 300422014
  *
  */
 public class Location {
@@ -45,22 +45,22 @@ public class Location {
 		// Creating Tile object: Tile("name","canMoveOn",canPickUp","variation")
 		switch (tileName) {
 		case WALL:
-			this.tile = new Wall(tileName, false, false);
+			this.tile = new Wall(tileName, this, false, false);
 			break;
 		case CHIP:
-			this.tile = new Chip(tileName, true, true);
+			this.tile = new Chip(tileName, this, true, true);
 			break;
 		case KEY:
-			this.tile = new Key(tileName, true, true, variation);
+			this.tile = new Key(tileName, this, true, true, variation);
 			break;
 		case DOOR:
-			this.tile = new Door(tileName, false, false, variation);
+			this.tile = new Door(tileName, this, false, false, variation);
 			break;
 		case GATE:
-			this.tile = new Gate(tileName, false, false);
+			this.tile = new Gate(tileName, this, false, false);
 			break;
 		case EXIT:
-			this.tile = new Exit(tileName, true, false);
+			this.tile = new Exit(tileName, this, true, false);
 			break;
 		default:
 			this.tile = null;
@@ -102,7 +102,6 @@ public class Location {
 	public int getY() {
 		return y;
 	}
-
 
 	/**
 	 * @return the tile

@@ -1,18 +1,14 @@
 package nz.ac.vuw.ecs.swen225.gp20.maze;
 
-import java.util.HashMap;
-
 /**
  * Maze class which stores the current level infomation of the game
  * 
- * @author wangding1
+ * @author wangding1 300422014
  *
  */
 public class Maze {
 
 	private Location[][] locations; // 2D array of maze locations (row,col)
-	private HashMap<String, Integer> inventory;
-	private int chips;
 	private Chap chap;
 
 	/**
@@ -22,10 +18,7 @@ public class Maze {
 	 */
 	public void setLevel(Location[][] locations) {
 		this.locations = locations;
-		this.inventory = new HashMap<>();
-		this.chips = 0;
 		this.chap = findChap(locations);
-		chap.setMaze(this);
 	}
 
 	/**
@@ -95,6 +88,13 @@ public class Maze {
 			}
 		}
 		return null;
+	}
+
+	/**
+	 * @return the chap
+	 */
+	public Chap getChap() {
+		return chap;
 	}
 
 	/**
