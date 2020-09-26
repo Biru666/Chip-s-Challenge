@@ -26,6 +26,7 @@ public class Main extends JFrame {
 		setTitle("Chap's Challenge");
 		setSize(800, 600);
 		setJMenuBar(menu);
+		menu.setWindow(this);
 		setResizable(false);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setLocationByPlatform(true);

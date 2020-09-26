@@ -3,12 +3,14 @@ package nz.ac.vuw.ecs.swen225.gp20.application;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
+import java.awt.event.KeyEvent;
 
 import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
+import javax.swing.KeyStroke;
 import javax.swing.SwingConstants;
 
 /**
@@ -36,6 +38,7 @@ public class GameInfoView extends JPanel {
 		levelText.setMaximumSize(levelText.getPreferredSize());
 		levelText.setHorizontalAlignment(SwingConstants.RIGHT);
 		levelText.setFont(new Font(Font.SERIF, Font.BOLD, 28));
+		levelText.getInputMap().put(KeyStroke.getKeyStroke(KeyEvent.VK_X, KeyEvent.CTRL_DOWN_MASK), "");
 		this.add(levelText);
 		JLabel timeLabel = new JLabel("<html><br/><br/><div"+LABEL_STYLE+">TIME</div></html>");
 		this.add(timeLabel);
@@ -45,6 +48,7 @@ public class GameInfoView extends JPanel {
 		timeText.setMaximumSize(levelText.getPreferredSize());
 		timeText.setHorizontalAlignment(SwingConstants.RIGHT);
 		timeText.setFont(new Font(Font.SERIF, Font.BOLD, 28));
+		timeText.getInputMap().put(KeyStroke.getKeyStroke(KeyEvent.VK_X, KeyEvent.CTRL_DOWN_MASK), "");
 		this.add(timeText);
 		JLabel chipsLeftLabel = new JLabel("<html><br/><br/><div"+LABEL_STYLE+">CHIPS<br/>LEFT</div></html>");
 		this.add(chipsLeftLabel);
@@ -54,6 +58,7 @@ public class GameInfoView extends JPanel {
 		chipsLeftText.setMaximumSize(levelText.getPreferredSize());
 		chipsLeftText.setHorizontalAlignment(SwingConstants.RIGHT);
 		chipsLeftText.setFont(new Font(Font.SERIF, Font.BOLD, 28));
+		chipsLeftText.getInputMap().put(KeyStroke.getKeyStroke(KeyEvent.VK_X, KeyEvent.CTRL_DOWN_MASK), "");
 		this.add(chipsLeftText);
 		
 	}
