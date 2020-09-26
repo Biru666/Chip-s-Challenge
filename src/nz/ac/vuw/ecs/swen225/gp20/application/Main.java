@@ -3,9 +3,14 @@ package nz.ac.vuw.ecs.swen225.gp20.application;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
+
+import nz.ac.vuw.ecs.swen225.gp20.maze.Direction;
 
 /**
  * 
@@ -39,6 +44,34 @@ public class Main extends JFrame {
 		infoContainer.add(gameInfoView);
 		infoContainer.setPreferredSize(new Dimension(270, 600));
 		this.add(infoContainer, BorderLayout.EAST);
+		this.setFocusable(true);
+		this.addKeyListener(new KeyAdapter() {
+			private AtomicBoolean isBusy = new AtomicBoolean(false);
+			@Override
+			public void keyPressed(KeyEvent e) {
+				new Thread(() -> {
+					if (isBusy.compareAndSet(false, true)) {
+						switch (e.getKeyCode()) {
+						case KeyEvent.VK_UP:
+							controller.move(Direction.NORTH);
+							break;
+						case KeyEvent.VK_DOWN:
+							controller.move(Direction.SOUTH);
+							break;
+						case KeyEvent.VK_LEFT:
+							controller.move(Direction.WEST);
+							break;
+						case KeyEvent.VK_RIGHT:
+							controller.move(Direction.EAST);
+							break;
+						default:
+							break;
+						}
+						isBusy.set(false);
+					}
+				}).start();
+			}
+		});
 	}
 
 	private void equiptController() {
