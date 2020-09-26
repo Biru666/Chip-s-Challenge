@@ -36,25 +36,30 @@ public class Maze {
 	 */
 	public void move(Actor actor, Direction direction) {
 
-		int currentX = actor.location.x;
-		int currentY = actor.location.y;
+		int currentX = actor.getLocation().getX();
+		int currentY = actor.getLocation().getY();
+		Location newL = null;
 
 		switch (direction) {
 		case NORTH:
-			if (isValidLocation(currentX, currentY - 1))
-				actor.move(locations[currentY - 1][currentX]);
+			if ((newL = getValidLocation(currentX, currentY - 1)) != null) {
+				actor.move(newL);
+			}
 			break;
 		case SOUTH:
-			if (isValidLocation(currentX, currentY + 1))
-				actor.move(locations[currentY + 1][currentX]);
+			if ((newL = getValidLocation(currentX, currentY + 1)) != null) {
+				actor.move(newL);
+			}
 			break;
 		case EAST:
-			if (isValidLocation(currentX + 1, currentY))
-				actor.move(locations[currentY][currentX + 1]);
+			if ((newL = getValidLocation(currentX + 1, currentY)) != null) {
+				actor.move(newL);
+			}
 			break;
 		case WEST:
-			if (isValidLocation(currentX - 1, currentY))
-				actor.move(locations[currentY][currentX - 1]);
+			if ((newL = getValidLocation(currentX - 1, currentY)) != null) {
+				actor.move(newL);
+			}
 			break;
 		}
 	}
@@ -64,11 +69,14 @@ public class Maze {
 	 * 
 	 * @param newX - x axis
 	 * @param newY - y axis
-	 * @return true/false
+	 * @return newL - new Location
 	 */
-	private boolean isValidLocation(int newX, int newY) {
-		return (newX >= 0 && newX <= locations[0].length) && (newY >= 0 && newY <= locations.length);
-
+	private Location getValidLocation(int newX, int newY) {
+		Location newL = null;
+		if ((newX >= 0 && newX <= locations[0].length) && (newY >= 0 && newY <= locations.length)) {
+			newL = locations[newX][newY];
+		}
+		return newL;
 	}
 
 	/**
@@ -82,8 +90,8 @@ public class Maze {
 			for (Location loc : row) {
 
 				// if actor is chap, set chap
-				if (loc.actor.actorName == ActorName.CHAP)
-					return (Chap) loc.actor;
+				if (loc.getActor().getActorName() == ActorName.CHAP)
+					return (Chap) loc.getActor();
 			}
 		}
 		return null;

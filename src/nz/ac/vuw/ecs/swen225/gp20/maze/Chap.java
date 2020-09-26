@@ -1,6 +1,5 @@
 package nz.ac.vuw.ecs.swen225.gp20.maze;
 
-
 /**
  * Chap class which extends Actor which is our main protagonist. Chap will be
  * able to tranverse through-out the maze, gather chips and finish each level.
@@ -17,21 +16,30 @@ public class Chap extends Actor {
 
 	}
 
-	public void move(Location newLocation) {
-		Tile tile = newLocation.tile;
+	@Override
+	public void interact(Location newLocation) {
+		Actor a = newLocation.getActor();
+		Tile t = newLocation.getTile();
 
-		if (tile == null) {
-			updatePosition(newLocation);
-		} else if (tile.canMoveOn == true) {
-
-		}
-
+		// empty Location
+		if (t == null && a == null)
+			return;
+		// collided with another actor, kill the other
+		else if (a != null && die())
+			return;
+		// has a Tile
+		if(t.canMoveOn())
 	}
 
-	private void updatePosition(Location newLocation) {
-
+	private boolean die() {
+		return true;
 	}
 
+	/**
+	 * Sets the current maze for chap, if thier is an Chap
+	 * 
+	 * @param maze - Maza class
+	 */
 	public void setMaze(Maze maze) {
 		this.maze = maze;
 	}

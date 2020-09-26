@@ -8,9 +8,9 @@ package nz.ac.vuw.ecs.swen225.gp20.maze;
  */
 public abstract class Tile {
 
-	protected TileName tileName;
-	protected boolean canMoveOn;
-	protected boolean canPickUp;
+	private TileName tileName;
+	private boolean moveOn;
+	private boolean pickUp;
 
 	/**
 	 * Constructor for creating an Tile on a single location
@@ -19,10 +19,31 @@ public abstract class Tile {
 	 * @param canMoveOn - boolean to check if an entity can move on.
 	 * @param canPickUp - boolean to check of Chap can pick it up.
 	 */
-	public Tile(TileName tileName, boolean canMoveOn, boolean canPickUp) {
+	public Tile(TileName tileName, boolean moveOn, boolean pickUp) {
 		this.tileName = tileName;
-		this.canMoveOn = canMoveOn;
-		this.canPickUp = canPickUp;
+		this.moveOn = moveOn;
+		this.pickUp = pickUp;
+	}
+
+	/**
+	 * @return the tileName
+	 */
+	public TileName getTileName() {
+		return tileName;
+	}
+
+	/**
+	 * @return the moveOn boolean
+	 */
+	public boolean canMoveOn() {
+		return moveOn;
+	}
+
+	/**
+	 * @return the pickUp boolean
+	 */
+	public boolean canPickUp() {
+		return pickUp;
 	}
 
 }

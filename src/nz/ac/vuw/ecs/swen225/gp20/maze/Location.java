@@ -9,11 +9,11 @@ package nz.ac.vuw.ecs.swen225.gp20.maze;
 public class Location {
 
 	// 2D array coordinates
-	int x, y;
+	private int x, y;
 
 	// Grid componants
-	Tile tile;
-	Actor actor;
+	private Tile tile;
+	private Actor actor;
 
 	/**
 	 * Empty tile constructor.
@@ -87,6 +87,49 @@ public class Location {
 		default:
 			this.actor = null;
 		}
+	}
+
+	/**
+	 * @return the x
+	 */
+	public int getX() {
+		return x;
+	}
+
+	/**
+	 * @return the y
+	 */
+	public int getY() {
+		return y;
+	}
+
+
+	/**
+	 * @return the tile
+	 */
+	public Tile getTile() {
+		return tile;
+	}
+
+	/**
+	 * @param tile the tile to set
+	 */
+	public void setTile(Tile tile) {
+		this.tile = tile;
+	}
+
+	/**
+	 * @return the actor
+	 */
+	public Actor getActor() {
+		return actor;
+	}
+
+	/**
+	 * @param actor the actor to set
+	 */
+	public void setActor(Actor actor) {
+		this.actor = actor;
 	}
 
 	/**
