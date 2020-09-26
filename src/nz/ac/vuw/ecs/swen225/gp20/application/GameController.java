@@ -1,7 +1,6 @@
 package nz.ac.vuw.ecs.swen225.gp20.application;
 
 import java.awt.event.ActionEvent;
-import java.util.Random;
 
 public class GameController {
 	private MazeView mazePanel;
@@ -12,7 +11,16 @@ public class GameController {
 		System.out.println("start level 1");
 		// Maze - get a new Maze from level 1.
 		GameInfoModel gameInfoModel = new GameInfoModel();
-		gameInfoModel.setLevel(new Random().nextInt(10));
+		gameInfoModel.setLevel(3);
+		gameInfoRenderer.render(gameInfoModel);
+		return null;
+	}
+
+	public SwingAction saveLevel() {
+		System.out.println("saving level");
+		// Maze - get a new Maze from level 1.
+		GameInfoModel gameInfoModel = new GameInfoModel();
+		gameInfoModel.setLevel(2);
 		gameInfoRenderer.render(gameInfoModel);
 		return null;
 	}
