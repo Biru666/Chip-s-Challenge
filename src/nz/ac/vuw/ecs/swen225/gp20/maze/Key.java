@@ -9,8 +9,10 @@ public class Key extends Tile {
 
 	@Override
 	protected void interact(Actor actor) {
-		// TODO Auto-generated method stub
-		
+		if (actor instanceof Chap) {
+			((Chap) actor).addItem(createItemName(variation));
+			kill();
+		}
 	}
 
 }

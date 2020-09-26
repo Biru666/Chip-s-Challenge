@@ -25,6 +25,7 @@ public class Chip extends Tile {
 	protected void interact(Actor actor) {
 		if (actor instanceof Chap) {
 			((Chap) actor).addChips();
+			kill();
 		}
 	}
 }
