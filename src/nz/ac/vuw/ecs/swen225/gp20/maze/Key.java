@@ -1,5 +1,12 @@
 package nz.ac.vuw.ecs.swen225.gp20.maze;
 
+/**
+ * Key class for creating the key Tile which can be picked up and unlocks
+ * certain doors
+ * 
+ * @author wangding1 300422014
+ *
+ */
 public class Key extends Tile {
 	Variation variation;
 
