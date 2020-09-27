@@ -15,11 +15,13 @@ public class Key extends Tile {
 	}
 
 	@Override
-	protected void interact(Actor actor) {
+	protected Action interact(Actor actor) {
 		if (actor instanceof Chap) {
-			((Chap) actor).addItem(createItemName(variation));
+			((Chap) actor).addItem(createItemName(TileName.KEY, variation));
 			kill();
+			return Action.ITEM;
 		}
+		return null;
 	}
 
 }

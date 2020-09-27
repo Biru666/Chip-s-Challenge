@@ -8,9 +8,11 @@ public class Exit extends Tile {
 	}
 
 	@Override
-	protected void interact(Actor actor) {
-		// TODO Auto-generated method stub
-		
+	protected Action interact(Actor actor) {
+		if (actor instanceof Chap) {
+			return Action.EXIT;
+		}
+		return null;
 	}
 
 }

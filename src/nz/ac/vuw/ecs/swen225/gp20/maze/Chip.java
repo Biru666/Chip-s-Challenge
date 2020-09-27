@@ -22,10 +22,12 @@ public class Chip extends Tile {
 	}
 
 	@Override
-	protected void interact(Actor actor) {
+	protected Action interact(Actor actor) {
 		if (actor instanceof Chap) {
 			((Chap) actor).addChips();
 			kill();
+			return Action.ITEM;
 		}
+		return null;
 	}
 }

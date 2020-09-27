@@ -27,18 +27,17 @@ public abstract class Actor {
 	 * 
 	 * @param newLocation - exsisting Location
 	 */
-	public void move(Location newLocation) {
+	public Action move(Location newLocation) {
 		Actor a = newLocation.getActor();
 		Tile t = newLocation.getTile();
-		interact(t, a);
+		Action action = interact(t, a);
 
 		// if the actor nolonger exsist
 		if (location.getActor() == null)
-			return;
-		if (t == null)
+			return action;
+		if (t == null || t.canMoveOn())
 			doMove(newLocation);
-		else if (t.canMoveOn())
-			doMove(newLocation);
+		return action;
 	}
 
 	/**
@@ -46,25 +45,15 @@ public abstract class Actor {
 	 * 
 	 * @param t - Tile
 	 * @param a - Actor
+	 * @return Action enum
 	 */
-	private void interact(Tile t, Actor a) {
-
-		// collided with another actor, kill each other
-		if (a != null) {
-			kill();
-			a.kill();
-		}
-		// has a tile
-		else if (t != null) {
-			t.interact(this);
-		}
-	}
+	public abstract Action interact(Tile t, Actor a);
 
 	/**
 	 * Kills an actor by remove its refrence
 	 * 
 	 */
-	private void kill() {
+	public void kill() {
 		location.setActor(null);
 		location = null;
 	}
