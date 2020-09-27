@@ -1,5 +1,9 @@
 package nz.ac.vuw.ecs.swen225.gp20.maze;
 
+/**
+ * @author wangding1 300422014
+ *
+ */
 public class Info extends Tile {
 
 	public Info(TileName tileName, Location location, boolean moveOn, boolean pickUp) {
