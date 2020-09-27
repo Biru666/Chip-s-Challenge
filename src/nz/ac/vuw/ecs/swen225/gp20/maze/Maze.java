@@ -81,6 +81,8 @@ public class Maze {
 	 * Helper method for finding Chap in the current level
 	 */
 	private Chap findChap(Location[][] level) {
+		Chap c = null;
+		int totChips = 0;
 		// for each row array
 		for (Location[] row : level) {
 
@@ -89,10 +91,14 @@ public class Maze {
 
 				// if actor is chap, set chap
 				if (loc.getActor().getActorName() == ActorName.CHAP)
-					return (Chap) loc.getActor();
+					c = (Chap) loc.getActor();
+				if (loc.getTile().getTileName() == TileName.CHIP)
+					totChips++;
 			}
 		}
-		return null;
+		if (c != null)
+			c.setTotalChips(totChips);
+		return c;
 	}
 
 	/**

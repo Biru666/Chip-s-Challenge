@@ -10,9 +10,12 @@ public class Gate extends Tile {
 	@Override
 	protected Action interact(Actor actor) {
 		if (actor instanceof Chap) {
-			asd
-			kill();
-			return Action.DOOR;
+			Chap c = (Chap) actor;
+			if (c.getChips() == c.getTotalChips()) {
+				kill();
+				return Action.DOOR;
+			}
+			return Action.WALL;
 		}
 		return null;
 	}

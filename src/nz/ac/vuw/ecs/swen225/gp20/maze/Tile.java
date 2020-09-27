@@ -50,8 +50,8 @@ public abstract class Tile {
 	 * @param variation
 	 * @return
 	 */
-	public String createItemName(Variation variation) {
-		return tileName.toString() + " " + variation.toString();
+	public String createItemName(TileName t, Variation v) {
+		return t.toString() + " " + v.toString();
 	}
 
 	/**
