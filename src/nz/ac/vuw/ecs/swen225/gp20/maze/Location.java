@@ -62,6 +62,9 @@ public class Location {
 		case EXIT:
 			this.tile = new Exit(tileName, this, true, false);
 			break;
+		case INFO:
+			this.tile = new Info(tileName, this, true, false);
+			break;
 		default:
 			this.tile = null;
 		}

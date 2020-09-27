@@ -47,6 +47,32 @@ public class Chap extends Actor {
 		chips++;
 	}
 
+	/**
+	 * Adds an item based on a custom string
+	 * 
+	 * @param s - String key
+	 */
+	public void addItem(String s) {
+		// alredy has the key, +1 extra count
+		if (inventory.containsKey(s))
+			inventory.put(s, inventory.get(s) + 1);
+		// no key yet, adds 1
+		else
+			inventory.put(s, 1);
+	}
+
+	/**
+	 * Removes an Item from the map with a custom String
+	 * 
+	 * @param s - String key
+	 */
+	public void removeItem(String s) {
+		if (inventory.get(s) > 1)
+			inventory.put(s, inventory.get(s) - 1);
+		else
+			inventory.remove(s);
+	}
+
 //	public boolean moveTo(Location newL) {
 //
 //		if (newL.getTile() == null) {

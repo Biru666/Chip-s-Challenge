@@ -36,10 +36,35 @@ public abstract class Tile {
 	protected abstract void interact(Actor actor);
 
 	/**
+	 * Destoryes the current tile by deleting its refrences
+	 */
+	public void kill() {
+		location.setTile(null);
+		location = null;
+	}
+
+	/**
+	 * Create an String based on the tile name and variation
+	 * 
+	 * @param variation
+	 * @return
+	 */
+	public String createItemName(Variation variation) {
+		return tileName.toString() + " " + variation.toString();
+	}
+
+	/**
 	 * @return the tileName
 	 */
 	public TileName getTileName() {
 		return tileName;
+	}
+
+	/**
+	 * @return the location
+	 */
+	public Location getLocation() {
+		return location;
 	}
 
 	/**
