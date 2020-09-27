@@ -108,6 +108,10 @@ public class Maze {
 		return chap;
 	}
 
+	public Action getAction() {
+		return action;
+	}
+
 	/**
 	 * testing needs
 	 * 
