@@ -1,7 +1,7 @@
 package nz.ac.vuw.ecs.swen225.gp20.maze;
 
 /**
- * Action enums
+ * Action enums testing
  * 
  * @author wangding1 300422014
  *
