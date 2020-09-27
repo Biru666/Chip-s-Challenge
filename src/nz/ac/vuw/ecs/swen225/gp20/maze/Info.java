@@ -7,15 +7,10 @@ public class Info extends Tile {
 	}
 
 	@Override
-	protected void interact(Actor actor) {
-		if (actor instanceof Chap) {
-			display();
-		}
-	}
-
-	private void display() {
-		// TODO Auto-generated method stub
-		
+	protected Action interact(Actor actor) {
+		if (actor instanceof Chap)
+			return Action.INFO;
+		return null;
 	}
 
 }

@@ -10,6 +10,7 @@ public class Maze {
 
 	private Location[][] locations; // 2D array of maze locations (row,col)
 	private Chap chap;
+	private Action action;
 
 	/**
 	 * Sets the current level of the maze with all fields being reset.
@@ -22,37 +23,42 @@ public class Maze {
 	}
 
 	/**
+	 * Moves chap from invoking move method
+	 * 
+	 * @param direction - Direction enum
+	 */
+	public void moveChap(Direction direction) {
+		move(chap, direction);
+	}
+
+	/**
 	 * Moves the desierd actor in a given direction
 	 * 
 	 * @param actor     - Actor object
 	 * @param direction - Direction enum
 	 */
 	public void move(Actor actor, Direction direction) {
-
 		int currentX = actor.getLocation().getX();
 		int currentY = actor.getLocation().getY();
+		action = Action.INVALID;
 		Location newL = null;
 
 		switch (direction) {
 		case NORTH:
-			if ((newL = getValidLocation(currentX, currentY - 1)) != null) {
-				actor.move(newL);
-			}
+			if ((newL = getValidLocation(currentX, currentY - 1)) != null)
+				action = actor.move(newL);
 			break;
 		case SOUTH:
-			if ((newL = getValidLocation(currentX, currentY + 1)) != null) {
-				actor.move(newL);
-			}
+			if ((newL = getValidLocation(currentX, currentY + 1)) != null)
+				action = actor.move(newL);
 			break;
 		case EAST:
-			if ((newL = getValidLocation(currentX + 1, currentY)) != null) {
-				actor.move(newL);
-			}
+			if ((newL = getValidLocation(currentX + 1, currentY)) != null)
+				action = actor.move(newL);
 			break;
 		case WEST:
-			if ((newL = getValidLocation(currentX - 1, currentY)) != null) {
-				actor.move(newL);
-			}
+			if ((newL = getValidLocation(currentX - 1, currentY)) != null)
+				action = actor.move(newL);
 			break;
 		}
 	}
@@ -66,9 +72,8 @@ public class Maze {
 	 */
 	private Location getValidLocation(int newX, int newY) {
 		Location newL = null;
-		if ((newX >= 0 && newX <= locations[0].length) && (newY >= 0 && newY <= locations.length)) {
+		if ((newX >= 0 && newX <= locations[0].length) && (newY >= 0 && newY <= locations.length))
 			newL = locations[newX][newY];
-		}
 		return newL;
 	}
 

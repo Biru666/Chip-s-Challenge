@@ -32,8 +32,9 @@ public abstract class Tile {
 	 * Performs different interactions based on the current child class of Tile
 	 * 
 	 * @param actor - Actor
+	 * @return Action enum
 	 */
-	protected abstract void interact(Actor actor);
+	protected abstract Action interact(Actor actor);
 
 	/**
 	 * Destoryes the current tile by deleting its refrences

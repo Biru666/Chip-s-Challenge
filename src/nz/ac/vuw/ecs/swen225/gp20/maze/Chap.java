@@ -26,6 +26,21 @@ public class Chap extends Actor {
 		this.chips = 0;
 	}
 
+	@Override
+	public Action interact(Tile t, Actor a) {
+		// collided with another actor, kill each other
+		if (a != null) {
+			kill();
+			a.kill();
+			return Action.DIE;
+		}
+		// has a tile
+		if (t != null) {
+			return t.interact(this);
+		}
+		return Action.MOVE;
+	}
+
 	/**
 	 * @return the inventory
 	 */

@@ -10,9 +10,13 @@ public class Door extends Tile {
 	}
 
 	@Override
-	protected void interact(Actor actor) {
-		// TODO Auto-generated method stub
-		
+	protected Action interact(Actor actor) {
+		if (actor instanceof Chap) {
+			asd
+			kill();
+			return Action.DOOR;
+		}
+		return null;
 	}
 
 }
