@@ -14,7 +14,7 @@ public class GameController {
 
 	public SwingAction startLevel1(ActionEvent e) {
 		System.out.println("start level 1");
-		Parser parser = new Parser(GameController.class.getResource("/level1.json").getPath());
+		Parser parser = new Parser(GameController.class.getResource("levels/level1.json").getPath());
 		
 		// Maze - get a new Maze from level 1.
 		GameInfoModel gameInfoModel = new GameInfoModel();
