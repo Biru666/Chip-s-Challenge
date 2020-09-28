@@ -4,5 +4,5 @@
 | Application       | Conglang Wang    | wangcong@ecs.vuw.ac.nz     |
 | Renderer          |                  |                            |
 | Persistence       |                  |                            |
-| Record and Replay |                  |                            |
+| Record and Replay | Jasmine Liang    | liangyaxi@ecs.vuw.ac.nz    |
 | Monkey Test       |                  |                            |
