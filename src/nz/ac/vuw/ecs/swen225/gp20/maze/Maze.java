@@ -88,11 +88,14 @@ public class Maze {
 
 			// for each location in row
 			for (Location loc : row) {
+				Actor a = loc.getActor();
+				Tile t = loc.getTile();
 
 				// if actor is chap, set chap
-				if (loc.getActor().getActorName() == ActorName.CHAP)
-					c = (Chap) loc.getActor();
-				if (loc.getTile().getTileName() == TileName.CHIP)
+				if (a != null && a.getActorName() == ActorName.CHAP)
+					c = (Chap) a;
+
+				if (t != null && t.getTileName() == TileName.CHIP)
 					totChips++;
 			}
 		}
