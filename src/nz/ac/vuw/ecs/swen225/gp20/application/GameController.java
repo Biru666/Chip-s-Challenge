@@ -19,7 +19,9 @@ public class GameController {
 		// Maze - get a new Maze from level 1.
 		GameInfoModel gameInfoModel = new GameInfoModel();
 		gameInfoModel.setLevel(3);
+		gameInfoModel.setTime(10);
 		gameInfoRenderer.render(gameInfoModel);
+		gameInfoRenderer.countdown();
 		return null;
 	}
 
@@ -39,6 +41,17 @@ public class GameController {
 		} catch (Exception e) {
 			System.out.println(e.getMessage());
 		}
+		return null;
+	}
+
+	public SwingAction pause() {
+		System.out.println("pre pause");
+		gameInfoRenderer.pause();
+		System.out.println("post pause");
+		return resume();
+	}
+
+	public SwingAction resume() {
 		return null;
 	}
 
