@@ -37,7 +37,7 @@ public abstract class Tile {
 	protected abstract Action interact(Actor actor);
 
 	/**
-	 * Destoryes the current tile by deleting its refrences
+	 * Destroys the current tile by deleting its references
 	 */
 	public void kill() {
 		location.setTile(null);

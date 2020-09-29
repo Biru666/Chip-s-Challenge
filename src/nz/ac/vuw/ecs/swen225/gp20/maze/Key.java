@@ -8,7 +8,7 @@ package nz.ac.vuw.ecs.swen225.gp20.maze;
  *
  */
 public class Key extends Tile {
-	Variation variation;
+	private Variation variation;
 
 	public Key(TileName tileName, Location location, boolean canMoveOn, boolean canPickup, Variation variation) {
 		super(tileName, location, canMoveOn, canPickup);
@@ -23,6 +23,14 @@ public class Key extends Tile {
 			return Action.ITEM;
 		}
 		return null;
+	}
+
+	/**
+	 * 
+	 * @return returns the variation
+	 */
+	public Variation getVariation() {
+		return this.variation;
 	}
 
 }
