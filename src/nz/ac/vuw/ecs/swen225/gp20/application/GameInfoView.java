@@ -7,7 +7,9 @@ import java.awt.event.KeyEvent;
 
 import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
+import javax.swing.JDialog;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.KeyStroke;
@@ -21,6 +23,8 @@ import javax.swing.SwingConstants;
 public class GameInfoView extends JPanel {
 	private static final long serialVersionUID = 1L;
 	private static final String LABEL_STYLE = " style=\"color: red; font-size: 24px;\"";
+	private Main window;
+	private JDialog dialog;
 	private GameController controller;
 	private JTextField levelText;
 	private JTextField timeText;
@@ -65,7 +69,28 @@ public class GameInfoView extends JPanel {
 	public void setController(GameController controller) {
 		this.controller = controller;
 	}
-	public void updateLevelText(String value) {
+	public void setLevelText(String value) {
 		levelText.setText(value);
+	}
+	public String getLevelText() {
+		return levelText.getText();
+	}
+	public String getTimeText() {
+		return timeText.getText();
+	}
+	public void setTimeText(String timeText) {
+		this.timeText.setText(timeText);
+	}
+	public String getChipsLeftText() {
+		return chipsLeftText.getText();
+	}
+	public void setChipsLeftText(String chipsLeftText) {
+		this.chipsLeftText.setText(chipsLeftText);
+	}
+	public void setWindow(Main window) {
+		this.window = window;
+	}
+	public void showPauseDialog() {
+		JOptionPane.showMessageDialog(window, "Game Paused. ESC or click on OK to resume.");
 	}
 }

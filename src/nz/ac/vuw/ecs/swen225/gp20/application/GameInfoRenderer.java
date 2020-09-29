@@ -7,4 +7,9 @@ package nz.ac.vuw.ecs.swen225.gp20.application;
  */
 public interface GameInfoRenderer {
 	void render(Model model);
+
+	void countdown();
+
+	void pause();
+
 }
