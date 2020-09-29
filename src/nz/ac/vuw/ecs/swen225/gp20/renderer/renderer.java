@@ -1,4 +1,4 @@
-package nz.ac.vuw.ecs.swen225.gp20;
+package nz.ac.vuw.ecs.swen225.gp20.renderer;
 
 /**
  * The rendering module is responsible for providing a simple 2-dimensional view

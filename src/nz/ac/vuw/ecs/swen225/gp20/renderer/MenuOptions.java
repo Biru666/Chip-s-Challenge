@@ -1,4 +1,4 @@
-package nz.ac.vuw.ecs.swen225.gp20;
+package nz.ac.vuw.ecs.swen225.gp20.renderer;
 
 import javax.swing.*;
 import java.awt.*;
