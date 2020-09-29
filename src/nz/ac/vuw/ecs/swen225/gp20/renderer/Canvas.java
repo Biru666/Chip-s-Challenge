@@ -23,7 +23,6 @@ public class Canvas extends JPanel {
   private Main GUI = new Main();
   private JLabel[][] displayTiles = new JLabel[VIEW_SIZE][VIEW_SIZE];
   private Tile[][] gameTiles = null;
-	
   private double width = 500; 
   private double height = 500;
 
