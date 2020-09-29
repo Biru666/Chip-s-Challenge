@@ -12,6 +12,7 @@ public class Key extends Tile {
 
 	public Key(TileName tileName, Location location, boolean canMoveOn, boolean canPickup, Variation variation) {
 		super(tileName, location, canMoveOn, canPickup);
+		this.variation = variation;
 	}
 
 	@Override

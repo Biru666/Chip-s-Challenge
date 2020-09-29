@@ -18,7 +18,10 @@ class MazeValidTest {
 	void test_moveChap() {
 		Maze m = new Maze();
 		m.setLevel(makeLocation());
-		
+		Location l = m.getChap().getLocation();
+		m.moveChap(Direction.NORTH);
+		assertTrue(m.getChap().getLocation() != l);
+
 	}
 
 	@Test
