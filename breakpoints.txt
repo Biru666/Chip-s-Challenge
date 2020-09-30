@@ -3,3 +3,9 @@ application:
 		line 17: call to persistence
 		line 18: call to maze to start level 1
 		line 41: call to maze to move the chap
+
+recnplay:
+	RecordAndReplay.java
+		line 129: call to persistence
+		line 142: call to maze
+		line 146: call to maze
