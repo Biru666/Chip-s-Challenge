@@ -29,7 +29,6 @@ import nz.ac.vuw.ecs.swen225.gp20.maze.Tile;
 import nz.ac.vuw.ecs.swen225.gp20.maze.TileName;
 import nz.ac.vuw.ecs.swen225.gp20.maze.Variation;
 
-//import nz.ac.vuw.ecs.swen225.gp20.maze.Direction;
 
 
 /**
@@ -41,27 +40,38 @@ public class RecordAndReplay {
 	private static String fileName;
 	private static ArrayList<KeyEvent> actions = new ArrayList<KeyEvent>();
 	private static boolean isRecording = false;
+	private static String gameState;
 
+	/**
+	 * To start a new record
+	 * @param name
+	 */
 	public static void startNewRecord(String name) {
 		actions.clear();
 		isRecording = true;
 		fileName = name;
+		gameState = getGameState();
 	}
 	
+	/**
+	 * Add actions to the action list
+	 * @param e
+	 */
 	public static void addAction(KeyEvent e) {
 		if(isRecording) {
 			actions.add(e);
 		}
 	}
 	
+	/**
+	 * Save recording to json file
+	 */
 	public static void saveRecording() {
 		if(isRecording) {
-			String gameState = null;
 			/** if using the saveGame in persistence package
 			 * SaveGame s = new SaveGame(maze, currentState);
 			 * gameState = s.save();
 			*/
-			//gameState = getGameState();
 			JsonArrayBuilder arrayBuilder = Json.createArrayBuilder();
 			for (int i = 0; i < actions.size(); ++i) {
 				KeyEvent e = actions.get(i);
@@ -109,35 +119,52 @@ public class RecordAndReplay {
 		
 	}
 	
+	/**
+	 * Get the game state
+	 * @return
+	 */
 	private static String getGameState() {
 		String gamestate = null;
 		Location[][]map = null;
-		Parser parser = new Parser(GameController.class.getResource("/level1.json").getPath());
+		Parser parser = new Parser("levels/level1.json");
 		map = parser.map;
 		for(int i=0; i<map.length; i++) {
 			for(int j=0; j<map[0].length; j++) {
 				String gs = null;
 				Location object = map[i][j];
-				TileName tileName = object.getTile().getTileName();
-				ActorName actorName = object.getActor().getActorName();
-				switch(actorName) {
-				case CHAP:
-					gs = "1";
+				System.out.println(object.toString());
+				if(object.toString().equals("_")) {
+					gs = "1, ";
 					gamestate = add(gamestate,gs);
 					break;
-				case BOT:
-					gs = "15";
-					gamestate = add(gamestate,gs);
+				}
+				TileName tileName = null;
+				if(object.getTile()!=null) {
+					tileName = object.getTile().getTileName();
+				}
+				ActorName actorName = null;
+				if(object.getActor()!=null) {
+					actorName = object.getActor().getActorName();
+					switch(actorName) {
+					case CHAP:
+						gs = "0, ";
+						gamestate = add(gamestate,gs);
+						break;
+					case BOT:
+						gs = "15, ";
+						gamestate = add(gamestate,gs);
+						break;
+					}
 				}
 				switch (tileName) {
 				// wall tile
 				case WALL:
-					gs = "2";
+					gs = "2, ";
 					gamestate = add(gamestate,gs);
 					break;
 				// chips
 				case CHIP:
-					gs = "3";
+					gs = "3, ";
 					gamestate = add(gamestate,gs);
 					break;
 				// Key
@@ -146,19 +173,19 @@ public class RecordAndReplay {
 					Variation v = k.getVariation();
 					switch(v) {
 					case YELLOW:
-						gs = "4";
+						gs = "4, ";
 						gamestate = add(gamestate,gs);
 						break;
 					case RED:
-						gs = "5";
+						gs = "5, ";
 						gamestate = add(gamestate,gs);
 						break;
 					case GREEN:
-						gs = "6";
+						gs = "6, ";
 						gamestate = add(gamestate,gs);
 						break;
 					case BLUE:
-						gs = "7";
+						gs = "7, ";
 						gamestate = add(gamestate,gs);
 						break;
 					}
@@ -168,40 +195,35 @@ public class RecordAndReplay {
 					Variation v2 = d.getVariation();
 					switch(v2) {
 					case YELLOW:
-						gs = "8";
+						gs = "8, ";
 						gamestate = add(gamestate,gs);
 						break;
 					case RED:
-						gs = "9";
+						gs = "9, ";
 						gamestate = add(gamestate,gs);
 						break;
 					case GREEN:
-						gs = "10";
+						gs = "10, ";
 						gamestate = add(gamestate,gs);
 						break;
 					case BLUE:
-						gs = "11";
+						gs = "11, ";
 						gamestate = add(gamestate,gs);
 						break;
 					}
 				// Gate
 				case GATE:
-					gs = "12";
+					gs = "12, ";
 					gamestate = add(gamestate,gs);
 					break;
 				// Portal
 				case EXIT:
-					gs = "13";
+					gs = "13, ";
 					gamestate = add(gamestate,gs);
 					break;
 				// Help
 				case INFO:
-					gs = "14";
-					gamestate = add(gamestate,gs);
-					break;
-				// Sand
-				default:
-					gs = "34";
+					gs = "14, ";
 					gamestate = add(gamestate,gs);
 					break;
 				}
@@ -210,19 +232,37 @@ public class RecordAndReplay {
 		return gamestate;
 	}
 	
+	/**
+	 * Help method for adding two strings
+	 * @param s1
+	 * @param s2
+	 * @return
+	 */
 	private static String add(String s1, String s2) {
 		return s1+s2;
 	}
 	
+	/**
+	 * Get isRecording
+	 * @return
+	 */
 	public static boolean isRecording() {
 		if(isRecording) return true;
 		return false;
 	}
 	
+	/**
+	 * Get actions list
+	 * @return
+	 */
 	public ArrayList<KeyEvent> getActions(){
 		return actions;
 	}
 	
+	/**
+	 * Get file name
+	 * @return
+	 */
 	public String getFileName() {
 		return fileName;
 	}
