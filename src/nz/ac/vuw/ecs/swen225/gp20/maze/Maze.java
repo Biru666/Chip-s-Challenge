@@ -135,6 +135,10 @@ public class Maze {
 		}
 		return s;
 	}
+	
+	public Location[][] getLocation() {
+		return locations;
+	}
 
 	/**
 	 * testing needs

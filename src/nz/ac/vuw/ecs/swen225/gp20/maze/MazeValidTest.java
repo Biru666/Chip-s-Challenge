@@ -16,7 +16,24 @@ class MazeValidTest {
 	}
 
 	@Test
-	void test_moveChap() {
+	void test_stringMap() {
+		Maze m = makeMaze();
+		String map = 	"w w w w w w w w \n" + 
+						"w d _ _ _ _ d w \n" + 
+						"w k _ _ _ _ k w \n" + 
+						"w _ _ _ _ _ _ w \n" + 
+						"w c c _ _ _ _ w \n" + 
+						"w _ _ _ _ C i w \n" + 
+						"w _ _ _ e _ g w \n" + 
+						"w w w w w w w w \n";
+		// Checks
+		assertTrue(m.toString().equals(map));
+		assertTrue(m.getChap() != null);
+		assertTrue(m.getAction() == null);
+	}
+
+	@Test
+	void test_move() {
 		Maze m = makeMaze();
 
 		// Moves
@@ -29,7 +46,7 @@ class MazeValidTest {
 	}
 
 	@Test
-	void test_moveChapInfo() {
+	void test_moveToInfo() {
 		Maze m = makeMaze();
 
 		// Moves
@@ -39,11 +56,24 @@ class MazeValidTest {
 		// Checks
 		assertTrue(l != m.getChap().getLocation()); // Valid move, location can't be the same
 		assertTrue(m.getAction() == Action.INFO);
-
 	}
 
 	@Test
-	void test_moveChapWall() {
+	void test_moveToExit() {
+		Maze m = makeMaze();
+
+		// Moves
+		m.moveChap(Direction.SOUTH);
+		Location l = m.getChap().getLocation();
+		m.moveChap(Direction.WEST);
+
+		// Checks
+		assertTrue(l != m.getChap().getLocation()); // Valid move, location can't be the same
+		assertTrue(m.getAction() == Action.EXIT);
+	}
+
+	@Test
+	void test_moveToWall() {
 		Maze m = makeMaze();
 
 		// Moves
@@ -52,8 +82,175 @@ class MazeValidTest {
 		m.moveChap(Direction.SOUTH);
 
 		// Checks
-		assertTrue(l == m.getChap().getLocation()); // can't move, location have to be the same
 		assertTrue(m.getAction() == Action.WALL);
+		assertTrue(l == m.getChap().getLocation()); // can't move, location have to be the same
+
+	}
+
+	@Test
+	void test_moveToGate() {
+		Maze m = makeMaze();
+
+		// Moves
+		m.moveChap(Direction.SOUTH);
+		Location l = m.getChap().getLocation(); // Location just b4 checking
+		m.moveChap(Direction.EAST);
+
+		// Checks
+		assertTrue(m.getAction() == Action.WALL); // Gets blocked by the door
+		assertTrue(l == m.getChap().getLocation()); // can't move, location have to be the same
+	}
+
+	@Test
+	void test_moveToDoor() {
+		Maze m = makeMaze();
+
+		// Moves
+		m.moveChap(Direction.NORTH);
+		m.moveChap(Direction.NORTH);
+		m.moveChap(Direction.NORTH);
+		m.moveChap(Direction.NORTH);
+		m.moveChap(Direction.WEST);
+		m.moveChap(Direction.WEST);
+		m.moveChap(Direction.WEST);
+		Location l = m.getChap().getLocation(); // Location just b4 checking
+		m.moveChap(Direction.WEST);
+
+		// Checks
+		assertTrue(m.getAction() == Action.WALL); // Gets blocked by the door
+		assertTrue(l == m.getChap().getLocation()); // can't move, location have to be the same
+	}
+
+	@Test
+	void test_moveToChips() {
+		Maze m = makeMaze();
+
+		// Moves
+		m.moveChap(Direction.NORTH);
+		m.moveChap(Direction.WEST);
+		m.moveChap(Direction.WEST);
+
+		Location l = m.getChap().getLocation(); // Location just b4 checking
+		m.moveChap(Direction.WEST);
+
+		// Checks
+		assertTrue(m.getAction() == Action.ITEM); // Takes the chips
+		assertTrue(l != m.getChap().getLocation()); // Valid move, location can't to be the same
+		assertTrue(m.getChap().getChips() == 1); // should have a chip
+
+	}
+
+	@Test
+	void test_moveToKey() {
+		Maze m = makeMaze();
+
+		// Moves
+		m.moveChap(Direction.NORTH);
+		m.moveChap(Direction.NORTH);
+		m.moveChap(Direction.NORTH);
+		m.moveChap(Direction.WEST);
+		m.moveChap(Direction.WEST);
+		m.moveChap(Direction.WEST);
+		Location l = m.getChap().getLocation(); // Location just b4 checking
+		m.moveChap(Direction.WEST);
+
+		// Checks
+		assertTrue(m.getAction() == Action.ITEM); // Takes the chips
+		assertTrue(l != m.getChap().getLocation()); // Valid move, location can't to be the same
+		assertTrue(m.getChap().getInventory().size() == 1); // should have a entry item
+	}
+
+	@Test
+	void test_openGate() {
+		Maze m = makeMaze();
+
+		// Moves
+		m.moveChap(Direction.NORTH);
+		m.moveChap(Direction.WEST);
+		m.moveChap(Direction.WEST);
+		m.moveChap(Direction.WEST);
+		m.moveChap(Direction.WEST);
+		m.moveChap(Direction.EAST);
+		m.moveChap(Direction.EAST);
+		m.moveChap(Direction.EAST);
+		m.moveChap(Direction.EAST);
+		m.moveChap(Direction.SOUTH);
+		m.moveChap(Direction.SOUTH);
+		Location l = m.getChap().getLocation(); // Location just b4 checking
+		m.moveChap(Direction.EAST);
+
+		// Checks
+		assertTrue(m.getAction() == Action.DOOR); // opens the Gate
+		assertTrue(l != m.getChap().getLocation()); // Valid move, location can't to be the same
+	}
+
+	@Test
+	void test_openDoor() {
+		Maze m = makeMaze();
+
+		// Moves
+		m.moveChap(Direction.NORTH);
+		m.moveChap(Direction.NORTH);
+		m.moveChap(Direction.NORTH);
+		m.moveChap(Direction.WEST);
+		m.moveChap(Direction.WEST);
+		m.moveChap(Direction.WEST);
+
+		m.moveChap(Direction.WEST);
+		Location l = m.getChap().getLocation(); // Location just b4 checking
+		m.moveChap(Direction.NORTH);
+
+		// Checks
+		assertTrue(m.getAction() == Action.DOOR); // Opens the door
+		assertTrue(l != m.getChap().getLocation()); // Valid move, location can't to be the same
+		assertTrue(m.getChap().getInventory().size() == 0); // should have used the key
+	}
+
+	@Test
+	void test_openWrongDoors() {
+		Maze m = makeMaze();
+
+		// Moves
+		m.moveChap(Direction.NORTH);
+		m.moveChap(Direction.NORTH);
+		m.moveChap(Direction.EAST);
+		m.moveChap(Direction.NORTH);
+		m.moveChap(Direction.WEST);
+		m.moveChap(Direction.WEST);
+		m.moveChap(Direction.WEST);
+		m.moveChap(Direction.WEST);
+		m.moveChap(Direction.NORTH);
+		Location l = m.getChap().getLocation(); // Location just b4 checking
+		m.moveChap(Direction.WEST);
+
+		// Checks
+		assertTrue(m.getAction() == Action.WALL); // Opens the door
+		assertTrue(l == m.getChap().getLocation()); // can't move, location have to be the same
+		assertTrue(m.getChap().getInventory().size() == 1); // shoulden't have used the key
+	}
+
+	@Test
+	void test_openRightDoors() {
+		Maze m = makeMaze();
+
+		// Moves
+		m.moveChap(Direction.NORTH);
+		m.moveChap(Direction.NORTH);
+		m.moveChap(Direction.NORTH);
+		m.moveChap(Direction.EAST);
+		m.moveChap(Direction.WEST);
+		m.moveChap(Direction.WEST);
+		m.moveChap(Direction.WEST);
+		m.moveChap(Direction.WEST);
+		m.moveChap(Direction.WEST);
+		Location l = m.getChap().getLocation(); // Location just b4 checking
+		m.moveChap(Direction.NORTH);
+
+		// Checks
+		assertTrue(m.getAction() == Action.DOOR); // Opens the door
+		assertTrue(l != m.getChap().getLocation()); // Valid move, location can't to be the same
+		assertTrue(m.getChap().getInventory().size() == 1); // shoulden't have used the key
+		assertTrue(m.getChap().getInventory().get("KEY RED") == 1); // shoulden't have used the key and its red
 
 	}
 
@@ -96,7 +293,11 @@ class MazeValidTest {
 		// Chap
 		loc[5][5] = new Location(5, 5, ActorName.CHAP);
 
-		// door and key
+		// door and key red
+		loc[1][6] = new Location(1, 6, TileName.DOOR, Variation.RED);
+		loc[2][6] = new Location(2, 6, TileName.KEY, Variation.RED);
+
+		// door and key blue
 		loc[1][1] = new Location(1, 1, TileName.DOOR, Variation.BLUE);
 		loc[2][1] = new Location(2, 1, TileName.KEY, Variation.BLUE);
 
@@ -111,7 +312,7 @@ class MazeValidTest {
 		loc[5][6] = new Location(5, 6, TileName.INFO, null);
 
 		// exit
-		loc[6][7] = new Location(6, 7, TileName.EXIT, null);
+		loc[6][4] = new Location(6, 4, TileName.EXIT, null);
 
 		return loc;
 	}
