@@ -132,7 +132,7 @@ public class RecordAndReplay {
 			for(int j=0; j<map[0].length; j++) {
 				String gs = null;
 				Location object = map[i][j];
-				System.out.println(object.toString());
+				//System.out.println(object.toString());
 				if(object.toString().equals("_")) {
 					gs = "1, ";
 					gamestate = add(gamestate,gs);
