@@ -12,7 +12,7 @@ public abstract class Actor {
 	private Location location;
 
 	/**
-	 * Constructor for creating an actor on a single location. xx "wghjjkhjh
+	 * Constructor for creating an actor on a single location.
 	 * 
 	 * @param actorName - Enum for type of actor.
 	 * @param location  - Location in which the actor is currently on.
@@ -25,14 +25,15 @@ public abstract class Actor {
 	/**
 	 * Moves the actor to the new Location if its valid
 	 * 
-	 * @param newLocation - exsisting Location
+	 * @param newLocation - existing Location
 	 */
 	public Action move(Location newLocation) {
 		Actor a = newLocation.getActor();
 		Tile t = newLocation.getTile();
 		Action action = interact(t, a);
+		t = newLocation.getTile();
 
-		// if the actor nolonger exsist
+		// if the actor no longer exist
 		if (location.getActor() == null)
 			return action;
 		if (t == null || t.canMoveOn())
@@ -41,16 +42,16 @@ public abstract class Actor {
 	}
 
 	/**
-	 * Manages the interation between actors and tiles
+	 * Manages the interaction between actors and tiles
 	 * 
 	 * @param t - Tile
 	 * @param a - Actor
 	 * @return Action enum
 	 */
-	public abstract Action interact(Tile t, Actor a);
+	protected abstract Action interact(Tile t, Actor a);
 
 	/**
-	 * Kills an actor by remove its refrence
+	 * Kills an actor by remove its reference
 	 * 
 	 */
 	public void kill() {
@@ -81,6 +82,18 @@ public abstract class Actor {
 	 */
 	public ActorName getActorName() {
 		return actorName;
+	}
+
+	public String toString() {
+		String s = "";
+		switch (actorName) {
+		case CHAP:
+			s = "C";
+			break;
+		default:
+			s = "X";
+		}
+		return s;
 	}
 
 }

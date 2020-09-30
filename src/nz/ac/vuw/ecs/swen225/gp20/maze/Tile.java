@@ -37,7 +37,7 @@ public abstract class Tile {
 	protected abstract Action interact(Actor actor);
 
 	/**
-	 * Destoryes the current tile by deleting its refrences
+	 * Destroys the current tile by deleting its references
 	 */
 	public void kill() {
 		location.setTile(null);
@@ -80,6 +80,40 @@ public abstract class Tile {
 	 */
 	public boolean canPickUp() {
 		return pickUp;
+	}
+
+	/**
+	 * @return returns a string which best represents the location
+	 */
+	public String toString() {
+		String s = "";
+		switch (tileName) {
+		case CHIP:
+			s = "c";
+			break;
+		case DOOR:
+			s = "d";
+			break;
+		case KEY:
+			s = "k";
+			break;
+		case INFO:
+			s = "i";
+			break;
+		case EXIT:
+			s = "e";
+			break;
+		case GATE:
+			s = "g";
+			break;
+		case WALL:
+			s = "w";
+			break;
+		default:
+			s= "Z";
+			break;
+		}
+		return s;
 	}
 
 }
