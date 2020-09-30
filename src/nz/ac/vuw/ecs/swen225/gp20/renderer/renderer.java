@@ -62,8 +62,8 @@ public class renderer {
 	private void Corner() {
 		assert playerPos != null: "The player position should not be null";
 		int centered = 4; 
-		int row = playerPos.getX() - centered;
-		int col = playerPos.getY() - centered;
+		int row = playerPos.getRow() - centered;
+		int col = playerPos.getCol() - centered;
 		
 		int mazeHeight = maze.length;	//rows
 		int mazeWidth = maze[0].length; //cols
@@ -88,7 +88,7 @@ public class renderer {
 				
 		for(int row = 0; row < canvas.VIEW_SIZE; row++) {
 			for(int col = 0; col < canvas.VIEW_SIZE; col++) {
-				tiles[row][col] = maze[cornerPos.getX() + row][cornerPos.getY() + col];
+				tiles[row][col] = maze[cornerPos.getRow() + row][cornerPos.getCol() + col];
 			}
 		}
 		canvas.setGameTiles(tiles);
