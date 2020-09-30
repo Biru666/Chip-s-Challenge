@@ -77,4 +77,12 @@ public class RecordAndReplay {
 		return false;
 	}
 	
+	public ArrayList<Action> getActions() {
+		return actions;
+	}
+	
+	public String getFileName() {
+		return fileName;
+	}
+	
 }
