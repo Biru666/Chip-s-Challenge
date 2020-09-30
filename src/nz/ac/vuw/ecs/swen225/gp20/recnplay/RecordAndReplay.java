@@ -28,7 +28,7 @@ import javax.json.JsonReader;
  */
 public class RecordAndReplay {
 	private String fileName;
-	private ArrayList<Action> actions = new ArrayList<Action>();
+	private ArrayList<KeyEvent> actions = new ArrayList<KeyEvent>();
 	private boolean isRecording = false;
 
 	public void startNewRecord(String name) {
@@ -37,9 +37,9 @@ public class RecordAndReplay {
 		this.fileName = name;
 	}
 	
-	public void addAction(Action a) {
-		if(this.isRecording) {
-			this.actions.add(a);
+	public void addAction(KeyEvent e) {
+		if(isRecording) {
+			actions.add(e);
 		}
 	}
 	
@@ -57,7 +57,7 @@ public class RecordAndReplay {
 			Writer writer = new StringWriter();
 			Json.createWriter(writer).write(builder.build());
 			try {
-				BufferedWriter bw = new BufferedWriter(new FileWriter(fileName,true));
+				BufferedWriter bw = new BufferedWriter(new FileWriter(fileName));
 			    bw.write(writer.toString());
 			    bw.close();
 			    } catch (IOException e) {
@@ -77,7 +77,7 @@ public class RecordAndReplay {
 		return false;
 	}
 	
-	public ArrayList<Action> getActions() {
+	public ArrayList<KeyEvent> getActions() {
 		return actions;
 	}
 	
