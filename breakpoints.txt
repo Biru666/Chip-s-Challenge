@@ -9,3 +9,7 @@ recnplay:
 		line 129: call to persistence
 		line 142: call to maze
 		line 146: call to maze
+		
+rederer:
+	renderer.java
+		line 65: call to maze to use Location
