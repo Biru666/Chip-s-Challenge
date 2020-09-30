@@ -1,6 +1,7 @@
 package nz.ac.vuw.ecs.swen225.gp20.recnplay;
 
 import java.awt.Desktop.Action;
+import java.awt.event.KeyEvent;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
@@ -44,7 +45,6 @@ public class RecordAndReplay {
 	
 	public void saveRecording() {
 		if(isRecording) {
-			File file = new File(this.fileName);
 			JsonArrayBuilder arrayBuilder = Json.createArrayBuilder();
 			for (int i = 0; i < actions.size(); ++i) {
 		        JsonObjectBuilder builder = Json.createObjectBuilder()
@@ -70,6 +70,11 @@ public class RecordAndReplay {
 	
 	public void loadRecording() {
 		
+	}
+	
+	public boolean isRecording() {
+		if(isRecording) return true;
+		return false;
 	}
 	
 }
