@@ -40,6 +40,22 @@ public class Menu extends JMenuBar {
 		registerStartLevel1Action(startLevel1);
 		registerExitNoSavingAction(exitNoSaving);
 		registerSaveAndExitgAction(saveAndExit);
+		JMenuItem pause = new JMenuItem("Pause");
+		options.add(pause);
+		registerPauseAction(pause);
+	}
+
+	private void registerPauseAction(JMenuItem pause) {
+		Action pauseAction = new AbstractAction("Pause") {
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				controller.pause();
+			}
+		};
+		pauseAction.putValue(Action.ACCELERATOR_KEY, KeyStroke.getKeyStroke(KeyEvent.VK_SPACE, 0));
+		pause.setAction(pauseAction);
 	}
 
 	private void registerSaveAndExitgAction(JMenuItem saveAndExit) {
@@ -65,7 +81,8 @@ public class Menu extends JMenuBar {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				int confirm = JOptionPane.showConfirmDialog(window,
-						"The current level will not be saved. Do you want to quit anyway?", "Confirm Quit", JOptionPane.YES_NO_OPTION);
+						"The current level will not be saved. Do you want to quit anyway?", "Confirm Quit",
+						JOptionPane.YES_NO_OPTION);
 				if (confirm == JOptionPane.YES_OPTION) {
 					System.exit(0);
 				}

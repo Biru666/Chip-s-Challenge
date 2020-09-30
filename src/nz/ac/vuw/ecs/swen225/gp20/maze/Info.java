@@ -1,5 +1,9 @@
 package nz.ac.vuw.ecs.swen225.gp20.maze;
 
+/**
+ * @author wangding1 300422014
+ *
+ */
 public class Info extends Tile {
 
 	public Info(TileName tileName, Location location, boolean moveOn, boolean pickUp) {
@@ -7,15 +11,10 @@ public class Info extends Tile {
 	}
 
 	@Override
-	protected void interact(Actor actor) {
-		if (actor instanceof Chap) {
-			display();
-		}
-	}
-
-	private void display() {
-		// TODO Auto-generated method stub
-		
+	protected Action interact(Actor actor) {
+		if (actor instanceof Chap)
+			return Action.INFO;
+		return null;
 	}
 
 }

@@ -31,7 +31,6 @@ public class Main extends JFrame {
 		setTitle("Chap's Challenge");
 		setSize(800, 600);
 		setJMenuBar(menu);
-		menu.setWindow(this);
 		setResizable(false);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setLocationByPlatform(true);
@@ -83,6 +82,8 @@ public class Main extends JFrame {
 		GameInfoRendererImpl gameInfoRenderer = new GameInfoRendererImpl();
 		gameInfoRenderer.setView(gameInfoView);
 		controller.setGameInfoRenderer(gameInfoRenderer);
+		menu.setWindow(this);
+		gameInfoView.setWindow(this);
 	}
 	public static void main(String[] args) {
 		Main main = new Main();
