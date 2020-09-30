@@ -1,6 +1,5 @@
 package nz.ac.vuw.ecs.swen225.gp20.recnplay;
 
-import java.awt.Desktop.Action;
 import java.awt.event.KeyEvent;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -27,23 +26,23 @@ import javax.json.JsonReader;
  *
  */
 public class RecordAndReplay {
-	private String fileName;
-	private ArrayList<KeyEvent> actions = new ArrayList<KeyEvent>();
-	private boolean isRecording = false;
+	private static String fileName;
+	private static ArrayList<KeyEvent> actions = new ArrayList<KeyEvent>();
+	private static boolean isRecording = false;
 
-	public void startNewRecord(String name) {
-		this.actions.clear();
-		this.isRecording = true;
-		this.fileName = name;
+	public static void startNewRecord(String name) {
+		actions.clear();
+		isRecording = true;
+		fileName = name;
 	}
 	
-	public void addAction(KeyEvent e) {
+	public static void addAction(KeyEvent e) {
 		if(isRecording) {
 			actions.add(e);
 		}
 	}
 	
-	public void saveRecording() {
+	public static void saveRecording() {
 		if(isRecording) {
 			JsonArrayBuilder arrayBuilder = Json.createArrayBuilder();
 			for (int i = 0; i < actions.size(); ++i) {
@@ -90,17 +89,9 @@ public class RecordAndReplay {
 		
 	}
 	
-	public boolean isRecording() {
+	public static boolean isRecording() {
 		if(isRecording) return true;
 		return false;
-	}
-	
-	public ArrayList<KeyEvent> getActions() {
-		return actions;
-	}
-	
-	public String getFileName() {
-		return fileName;
 	}
 	
 }
