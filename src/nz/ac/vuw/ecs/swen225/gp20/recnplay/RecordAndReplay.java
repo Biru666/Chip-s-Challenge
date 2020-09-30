@@ -47,8 +47,26 @@ public class RecordAndReplay {
 		if(isRecording) {
 			JsonArrayBuilder arrayBuilder = Json.createArrayBuilder();
 			for (int i = 0; i < actions.size(); ++i) {
+				KeyEvent e = actions.get(i);
+				String action = null;
+				switch (e.getKeyCode()) {
+				case KeyEvent.VK_UP:
+					action = "North";
+					break;
+				case KeyEvent.VK_DOWN:
+					action = "South";
+					break;
+				case KeyEvent.VK_LEFT:
+					action = "West";
+					break;
+				case KeyEvent.VK_RIGHT:
+					action = "East";
+					break;
+				default:
+					break;
+				}
 		        JsonObjectBuilder builder = Json.createObjectBuilder()
-		            .add("move", actions.get(i).toString());
+		            .add("move", action);
 		        arrayBuilder.add(builder.build());
 		      }
 			JsonObjectBuilder builder = Json.createObjectBuilder()
