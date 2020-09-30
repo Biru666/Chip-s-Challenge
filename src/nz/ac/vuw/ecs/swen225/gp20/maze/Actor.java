@@ -47,7 +47,7 @@ public abstract class Actor {
 	 * @param a - Actor
 	 * @return Action enum
 	 */
-	public abstract Action interact(Tile t, Actor a);
+	protected abstract Action interact(Tile t, Actor a);
 
 	/**
 	 * Kills an actor by remove its refrence
@@ -81,6 +81,18 @@ public abstract class Actor {
 	 */
 	public ActorName getActorName() {
 		return actorName;
+	}
+
+	public String toString() {
+		String s = "";
+		switch (actorName) {
+		case CHAP:
+			s = "C";
+			break;
+		default:
+			s = "X";
+		}
+		return s;
 	}
 
 }

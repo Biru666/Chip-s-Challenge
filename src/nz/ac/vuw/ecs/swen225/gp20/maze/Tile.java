@@ -82,4 +82,38 @@ public abstract class Tile {
 		return pickUp;
 	}
 
+	/**
+	 * @return returns a string which best represents the location
+	 */
+	public String toString() {
+		String s = "";
+		switch (tileName) {
+		case CHIP:
+			s = "c";
+			break;
+		case DOOR:
+			s = "d";
+			break;
+		case KEY:
+			s = "k";
+			break;
+		case INFO:
+			s = "i";
+			break;
+		case EXIT:
+			s = "e";
+			break;
+		case GATE:
+			s = "g";
+			break;
+		case WALL:
+			s = "w";
+			break;
+		default:
+			s= "Z";
+			break;
+		}
+		return s;
+	}
+
 }

@@ -15,7 +15,7 @@ public class Maze {
 	/**
 	 * Sets the current level of the maze with all fields being reset.
 	 * 
-	 * @param locations - 2d Array of Locations
+	 * @param locations - 2d Array of Locations (x,y)
 	 */
 	public void setLevel(Location[][] locations) {
 		this.locations = locations;
@@ -38,26 +38,26 @@ public class Maze {
 	 * @param direction - Direction enum
 	 */
 	public void move(Actor actor, Direction direction) {
-		int currentX = actor.getLocation().getX();
-		int currentY = actor.getLocation().getY();
+		int currentRow = actor.getLocation().getRow();
+		int currentCol = actor.getLocation().getCol();
 		action = Action.INVALID;
 		Location newL = null;
 
 		switch (direction) {
 		case NORTH:
-			if ((newL = getValidLocation(currentX, currentY - 1)) != null)
+			if ((newL = getValidLocation(currentCol, currentRow - 1)) != null)
 				action = actor.move(newL);
 			break;
 		case SOUTH:
-			if ((newL = getValidLocation(currentX, currentY + 1)) != null)
+			if ((newL = getValidLocation(currentCol, currentRow + 1)) != null)
 				action = actor.move(newL);
 			break;
 		case EAST:
-			if ((newL = getValidLocation(currentX + 1, currentY)) != null)
+			if ((newL = getValidLocation(currentCol + 1, currentRow)) != null)
 				action = actor.move(newL);
 			break;
 		case WEST:
-			if ((newL = getValidLocation(currentX - 1, currentY)) != null)
+			if ((newL = getValidLocation(currentCol - 1, currentRow)) != null)
 				action = actor.move(newL);
 			break;
 		}
@@ -70,7 +70,7 @@ public class Maze {
 	 * @param newY - y axis
 	 * @return newL - new Location
 	 */
-	private Location getValidLocation(int newX, int newY) {
+	private Location getValidLocation(int newY, int newX) {
 		Location newL = null;
 		if ((newX >= 0 && newX <= locations[0].length) && (newY >= 0 && newY <= locations.length))
 			newL = locations[newX][newY];
@@ -111,8 +111,29 @@ public class Maze {
 		return chap;
 	}
 
+	/**
+	 * Returns the action after a move
+	 * 
+	 * @return Action enum
+	 */
 	public Action getAction() {
 		return action;
+	}
+
+	/**
+	 * Maze toString for debugging
+	 */
+	public String toString() {
+		String s = "";
+		// i == x
+		for (int i = 0; i < locations[0].length; i++) {
+			// j == y
+			for (int j = 0; j < locations.length; j++) {
+				s += locations[i][j].toString() + " ";
+			}
+			s += "\n";
+		}
+		return s;
 	}
 
 	/**

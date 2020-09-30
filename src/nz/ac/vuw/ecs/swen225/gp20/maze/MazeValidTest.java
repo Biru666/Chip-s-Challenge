@@ -8,62 +8,94 @@ class MazeValidTest {
 
 	@Test
 	void test_setLocation() {
-		Maze m = new Maze();
-		m.setLevel(makeLocation());
+		Maze m = makeMaze();
+
+		// Checks
 		assertTrue(m.getChap() != null);
 		assertTrue(m.getAction() == null);
 	}
 
 	@Test
 	void test_moveChap() {
-		Maze m = new Maze();
-		m.setLevel(makeLocation());
+		Maze m = makeMaze();
+
+		// Moves
 		Location l = m.getChap().getLocation();
 		m.moveChap(Direction.NORTH);
-		assertTrue(m.getChap().getLocation() != l);
+
+		// Checks
+		assertTrue(l != m.getChap().getLocation()); // Valid move, location can't be the same
+		assertTrue(m.getAction() == Action.MOVE);
+	}
+
+	@Test
+	void test_moveChapInfo() {
+		Maze m = makeMaze();
+
+		// Moves
+		Location l = m.getChap().getLocation();
+		m.moveChap(Direction.EAST);
+
+		// Checks
+		assertTrue(l != m.getChap().getLocation()); // Valid move, location can't be the same
+		assertTrue(m.getAction() == Action.INFO);
 
 	}
 
 	@Test
-	void test_stopOnWall() {
-		// Maze m = makeMaze();
-		// m.toString();
+	void test_moveChapWall() {
+		Maze m = makeMaze();
+
+		// Moves
+		m.moveChap(Direction.SOUTH);
+		Location l = m.getChap().getLocation(); // Location just b4 checking
+		m.moveChap(Direction.SOUTH);
+
+		// Checks
+		assertTrue(l == m.getChap().getLocation()); // can't move, location have to be the same
+		assertTrue(m.getAction() == Action.WALL);
+
 	}
 
 	/**
 	 * Helper method for constructing a basic maze
 	 * 
 	 * 
-	 * @return initialzed maze
+	 * @return initialed maze
 	 */
-	private Location[][] makeLocation() {
-		int row = 10;
-		int col = 10;
-		Location[][] l = new Location[row][col];
-		for (int i = 0; i < row; i++) {
-			for (int j = 0; j < col; j++) {
+	private Maze makeMaze() {
+		Maze m = new Maze();
+		int x = 8;
+		int y = 8;
+		Location[][] l = new Location[x][y];
+		for (int i = 0; i < x; i++) {
+			for (int j = 0; j < y; j++) {
 				Location loc = null;
 				// Wall tile
-				if (i == 0 || i == row - 1 || j == 0 || j == col - 1)
-					loc = new Location(j, j, TileName.WALL, null);
+				if (i == 0 || i == x - 1 || j == 0 || j == y - 1)
+					loc = new Location(i, j, TileName.WALL, null);
 				// empty tile
 				else {
-					loc = new Location(j, j);
+					loc = new Location(i, j);
 				}
 				l[i][j] = loc;
 			}
 		}
 		l = addTiles(l);
-		return l;
+		m.setLevel(l);
+		return m;
 	}
 
 	/**
-	 * Adding some hard coded loactions for testing
+	 * Adding some hard coded locations for testing (x,y)
 	 * 
-	 * @param loc 2D array of Loacations
+	 * @param loc 2D array of Locations
 	 * @return 2D array of Locations
 	 */
 	private Location[][] addTiles(Location[][] loc) {
+		// Chap
+		loc[5][5] = new Location(5, 5, ActorName.CHAP);
+
 		// door and key
 		loc[1][1] = new Location(1, 1, TileName.DOOR, Variation.BLUE);
 		loc[2][1] = new Location(2, 1, TileName.KEY, Variation.BLUE);
@@ -75,14 +107,11 @@ class MazeValidTest {
 		// Gate
 		loc[6][6] = new Location(6, 6, TileName.GATE, null);
 
-		// Chap
-		loc[5][5] = new Location(5, 5, ActorName.CHAP);
-
 		// Info
 		loc[5][6] = new Location(5, 6, TileName.INFO, null);
 
 		// exit
-		loc[6][7] = new Location(5, 7, TileName.GATE, null);
+		loc[6][7] = new Location(6, 7, TileName.EXIT, null);
 
 		return loc;
 	}

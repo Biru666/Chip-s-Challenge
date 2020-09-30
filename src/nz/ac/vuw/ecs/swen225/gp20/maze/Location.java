@@ -9,9 +9,9 @@ package nz.ac.vuw.ecs.swen225.gp20.maze;
 public class Location {
 
 	// 2D array coordinates
-	private int x, y;
+	private int row, col;
 
-	// Grid componants
+	// Grid components
 	private Tile tile;
 	private Actor actor;
 
@@ -21,9 +21,9 @@ public class Location {
 	 * @param x - the x coordinate in the 2D array.
 	 * @param y - the y coordinate in the 2D array.
 	 */
-	public Location(int x, int y) {
-		this.x = x;
-		this.y = y;
+	public Location(int row, int col) {
+		this.row = row;
+		this.col = col;
 		tile = null;
 		actor = null;
 
@@ -37,9 +37,9 @@ public class Location {
 	 * @param tileName  - the specified Enum TileName.
 	 * @param variation - the specified Enum variation, null if no need.
 	 */
-	public Location(int x, int y, TileName tileName, Variation variation) {
-		this.x = x;
-		this.y = y;
+	public Location(int row, int col, TileName tileName, Variation variation) {
+		this.row = row;
+		this.col = col;
 		this.actor = null;
 
 		// Creating Tile object: Tile("name","canMoveOn",canPickUp","variation")
@@ -77,9 +77,9 @@ public class Location {
 	 * @param y         - the y coordinate in the 2D array
 	 * @param actorName - the specified Enum ActorName
 	 */
-	public Location(int x, int y, ActorName actorName) {
-		this.x = x;
-		this.y = y;
+	public Location(int row, int col, ActorName actorName) {
+		this.row = row;
+		this.col = col;
 		this.tile = null;
 
 		// Creating actor object
@@ -95,15 +95,15 @@ public class Location {
 	/**
 	 * @return the x
 	 */
-	public int getX() {
-		return x;
+	public int getRow() {
+		return row;
 	}
 
 	/**
 	 * @return the y
 	 */
-	public int getY() {
-		return y;
+	public int getCol() {
+		return col;
 	}
 
 	/**
@@ -138,7 +138,14 @@ public class Location {
 	 * testing for x and y location
 	 */
 	public String toString() {
-		return x + " " + y + "\n";
+		String s = "";
+		if (actor != null)
+			s = actor.toString();
+		else if (tile != null)
+			s = tile.toString();
+		else
+			s = "_";
+		return s;
 	}
 
 }

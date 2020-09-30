@@ -38,4 +38,6 @@ public class Door extends Tile {
 		return this.variation;
 	}
 
+
+
 }
