@@ -16,4 +16,4 @@ rederer:
 
 persistence:
 	SaveGame.java
-		line 9: call to maze to get maze object
+		line 9: call to maze to take maze object
