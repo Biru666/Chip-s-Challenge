@@ -13,3 +13,7 @@ recnplay:
 rederer:
 	renderer.java
 		line 65: call to maze to use Location
+
+persistence:
+	SaveGame.java
+		line 9: call to maze to get maze object
