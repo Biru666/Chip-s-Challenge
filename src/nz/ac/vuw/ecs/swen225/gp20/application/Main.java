@@ -83,6 +83,7 @@ public class Main extends JFrame {
 		gameInfoRenderer.setView(gameInfoView);
 		controller.setGameInfoRenderer(gameInfoRenderer);
 		menu.setWindow(this);
+		menu.initHelpPage();
 		gameInfoView.setWindow(this);
 	}
 	public static void main(String[] args) {
