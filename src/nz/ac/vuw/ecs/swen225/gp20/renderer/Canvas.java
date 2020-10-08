@@ -60,12 +60,15 @@ public class Canvas extends JPanel {
 	}
 
   private Image getImage(Tile name) {
+	  if (name == null || name.getTileName() == null) {
+		  return new ImageIcon("/floor.png").getImage().getScaledInstance(50, 50, Image.SCALE_DEFAULT);
+	  }
 	String tilename = name.getTileName().toString();
 	//TODO  needs to be fix for color choose
 	//String color = name.getTileName() ;
 	String s = tilename+".png";
 	
-	URL url = getClass().getResource("swen-225-project/icons/" + s);
+	URL url = getClass().getResource("/" + s);
     Image icon = new ImageIcon(url).getImage();
     
     return icon.getScaledInstance(50, 50, Image.SCALE_DEFAULT);
@@ -74,6 +77,8 @@ public class Canvas extends JPanel {
 
 	public void setGameTiles(Tile[][] tiles) {
 	this.gameTiles = tiles;
+	paintTiles();
+//	revalidate();
 }
 
 }
