@@ -1,6 +1,5 @@
 package nz.ac.vuw.ecs.swen225.gp20.application;
 
-import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
 import java.io.BufferedReader;
@@ -45,12 +44,18 @@ public class Menu extends JMenuBar {
 		this.add(help);
 		// Menu Items in Game.
 		JMenuItem startLevel1 = new JMenuItem("Start Level 1");
+		JMenuItem resumeSavedGame = new JMenuItem("Resume A Saved Game");
+		JMenuItem startLastUnfinishedGame = new JMenuItem("Start Last Unfinished Level");
 		JMenuItem exitNoSaving = new JMenuItem("Discard Level and Exit");
 		JMenuItem saveAndExit = new JMenuItem("Save and Exit");
 		game.add(startLevel1);
+		game.add(resumeSavedGame);
+		game.add(startLastUnfinishedGame);
 		game.add(exitNoSaving);
 		game.add(saveAndExit);
 		registerStartLevel1Action(startLevel1);
+		registerResumeSavedGameAction(resumeSavedGame);
+		registerStartLastUnfinishedGameAction(startLastUnfinishedGame);
 		registerExitNoSavingAction(exitNoSaving);
 		registerSaveAndExitgAction(saveAndExit);
 		// Menu Items in Options
@@ -180,6 +185,34 @@ public class Menu extends JMenuBar {
 		startLevel1Action.putValue(Action.ACCELERATOR_KEY,
 				KeyStroke.getKeyStroke(KeyEvent.VK_1, KeyEvent.CTRL_DOWN_MASK));
 		startLevel1.setAction(startLevel1Action);
+	}
+
+	private void registerResumeSavedGameAction(JMenuItem resumeSavedGame) {
+		Action resumeSavedGameAction = new AbstractAction("Resume A Saved Game") {
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				controller.resumeSavedGame(e);
+			}
+		};
+		resumeSavedGameAction.putValue(Action.ACCELERATOR_KEY,
+				KeyStroke.getKeyStroke(KeyEvent.VK_R, KeyEvent.CTRL_DOWN_MASK));
+		resumeSavedGame.setAction(resumeSavedGameAction);
+	}
+
+	private void registerStartLastUnfinishedGameAction(JMenuItem startLastUnfinishedGame) {
+		Action startLastUnfinishedGameAction = new AbstractAction("Start Last Unfinished Level") {
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				controller.startLastUnfinishedGame(e);
+			}
+		};
+		startLastUnfinishedGameAction.putValue(Action.ACCELERATOR_KEY,
+				KeyStroke.getKeyStroke(KeyEvent.VK_P, KeyEvent.CTRL_DOWN_MASK));
+		startLastUnfinishedGame.setAction(startLastUnfinishedGameAction);
 	}
 
 	public GameController getController() {

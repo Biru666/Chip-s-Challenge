@@ -22,7 +22,7 @@ public class GameController {
 		// Maze - get a new Maze from level 1.
 		GameInfoModel gameInfoModel = new GameInfoModel();
 		gameInfoModel.setLevel(1);
-		gameInfoModel.setTime(10);
+		gameInfoModel.setTime(100);
 		gameInfoRenderer.render(gameInfoModel);
 		gameInfoRenderer.countdown();
 		return null;
@@ -34,6 +34,34 @@ public class GameController {
 		GameInfoModel gameInfoModel = new GameInfoModel();
 		gameInfoModel.setLevel(2);
 		gameInfoRenderer.render(gameInfoModel);
+		return null;
+	}
+
+	public SwingAction resumeSavedGame(ActionEvent e) {
+		System.out.println("Resuming a saved game.");
+		Parser parser = new Parser("levels/level1.json");
+		maze.setLevel(parser.map);
+
+		// Maze - get a new Maze from level 1.
+		GameInfoModel gameInfoModel = new GameInfoModel();
+		gameInfoModel.setLevel(3);
+		gameInfoModel.setTime(50);
+		gameInfoRenderer.render(gameInfoModel);
+		gameInfoRenderer.countdown();
+		return null;
+	}
+
+	public SwingAction startLastUnfinishedGame(ActionEvent e) {
+		System.out.println("Start last unfinished game.");
+		Parser parser = new Parser("levels/level1.json");
+		maze.setLevel(parser.map);
+
+		// Maze - get a new Maze from level 1.
+		GameInfoModel gameInfoModel = new GameInfoModel();
+		gameInfoModel.setLevel(4);
+		gameInfoModel.setTime(100);
+		gameInfoRenderer.render(gameInfoModel);
+		gameInfoRenderer.countdown();
 		return null;
 	}
 
