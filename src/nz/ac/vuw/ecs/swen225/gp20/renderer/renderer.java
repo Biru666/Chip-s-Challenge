@@ -59,7 +59,7 @@ public class renderer {
 	 * Find the top left corner of the display to be shown, ensuring the 
 	 * player is in the middle.
 	 */
-	private void Corner() {
+	public void Corner() {
 		assert playerPos != null: "The player position should not be null";
 		int centered = 4; 
 		int row = playerPos.getRow() - centered;

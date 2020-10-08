@@ -57,7 +57,6 @@ public class GameInfoRendererImpl implements GameInfoRenderer {
 				int timeleft = seconds.addAndGet(-1);
 				if (timeleft >= 0) {
 					GameInfoRendererImpl.this.view.setTimeText("" + timeleft);
-					System.out.println("time set " + timeleft);
 				} else {
 					timer.stop();
 					timer = null;

@@ -81,6 +81,7 @@ public class Main extends JFrame {
 //		mazeView.setController(controller);
 		gameInfoView.setController(controller);
 		controller.setMazePanel(mazeRenderer.getCanvas());
+		controller.setMazeRenderer(mazeRenderer);
 		controller.setGameInfo(gameInfoView);
 		GameInfoRendererImpl gameInfoRenderer = new GameInfoRendererImpl();
 		gameInfoRenderer.setView(gameInfoView);

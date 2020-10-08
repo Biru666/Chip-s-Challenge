@@ -5,13 +5,17 @@ import java.awt.event.ActionEvent;
 import javax.swing.JPanel;
 
 import nz.ac.vuw.ecs.swen225.gp20.maze.Direction;
+import nz.ac.vuw.ecs.swen225.gp20.maze.Location;
 import nz.ac.vuw.ecs.swen225.gp20.maze.Maze;
+import nz.ac.vuw.ecs.swen225.gp20.maze.Tile;
 import nz.ac.vuw.ecs.swen225.gp20.persistence.Parser;
+import nz.ac.vuw.ecs.swen225.gp20.renderer.renderer;
 
 public class GameController {
 	private JPanel mazePanel;
 	private GameInfoView gameInfo;
 	private GameInfoRenderer gameInfoRenderer;
+	private renderer mazeRenderer;
 	private Maze maze = new Maze();
 
 	public SwingAction startLevel1(ActionEvent e) {
@@ -25,6 +29,7 @@ public class GameController {
 		gameInfoModel.setTime(100);
 		gameInfoRenderer.render(gameInfoModel);
 		gameInfoRenderer.countdown();
+		renderMap();
 		return null;
 	}
 
@@ -69,6 +74,7 @@ public class GameController {
 		try {
 			System.out.println("moving " + direction);
 			maze.moveChap(direction);
+			renderMap();
 		} catch (Exception e) {
 			System.out.println(e.getMessage());
 		}
@@ -80,6 +86,23 @@ public class GameController {
 		gameInfoRenderer.pause();
 		System.out.println("post pause");
 		return resume();
+	}
+
+	private Tile[][] mazeTiles() {
+		Location[][] locations = maze.getLocation();
+		Tile[][] tiles = new Tile[locations.length][locations[0].length];
+		for (int i = 0; i < locations.length; i++) {
+			for (int j = 0; j < locations[i].length; j++) {
+				tiles[i][j] = locations[i][j].getTile();
+			}
+		}
+		return tiles;
+	}
+
+	private void renderMap() {
+		mazeRenderer.setMaze(mazeTiles());
+		mazeRenderer.playerPos = maze.getChap().getLocation();
+		mazeRenderer.Corner();
 	}
 
 	public SwingAction resume() {
@@ -96,6 +119,10 @@ public class GameController {
 
 	public void setGameInfoRenderer(GameInfoRenderer gameInfoRenderer) {
 		this.gameInfoRenderer = gameInfoRenderer;
+	}
+
+	public void setMazeRenderer(renderer mazeRenderer) {
+		this.mazeRenderer = mazeRenderer;
 	}
 
 }
