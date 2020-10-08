@@ -11,6 +11,7 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 
 import nz.ac.vuw.ecs.swen225.gp20.maze.Direction;
+import nz.ac.vuw.ecs.swen225.gp20.renderer.renderer;
 
 /**
  * 
@@ -20,7 +21,8 @@ import nz.ac.vuw.ecs.swen225.gp20.maze.Direction;
 public class Main extends JFrame {
 	private static final long serialVersionUID = 1L;
 	private GameController controller = new GameController();
-	private MazeView mazeView = new MazeView();
+	private renderer mazeRenderer;
+//	private MazeView mazeView = new MazeView();
 	private GameInfoView gameInfoView = new GameInfoView();
 	private Menu menu = new Menu();
 
@@ -36,7 +38,8 @@ public class Main extends JFrame {
 		setLocationByPlatform(true);
 		JPanel mazeContainer = new JPanel();
 		mazeContainer.setBackground(Color.GREEN);
-		mazeContainer.add(mazeView);
+		mazeRenderer = new renderer(this);
+		mazeContainer.add(mazeRenderer.getCanvas());
 		this.add(mazeContainer);
 		JPanel infoContainer = new JPanel();
 		infoContainer.setBackground(Color.GREEN);
@@ -75,14 +78,15 @@ public class Main extends JFrame {
 
 	private void equiptController() {
 		menu.setController(controller);
-		mazeView.setController(controller);
+//		mazeView.setController(controller);
 		gameInfoView.setController(controller);
-		controller.setMazePanel(mazeView);
+		controller.setMazePanel(mazeRenderer.getCanvas());
 		controller.setGameInfo(gameInfoView);
 		GameInfoRendererImpl gameInfoRenderer = new GameInfoRendererImpl();
 		gameInfoRenderer.setView(gameInfoView);
 		controller.setGameInfoRenderer(gameInfoRenderer);
 		menu.setWindow(this);
+		menu.initHelpPage();
 		gameInfoView.setWindow(this);
 	}
 	public static void main(String[] args) {

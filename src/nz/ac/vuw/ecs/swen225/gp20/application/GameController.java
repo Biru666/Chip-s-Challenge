@@ -2,12 +2,14 @@ package nz.ac.vuw.ecs.swen225.gp20.application;
 
 import java.awt.event.ActionEvent;
 
+import javax.swing.JPanel;
+
 import nz.ac.vuw.ecs.swen225.gp20.maze.Direction;
 import nz.ac.vuw.ecs.swen225.gp20.maze.Maze;
 import nz.ac.vuw.ecs.swen225.gp20.persistence.Parser;
 
 public class GameController {
-	private MazeView mazePanel;
+	private JPanel mazePanel;
 	private GameInfoView gameInfo;
 	private GameInfoRenderer gameInfoRenderer;
 	private Maze maze = new Maze();
@@ -20,7 +22,7 @@ public class GameController {
 		// Maze - get a new Maze from level 1.
 		GameInfoModel gameInfoModel = new GameInfoModel();
 		gameInfoModel.setLevel(1);
-		gameInfoModel.setTime(10);
+		gameInfoModel.setTime(100);
 		gameInfoRenderer.render(gameInfoModel);
 		gameInfoRenderer.countdown();
 		return null;
@@ -32,6 +34,34 @@ public class GameController {
 		GameInfoModel gameInfoModel = new GameInfoModel();
 		gameInfoModel.setLevel(2);
 		gameInfoRenderer.render(gameInfoModel);
+		return null;
+	}
+
+	public SwingAction resumeSavedGame(ActionEvent e) {
+		System.out.println("Resuming a saved game.");
+		Parser parser = new Parser("levels/level1.json");
+		maze.setLevel(parser.map);
+
+		// Maze - get a new Maze from level 1.
+		GameInfoModel gameInfoModel = new GameInfoModel();
+		gameInfoModel.setLevel(3);
+		gameInfoModel.setTime(50);
+		gameInfoRenderer.render(gameInfoModel);
+		gameInfoRenderer.countdown();
+		return null;
+	}
+
+	public SwingAction startLastUnfinishedGame(ActionEvent e) {
+		System.out.println("Start last unfinished game.");
+		Parser parser = new Parser("levels/level1.json");
+		maze.setLevel(parser.map);
+
+		// Maze - get a new Maze from level 1.
+		GameInfoModel gameInfoModel = new GameInfoModel();
+		gameInfoModel.setLevel(4);
+		gameInfoModel.setTime(100);
+		gameInfoRenderer.render(gameInfoModel);
+		gameInfoRenderer.countdown();
 		return null;
 	}
 
@@ -56,7 +86,7 @@ public class GameController {
 		return null;
 	}
 
-	public void setMazePanel(MazeView mazePanel) {
+	public void setMazePanel(JPanel mazePanel) {
 		this.mazePanel = mazePanel;
 	}
 
