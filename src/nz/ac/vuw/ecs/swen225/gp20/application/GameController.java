@@ -2,12 +2,14 @@ package nz.ac.vuw.ecs.swen225.gp20.application;
 
 import java.awt.event.ActionEvent;
 
+import javax.swing.JPanel;
+
 import nz.ac.vuw.ecs.swen225.gp20.maze.Direction;
 import nz.ac.vuw.ecs.swen225.gp20.maze.Maze;
 import nz.ac.vuw.ecs.swen225.gp20.persistence.Parser;
 
 public class GameController {
-	private MazeView mazePanel;
+	private JPanel mazePanel;
 	private GameInfoView gameInfo;
 	private GameInfoRenderer gameInfoRenderer;
 	private Maze maze = new Maze();
@@ -56,7 +58,7 @@ public class GameController {
 		return null;
 	}
 
-	public void setMazePanel(MazeView mazePanel) {
+	public void setMazePanel(JPanel mazePanel) {
 		this.mazePanel = mazePanel;
 	}
 
