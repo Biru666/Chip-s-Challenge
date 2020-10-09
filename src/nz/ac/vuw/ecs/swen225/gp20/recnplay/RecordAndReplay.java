@@ -132,11 +132,11 @@ public class RecordAndReplay {
 			for(int j=0; j<map[0].length; j++) {
 				String gs = null;
 				Location object = map[i][j];
-				System.out.println(object.toString());
+				System.out.print(object.toString() + " ");
 				if(object.toString().equals("_")) {
 					gs = "1, ";
 					gamestate = add(gamestate,gs);
-					break;
+					continue;
 				}
 				TileName tileName = null;
 				if(object.getTile()!=null) {
@@ -149,11 +149,11 @@ public class RecordAndReplay {
 					case CHAP:
 						gs = "0, ";
 						gamestate = add(gamestate,gs);
-						break;
+						continue;
 					case BOT:
 						gs = "15, ";
 						gamestate = add(gamestate,gs);
-						break;
+						continue;
 					}
 				}
 				switch (tileName) {
@@ -161,12 +161,12 @@ public class RecordAndReplay {
 				case WALL:
 					gs = "2, ";
 					gamestate = add(gamestate,gs);
-					break;
+					continue;
 				// chips
 				case CHIP:
 					gs = "3, ";
 					gamestate = add(gamestate,gs);
-					break;
+					continue;
 				// Key
 				case KEY:
 					Key k = (Key) object.getTile();
@@ -175,19 +175,19 @@ public class RecordAndReplay {
 					case YELLOW:
 						gs = "4, ";
 						gamestate = add(gamestate,gs);
-						break;
+						continue;
 					case RED:
 						gs = "5, ";
 						gamestate = add(gamestate,gs);
-						break;
+						continue;
 					case GREEN:
 						gs = "6, ";
 						gamestate = add(gamestate,gs);
-						break;
+						continue;
 					case BLUE:
 						gs = "7, ";
 						gamestate = add(gamestate,gs);
-						break;
+						continue;
 					}
 				// Door
 				case DOOR:
@@ -197,35 +197,35 @@ public class RecordAndReplay {
 					case YELLOW:
 						gs = "8, ";
 						gamestate = add(gamestate,gs);
-						break;
+						continue;
 					case RED:
 						gs = "9, ";
 						gamestate = add(gamestate,gs);
-						break;
+						continue;
 					case GREEN:
 						gs = "10, ";
 						gamestate = add(gamestate,gs);
-						break;
+						continue;
 					case BLUE:
 						gs = "11, ";
 						gamestate = add(gamestate,gs);
-						break;
+						continue;
 					}
 				// Gate
 				case GATE:
 					gs = "12, ";
 					gamestate = add(gamestate,gs);
-					break;
+					continue;
 				// Portal
 				case EXIT:
 					gs = "13, ";
 					gamestate = add(gamestate,gs);
-					break;
+					continue;
 				// Help
 				case INFO:
 					gs = "14, ";
 					gamestate = add(gamestate,gs);
-					break;
+					continue;
 				}
 			}
 		}
