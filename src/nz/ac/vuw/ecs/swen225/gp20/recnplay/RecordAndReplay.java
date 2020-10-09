@@ -44,7 +44,7 @@ public class RecordAndReplay {
 
 	/**
 	 * To start a new record
-	 * @param name
+	 * @param name the file name to save
 	 */
 	public static void startNewRecord(String name) {
 		actions.clear();
@@ -55,7 +55,7 @@ public class RecordAndReplay {
 	
 	/**
 	 * Add actions to the action list
-	 * @param e
+	 * @param e the actions need to save
 	 */
 	public static void addAction(KeyEvent e) {
 		if(isRecording) {
@@ -73,6 +73,7 @@ public class RecordAndReplay {
 			 * gameState = s.save();
 			*/
 			JsonArrayBuilder arrayBuilder = Json.createArrayBuilder();
+			// add actions to array builder
 			for (int i = 0; i < actions.size(); ++i) {
 				KeyEvent e = actions.get(i);
 				String action = null;
@@ -96,10 +97,11 @@ public class RecordAndReplay {
 		            .add("move", action);
 		        arrayBuilder.add(builder.build());
 		      }
+			// add game state and action array to a new builder
 			JsonObjectBuilder builder = Json.createObjectBuilder()
 					.add("game", gameState)
 			        .add("moves", arrayBuilder);
-			
+			// write text to json file
 			Writer writer = new StringWriter();
 			Json.createWriter(writer).write(builder.build());
 			try {
@@ -124,32 +126,43 @@ public class RecordAndReplay {
 	 * @return
 	 */
 	private static String getGameState() {
-		String gamestate = null;
+		String gamestate = "";
 		Location[][]map = null;
 		Parser parser = new Parser("levels/level1.json");
 		map = parser.map;
 		for(int i=0; i<map.length; i++) {
 			for(int j=0; j<map[0].length; j++) {
-				String gs = null;
+				String gs = "";
+				if(j==0 && i!=0) {
+					gamestate+="]\n[";
+				}
+				if(j==0 && i==0) {
+					gamestate+="[";
+				}
 				Location object = map[i][j];
-				System.out.print(object.toString() + " ");
+				//System.out.print(object.toString() + " ");
+				// Blank
 				if(object.toString().equals("_")) {
 					gs = "1, ";
 					gamestate = add(gamestate,gs);
 					continue;
 				}
+				// get tile name of the cell
 				TileName tileName = null;
 				if(object.getTile()!=null) {
 					tileName = object.getTile().getTileName();
 				}
+				// get actor name of the cell
 				ActorName actorName = null;
 				if(object.getActor()!=null) {
 					actorName = object.getActor().getActorName();
 					switch(actorName) {
+					// Chap
 					case CHAP:
 						gs = "0, ";
 						gamestate = add(gamestate,gs);
 						continue;
+					// Bot
 					case BOT:
 						gs = "15, ";
 						gamestate = add(gamestate,gs);
@@ -157,12 +170,12 @@ public class RecordAndReplay {
 					}
 				}
 				switch (tileName) {
-				// wall tile
+				// Wall
 				case WALL:
 					gs = "2, ";
 					gamestate = add(gamestate,gs);
 					continue;
-				// chips
+				// Chip
 				case CHIP:
 					gs = "3, ";
 					gamestate = add(gamestate,gs);
@@ -228,6 +241,9 @@ public class RecordAndReplay {
 					continue;
 				}
 			}
+			if(i==map.length-1) {
+				gamestate += "]";
+			}
 		}
 		return gamestate;
 	}
@@ -236,7 +252,7 @@ public class RecordAndReplay {
 	 * Help method for adding two strings
 	 * @param s1
 	 * @param s2
-	 * @return
+	 * @return 
 	 */
 	private static String add(String s1, String s2) {
 		return s1+s2;
