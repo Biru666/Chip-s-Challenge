@@ -20,11 +20,11 @@ import nz.ac.vuw.ecs.swen225.gp20.persistence.*;
 
 public class renderer {
 	private Canvas canvas;
-	private Tile[][] maze; //this will be received in an update object from application
+	private Location[][] maze; //this will be received in an update object from application
 	
 	/**The players position**/public Location playerPos;
 	/**The corner position**/ public Location cornerPos;
-	
+
 	
 	public renderer(Main game) {
 		assert(game != null);
@@ -33,13 +33,13 @@ public class renderer {
 		 // Send the canvas to the game
 	}
 	
-	public Tile[][] createGrid() {
-
-		
-
-		
-		return maze ;
-	}
+//	public Location[][] createGrid() {
+//
+//		
+//
+//		
+//		return maze ;
+//	}
 	
 	/**
 	 * Get the canvas.
@@ -50,7 +50,7 @@ public class renderer {
 	}
 	
 
-	public void setMaze(Tile[][] maze) {
+	public void setMaze(Location[][] maze) {
 		this.maze = maze;
 	}
 
@@ -84,14 +84,14 @@ public class renderer {
 	 * Allocate the game tiles to be displayed currently to the canvas.
 	 */
 	private void allocateGameTiles() {
-		Tile[][] tiles = new Tile[canvas.VIEW_SIZE][canvas.VIEW_SIZE];
+		Location[][] map = new Location[canvas.VIEW_SIZE][canvas.VIEW_SIZE];
 				
 		for(int row = 0; row < canvas.VIEW_SIZE; row++) {
 			for(int col = 0; col < canvas.VIEW_SIZE; col++) {
-				tiles[row][col] = maze[cornerPos.getRow() + row][cornerPos.getCol() + col];
+				map[row][col] = maze[cornerPos.getRow() + row][cornerPos.getCol() + col];
 			}
 		}
-		canvas.setGameTiles(tiles);
+		canvas.setGameTiles(map);
 	}
 
 
