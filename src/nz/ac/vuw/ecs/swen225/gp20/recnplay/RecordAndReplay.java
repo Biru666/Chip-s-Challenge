@@ -116,8 +116,49 @@ public class RecordAndReplay {
 		}
 	}
 	
-	
-	public void loadRecording() {
+	/**
+	 * Load a recording
+	 * @param name
+	 */
+	public static void loadRecording(String name) {
+		fileName = name;
+		//load game state
+		
+		// load actions
+		JsonObject object = null;
+		try {
+	        BufferedReader reader = new BufferedReader(new FileReader(fileName));
+	        JsonReader jsonReader = Json.createReader(new StringReader(reader.readLine()));
+	        reader.close();
+	        object = jsonReader.readObject();
+	      } catch (IOException e) {
+	        System.out.println("Error reading file: " + e);
+	        return;
+	      }
+		 JsonArray movesJson = object != null ? object.getJsonArray("moves") : null;
+	      if (movesJson != null) {
+	    	  System.out.println("success");
+	    	  for (int i = 0; i < movesJson.size(); ++i) {
+	              JsonObject object2 = movesJson.getJsonObject(i);
+	              String direction = object2.getString("move");
+	              switch (direction) {
+	                case "West":
+	                  actions.add(KeyEvent.VK_LEFT, null);
+	                  break;
+	                case "East":
+	                  actions.add(KeyEvent.VK_RIGHT, null);
+	                  break;
+	                case "North":
+	                  actions.add(KeyEvent.VK_UP, null);
+	                  break;
+	                case "South":
+	                  actions.add(KeyEvent.VK_DOWN, null);
+	                  break;
+	                default:
+	                  break;
+	              }
+	            }
+	      }
 		
 	}
 	
