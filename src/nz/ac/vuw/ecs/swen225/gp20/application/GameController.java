@@ -1,89 +1,110 @@
 package nz.ac.vuw.ecs.swen225.gp20.application;
 
-import java.awt.event.ActionEvent;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.util.HashMap;
+import java.util.Map;
 
-import javax.swing.JPanel;
-
+import nz.ac.vuw.ecs.swen225.gp20.maze.Action;
 import nz.ac.vuw.ecs.swen225.gp20.maze.Direction;
 import nz.ac.vuw.ecs.swen225.gp20.maze.Maze;
 import nz.ac.vuw.ecs.swen225.gp20.persistence.Parser;
 import nz.ac.vuw.ecs.swen225.gp20.renderer.renderer;
 
+/**
+ * 
+ * @author Wang Conglang 300472254
+ *
+ */
 public class GameController {
-	private JPanel mazePanel;
-	private GameInfoView gameInfo;
+	private static Map<Integer, Integer> LEVEL_TIME = new HashMap<>();
+	static {
+		LEVEL_TIME.put(1, 100);
+		LEVEL_TIME.put(2, 60);
+		LEVEL_TIME.put(3, 90);
+		LEVEL_TIME.put(4, 200);
+		LEVEL_TIME.put(5, 250);
+	}
 	private GameInfoRenderer gameInfoRenderer;
 	private renderer mazeRenderer;
 	private Maze maze = new Maze();
+	private GameStatus status = GameStatus.NOT_STARTED;
+	private int currentLevel = 1;
 
-	public SwingAction startLevel1(ActionEvent e) {
-		System.out.println("start level 1");
-		Parser parser = new Parser("levels/level1.json");
-		maze.setLevel(parser.map);
+	public void startLevel1() {
+		startLevel(currentLevel = 1);
+	}
+
+	public void saveLevel() {
 		
-		// Maze - get a new Maze from level 1.
-		GameInfoModel gameInfoModel = new GameInfoModel();
-		gameInfoModel.setLevel(1);
-		gameInfoModel.setTime(100);
-		gameInfoRenderer.render(gameInfoModel);
-		gameInfoRenderer.countdown();
-		renderMap();
-		return null;
 	}
 
-	public SwingAction saveLevel() {
-		System.out.println("saving level");
-		// Maze - get a new Maze from level 1.
-		GameInfoModel gameInfoModel = new GameInfoModel();
-		gameInfoModel.setLevel(2);
-		gameInfoRenderer.render(gameInfoModel);
-		return null;
+	public void resumeSavedGame() {
+		startLevel(1);
 	}
 
-	public SwingAction resumeSavedGame(ActionEvent e) {
-		System.out.println("Resuming a saved game.");
-		Parser parser = new Parser("levels/level1.json");
-		maze.setLevel(parser.map);
-
-		// Maze - get a new Maze from level 1.
-		GameInfoModel gameInfoModel = new GameInfoModel();
-		gameInfoModel.setLevel(3);
-		gameInfoModel.setTime(50);
-		gameInfoRenderer.render(gameInfoModel);
-		gameInfoRenderer.countdown();
-		return null;
+	public void startLastUnfinishedGame() {
+		startLevel(currentLevel);
 	}
 
-	public SwingAction startLastUnfinishedGame(ActionEvent e) {
-		System.out.println("Start last unfinished game.");
-		Parser parser = new Parser("levels/level1.json");
-		maze.setLevel(parser.map);
-
-		// Maze - get a new Maze from level 1.
-		GameInfoModel gameInfoModel = new GameInfoModel();
-		gameInfoModel.setLevel(4);
-		gameInfoModel.setTime(100);
-		gameInfoRenderer.render(gameInfoModel);
-		gameInfoRenderer.countdown();
-		return null;
+	public void startNextLevel() {
+		startLevel(++currentLevel);
 	}
 
-	public SwingAction move(Direction direction) {
-		try {
-			System.out.println("moving " + direction);
-			maze.moveChap(direction);
-			renderMap();
-		} catch (Exception e) {
-			System.out.println(e.getMessage());
+	public boolean hasNextLevel() {
+		return Files.exists(Paths.get("levels/level" + (currentLevel + 1) + ".json"));
+	}
+
+	public void move(Direction direction) {
+		if (status != GameStatus.LEVEL_STARTED) {
+			return;
 		}
-		return null;
+		try {
+			maze.moveChap(direction);
+			Action action = maze.getAction();
+			System.out.println("action = " + action);
+			if (action != Action.WALL) {
+				renderMap();
+				if (action == Action.ITEM
+						|| action == Action.DOOR) {
+					GameInfoModel model = new GameInfoModel();
+					model.setChipsLeft(maze.getChap().getTotalChips() - maze.getChap().getChips());
+					Map<String, Integer> inventory = maze.getChap().getInventory();
+					model.setInventory(inventory);
+					gameInfoRenderer.update(model);
+				} else if (action == Action.EXIT) {
+					status = GameStatus.LEVEL_FINISHED;
+					gameInfoRenderer.levelFinished();
+				}
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 
-	public SwingAction pause() {
-		System.out.println("pre pause");
+	public void pause() {
+		// maze.pause();
 		gameInfoRenderer.pause();
-		System.out.println("post pause");
-		return resume();
+		resume();
+	}
+
+	public void timeout() {
+		status = GameStatus.LEVEL_FINISHED;
+	}
+
+	private void startLevel(int level) {
+		Parser parser = new Parser("levels/level" + level + ".json");
+		maze.setLevel(parser.map);
+
+		// Maze - get a new Maze from level 1.
+		GameInfoModel gameInfoModel = new GameInfoModel();
+		gameInfoModel.setLevel(level);
+		gameInfoModel.setTime(LEVEL_TIME.get(level));
+		gameInfoModel.setChipsLeft(maze.getChap().getTotalChips() - maze.getChap().getChips());
+		gameInfoRenderer.render(gameInfoModel);
+		gameInfoRenderer.countdown(() -> timeout());
+		renderMap();
+		status = GameStatus.LEVEL_STARTED;
 	}
 
 	private void renderMap() {
@@ -92,16 +113,8 @@ public class GameController {
 		mazeRenderer.Corner();
 	}
 
-	public SwingAction resume() {
-		return null;
-	}
-
-	public void setMazePanel(JPanel mazePanel) {
-		this.mazePanel = mazePanel;
-	}
-
-	public void setGameInfo(GameInfoView gameInfo) {
-		this.gameInfo = gameInfo;
+	public void resume() {
+		// maze.resume();
 	}
 
 	public void setGameInfoRenderer(GameInfoRenderer gameInfoRenderer) {

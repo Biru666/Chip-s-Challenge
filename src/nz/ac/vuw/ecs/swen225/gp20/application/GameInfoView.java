@@ -4,10 +4,10 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.event.KeyEvent;
+import java.util.Map;
 
 import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
-import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
@@ -25,12 +25,11 @@ public class GameInfoView extends JPanel {
 	private static final String LABEL_STYLE = " style=\"color: red; font-size: 18px;\"";
 	private static final int TEXT_FIELD_HEIGHT = 40;
 	private Main window;
-	private JDialog dialog;
 	private GameController controller;
 	private JTextField levelText;
 	private JTextField timeText;
 	private JTextField chipsLeftText;
-	private JTextField keysCollectedText;
+	private InventoryBag keysCollected;
 	public GameInfoView() {
 		setBackground(Color.YELLOW);
 		setPreferredSize(new Dimension(250, 500));
@@ -66,16 +65,10 @@ public class GameInfoView extends JPanel {
 		chipsLeftText.setFont(new Font(Font.SERIF, Font.BOLD, 28));
 		chipsLeftText.getInputMap().put(KeyStroke.getKeyStroke(KeyEvent.VK_X, KeyEvent.CTRL_DOWN_MASK), "");
 		this.add(chipsLeftText);
-		JLabel keysCollectedLabel = new JLabel("<html><br/><br/><div"+LABEL_STYLE+">KEYS<br/>COLLECTED</div></html>");
+		JLabel keysCollectedLabel = new JLabel("<html><br/><br/><div"+LABEL_STYLE+"> </div></html>");
 		this.add(keysCollectedLabel);
-		keysCollectedText = new JTextField("0");
-		keysCollectedText.setEditable(false);
-		keysCollectedText.setPreferredSize(new Dimension(250, TEXT_FIELD_HEIGHT));
-		keysCollectedText.setMaximumSize(levelText.getPreferredSize());
-		keysCollectedText.setHorizontalAlignment(SwingConstants.RIGHT);
-		keysCollectedText.setFont(new Font(Font.SERIF, Font.BOLD, 28));
-		keysCollectedText.getInputMap().put(KeyStroke.getKeyStroke(KeyEvent.VK_X, KeyEvent.CTRL_DOWN_MASK), "");
-		this.add(keysCollectedText);
+		keysCollected = new InventoryBag();
+		this.add(keysCollected);
 	}
 	public void setController(GameController controller) {
 		this.controller = controller;
@@ -98,10 +91,30 @@ public class GameInfoView extends JPanel {
 	public void setChipsLeftText(String chipsLeftText) {
 		this.chipsLeftText.setText(chipsLeftText);
 	}
+	public String getKeysCollected() {
+		return keysCollected.getText();
+	}
+	public void setKeysCollected(Map<String, Integer> inventory) {
+		this.keysCollected.setInventory(inventory);
+	}
 	public void setWindow(Main window) {
 		this.window = window;
 	}
 	public void showPauseDialog() {
 		JOptionPane.showMessageDialog(window, "Game Paused. ESC or click on OK to resume.");
+	}
+	public void showLevelFailedDialog() {
+		int confirm = JOptionPane.showConfirmDialog(window, "Time is up. Would you like to retry level?", "Level Failed", JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE);
+		if (confirm == JOptionPane.YES_OPTION) {
+			controller.startLastUnfinishedGame();
+		}
+	}
+	public void showLevelSuccessfulDialog() {
+		if (controller.hasNextLevel()) {
+			JOptionPane.showMessageDialog(window, "Contatulations! Moving to next level!");
+			controller.startNextLevel();
+		} else {
+			JOptionPane.showMessageDialog(window, "Contatulations! All levels clear!");
+		}
 	}
 }

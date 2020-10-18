@@ -9,6 +9,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
+import javax.swing.SwingUtilities;
 
 import nz.ac.vuw.ecs.swen225.gp20.maze.Direction;
 import nz.ac.vuw.ecs.swen225.gp20.renderer.renderer;
@@ -22,7 +23,6 @@ public class Main extends JFrame {
 	private static final long serialVersionUID = 1L;
 	private GameController controller = new GameController();
 	private renderer mazeRenderer;
-//	private MazeView mazeView = new MazeView();
 	private GameInfoView gameInfoView = new GameInfoView();
 	private Menu menu = new Menu();
 
@@ -51,8 +51,8 @@ public class Main extends JFrame {
 			private AtomicBoolean isBusy = new AtomicBoolean(false);
 			@Override
 			public void keyPressed(KeyEvent e) {
-				new Thread(() -> {
-					if (isBusy.compareAndSet(false, true)) {
+				if (isBusy.compareAndSet(false, true)) {
+					SwingUtilities.invokeLater(() -> {
 						switch (e.getKeyCode()) {
 						case KeyEvent.VK_UP:
 							controller.move(Direction.NORTH);
@@ -70,19 +70,16 @@ public class Main extends JFrame {
 							break;
 						}
 						isBusy.set(false);
-					}
-				}).start();
+					});
+				}
 			}
 		});
 	}
 
 	private void equiptController() {
 		menu.setController(controller);
-//		mazeView.setController(controller);
 		gameInfoView.setController(controller);
-		controller.setMazePanel(mazeRenderer.getCanvas());
 		controller.setMazeRenderer(mazeRenderer);
-		controller.setGameInfo(gameInfoView);
 		GameInfoRendererImpl gameInfoRenderer = new GameInfoRendererImpl();
 		gameInfoRenderer.setView(gameInfoView);
 		controller.setGameInfoRenderer(gameInfoRenderer);
