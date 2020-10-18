@@ -38,69 +38,69 @@ public class Parser {
 					switch (object) {
 					// Chap's initial place
 					case "0":
-						map[i][j] = new Location(j, i, ActorName.CHAP);
+						map[i][j] = new Location(i, j, ActorName.CHAP);
 						break;
 					// wall tile
 					case "2":
-						map[i][j] = new Location(j, i, TileName.WALL, null);
+						map[i][j] = new Location(i, j, TileName.WALL, null);
 						break;
 					// chips
 					case "3":
-						map[i][j] = new Location(j, i, TileName.CHIP, null);
+						map[i][j] = new Location(i, j, TileName.CHIP, null);
 						break;
 					// Yellow Key
 					case "4":
-						map[i][j] = new Location(j, i, TileName.KEY, Variation.YELLOW);
+						map[i][j] = new Location(i, j, TileName.KEY, Variation.YELLOW);
 						break;
 					// Red Key
 					case "5":
-						map[i][j] = new Location(j, i, TileName.KEY, Variation.RED);
+						map[i][j] = new Location(i, j, TileName.KEY, Variation.RED);
 						break;
 					// Green Key
 					case "6":
-						map[i][j] = new Location(j, i, TileName.KEY, Variation.GREEN);
+						map[i][j] = new Location(i, j, TileName.KEY, Variation.GREEN);
 						break;
 					// Blue Key
 					case "7":
-						map[i][j] = new Location(j, i, TileName.KEY, Variation.BLUE);
+						map[i][j] = new Location(i, j, TileName.KEY, Variation.BLUE);
 						break;
 					// Yellow Door
 					case "8":
-						map[i][j] = new Location(j, i, TileName.DOOR, Variation.YELLOW);
+						map[i][j] = new Location(i, j, TileName.DOOR, Variation.YELLOW);
 						break;
 					// Red Door
 					case "9":
-						map[i][j] = new Location(j, i, TileName.DOOR, Variation.RED);
+						map[i][j] = new Location(i, j, TileName.DOOR, Variation.RED);
 						break;
 					// Green Door
 					case "10":
-						map[i][j] = new Location(j, i, TileName.DOOR, Variation.GREEN);
+						map[i][j] = new Location(i, j, TileName.DOOR, Variation.GREEN);
 						break;
 					// Blue Door
 					case "11":
-						map[i][j] = new Location(j, i, TileName.DOOR, Variation.BLUE);
+						map[i][j] = new Location(i, j, TileName.DOOR, Variation.BLUE);
 						break;
 					// Gate
 					case "12":
-						map[i][j] = new Location(j, i, TileName.GATE, null);
+						map[i][j] = new Location(i, j, TileName.GATE, null);
 						break;
 					// Portal
 					case "13":
-						map[i][j] = new Location(j, i, TileName.EXIT, null);
+						map[i][j] = new Location(i, j, TileName.EXIT, null);
 						break;
 					// Help
 					case "14":
-						map[i][j] = new Location(j, i, TileName.INFO, null);
+						map[i][j] = new Location(i, j, TileName.INFO, null);
 						break;
 					// Bug
 					case "15":
-						map[i][j] = new Location(j, i, ActorName.BOT);
+						map[i][j] = new Location(i, j, ActorName.BOT);
 						break;
 					// Sand
 					case "34":
-						map[i][j] = new Location(j, i);
+						map[i][j] = new Location(i, j);
 					default:
-						map[i][j] = new Location(j, i);
+						map[i][j] = new Location(i, j);
 						break;
 					}
 				}

@@ -179,7 +179,7 @@ public class Menu extends JMenuBar {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				controller.startLevel1(e);
+				controller.startLevel1();
 			}
 		};
 		startLevel1Action.putValue(Action.ACCELERATOR_KEY,
@@ -193,7 +193,7 @@ public class Menu extends JMenuBar {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				controller.resumeSavedGame(e);
+				controller.resumeSavedGame();
 			}
 		};
 		resumeSavedGameAction.putValue(Action.ACCELERATOR_KEY,
@@ -207,7 +207,7 @@ public class Menu extends JMenuBar {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				controller.startLastUnfinishedGame(e);
+				controller.startLastUnfinishedGame();
 			}
 		};
 		startLastUnfinishedGameAction.putValue(Action.ACCELERATOR_KEY,
