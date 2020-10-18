@@ -5,9 +5,7 @@ import java.awt.event.ActionEvent;
 import javax.swing.JPanel;
 
 import nz.ac.vuw.ecs.swen225.gp20.maze.Direction;
-import nz.ac.vuw.ecs.swen225.gp20.maze.Location;
 import nz.ac.vuw.ecs.swen225.gp20.maze.Maze;
-import nz.ac.vuw.ecs.swen225.gp20.maze.Tile;
 import nz.ac.vuw.ecs.swen225.gp20.persistence.Parser;
 import nz.ac.vuw.ecs.swen225.gp20.renderer.renderer;
 
@@ -88,19 +86,8 @@ public class GameController {
 		return resume();
 	}
 
-	private Tile[][] mazeTiles() {
-		Location[][] locations = maze.getLocation();
-		Tile[][] tiles = new Tile[locations.length][locations[0].length];
-		for (int i = 0; i < locations.length; i++) {
-			for (int j = 0; j < locations[i].length; j++) {
-				tiles[i][j] = locations[i][j].getTile();
-			}
-		}
-		return tiles;
-	}
-
 	private void renderMap() {
-		mazeRenderer.setMaze(mazeTiles());
+		mazeRenderer.setMaze(maze.getLocation());
 		mazeRenderer.playerPos = maze.getChap().getLocation();
 		mazeRenderer.Corner();
 	}
