@@ -53,16 +53,15 @@ public class GameInfoRendererImpl implements GameInfoRenderer {
 		}
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			SwingUtilities.invokeLater(() -> {
-				int timeleft = seconds.addAndGet(-1);
-				if (timeleft >= 0) {
+			int timeleft = seconds.addAndGet(-1);
+			if (timeleft >= 0) {
+				SwingUtilities.invokeLater(() -> {
 					GameInfoRendererImpl.this.view.setTimeText("" + timeleft);
-				} else {
-					timer.stop();
-					timer = null;
-					System.out.println("stopped");
-				}
-			});
+				});
+			} else {
+				timer.stop();
+				timer = null;
+			}
 		}
 	}
 }
