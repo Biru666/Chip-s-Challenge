@@ -12,8 +12,11 @@ import java.net.URL;
 import nz.ac.vuw.ecs.swen225.gp20.application.*;
 import nz.ac.vuw.ecs.swen225.gp20.maze.Actor;
 import nz.ac.vuw.ecs.swen225.gp20.maze.ActorName;
+import nz.ac.vuw.ecs.swen225.gp20.maze.Door;
+import nz.ac.vuw.ecs.swen225.gp20.maze.Key;
 import nz.ac.vuw.ecs.swen225.gp20.maze.Location;
 import nz.ac.vuw.ecs.swen225.gp20.maze.Tile;
+import nz.ac.vuw.ecs.swen225.gp20.maze.Variation;
 
 
 /**
@@ -76,8 +79,44 @@ public class Canvas extends JPanel {
 		    return icon.getScaledInstance(50, 50, Image.SCALE_DEFAULT);
 			  }
  if (l == null || l.getTile() == null && l.getActor()==null) {
-		  return new ImageIcon("/floor.png").getImage().getScaledInstance(50, 50, Image.SCALE_DEFAULT);
+		  return new ImageIcon(getClass().getResource("/floor.png")).getImage().getScaledInstance(50, 50, Image.SCALE_DEFAULT);
 	  }
+ Tile tile = l.getTile();
+ if (tile instanceof Key) {
+		Key key = (Key) tile;
+		Variation variation = key.getVariation();
+		if (variation == Variation.BLUE) {
+			return new ImageIcon(getClass().getResource("/blue_key.png")).getImage().getScaledInstance(50, 50,
+					Image.SCALE_DEFAULT);
+		} else if (variation == Variation.YELLOW) {
+			return new ImageIcon(getClass().getResource("/yellow_key.png")).getImage().getScaledInstance(50, 50,
+					Image.SCALE_DEFAULT);
+		} else if (variation == Variation.GREEN) {
+			return new ImageIcon(getClass().getResource("/green_key.png")).getImage().getScaledInstance(50, 50,
+					Image.SCALE_DEFAULT);
+		} else if (variation == Variation.RED) {
+			return new ImageIcon(getClass().getResource("/red_key.png")).getImage().getScaledInstance(50, 50,
+					Image.SCALE_DEFAULT);
+		}
+	}
+	if (tile instanceof Door) {
+		Door door = (Door) tile;
+		Variation variation = door.getVariation();
+		if (variation == Variation.BLUE) {
+			return new ImageIcon(getClass().getResource("/blue_door.png")).getImage().getScaledInstance(50, 50,
+					Image.SCALE_DEFAULT);
+		} else if (variation == Variation.YELLOW) {
+			return new ImageIcon(getClass().getResource("/yellow_door.png")).getImage().getScaledInstance(50, 50,
+					Image.SCALE_DEFAULT);
+		} else if (variation == Variation.GREEN) {
+			return new ImageIcon(getClass().getResource("/green_door.png")).getImage().getScaledInstance(50, 50,
+					Image.SCALE_DEFAULT);
+		} else if (variation == Variation.RED) {
+			return new ImageIcon(getClass().getResource("/red_door.png")).getImage().getScaledInstance(50, 50,
+					Image.SCALE_DEFAULT);
+		}
+	}
+ 
 //	  if(l.getTile() != null&&l.getActor()==null) {
 	String name = l.getTile().getTileName().toString();
 	
