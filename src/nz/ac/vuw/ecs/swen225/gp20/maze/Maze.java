@@ -1,7 +1,7 @@
 package nz.ac.vuw.ecs.swen225.gp20.maze;
 
 /**
- * Maze class which stores the current level infomation of the game
+ * Maze class which stores the current level information of the game
  * 
  * @author wangding1 300422014
  *
@@ -78,7 +78,8 @@ public class Maze {
 	}
 
 	/**
-	 * Helper method for finding Chap in the current level
+	 * Helper method for finding Chap and setting the total chips in the current
+	 * level.
 	 */
 	private Chap findChap(Location[][] level) {
 		Chap c = null;
@@ -105,7 +106,9 @@ public class Maze {
 	}
 
 	/**
-	 * @return the chap
+	 * Returns Chap
+	 * 
+	 * @return chap - Chap object
 	 */
 	public Chap getChap() {
 		return chap;
@@ -118,6 +121,15 @@ public class Maze {
 	 */
 	public Action getAction() {
 		return action;
+	}
+
+	/**
+	 * Returns the 2d array of Locations
+	 * 
+	 * @return locations - 2d Array of Location objects
+	 */
+	public Location[][] getLocation() {
+		return locations;
 	}
 
 	/**
@@ -134,10 +146,6 @@ public class Maze {
 			s += "\n";
 		}
 		return s;
-	}
-
-	public Location[][] getLocation() {
-		return locations;
 	}
 
 //	/**

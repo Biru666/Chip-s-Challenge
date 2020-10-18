@@ -1,10 +1,24 @@
 package nz.ac.vuw.ecs.swen225.gp20.maze;
 
+/**
+ * Gate class which represents a Locked door but it will only open when chap has
+ * collected all the chips.
+ * 
+ * @author wangding1 300422014
+ *
+ */
 public class Gate extends Tile {
 
+	/**
+	 * Constructor which creates Gate tile.
+	 * 
+	 * @param tileName - name
+	 * @param location - location object
+	 * @param moveOn   - if the tile can be moved on
+	 * @param pickUp   - if the tile can be picked up
+	 */
 	public Gate(TileName tileName, Location location, boolean canMoveOn, boolean canPickup) {
 		super(tileName, location, canMoveOn, canPickup);
-		// TODO Auto-generated constructor stub
 	}
 
 	@Override

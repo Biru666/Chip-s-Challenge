@@ -1,7 +1,7 @@
 package nz.ac.vuw.ecs.swen225.gp20.maze;
 
 /**
- * Action enums testing
+ * Action enums to represent what was the last sucsessful action.
  * 
  * @author wangding1 300422014
  *

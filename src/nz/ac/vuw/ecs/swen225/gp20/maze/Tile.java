@@ -47,43 +47,54 @@ public abstract class Tile {
 	/**
 	 * Create an String based on the tile name and variation
 	 * 
-	 * @param variation
-	 * @return
+	 * @param t - TileName enum
+	 * @param v - Variation enum
+	 * @return returns a constructed string with tile and variation
 	 */
 	public String createItemName(TileName t, Variation v) {
 		return t.toString() + " " + v.toString();
 	}
 
 	/**
-	 * @return the tileName
+	 * Returns the tileName
+	 * 
+	 * @return tileName - TileName enum
 	 */
 	public TileName getTileName() {
 		return tileName;
 	}
 
 	/**
-	 * @return the location
+	 * Returns the Location for this object
+	 * 
+	 * @return location - Location object
 	 */
 	public Location getLocation() {
 		return location;
 	}
 
 	/**
-	 * @return the moveOn boolean
+	 * Returns the boolean if the tile can be walked on
+	 * 
+	 * @return moveOn - boolean if the Tile can be moved on
 	 */
 	public boolean canMoveOn() {
 		return moveOn;
 	}
 
 	/**
-	 * @return the pickUp boolean
+	 * Returns the boolean if the tile can be picked up
+	 * 
+	 * @return pickUp - boolean if the Tile can be picked up
 	 */
 	public boolean canPickUp() {
 		return pickUp;
 	}
 
 	/**
-	 * @return returns a string which best represents the location
+	 * String for testing
+	 * 
+	 * @return returns a string which best represents the location.
 	 */
 	public String toString() {
 		String s = "";
@@ -110,10 +121,12 @@ public abstract class Tile {
 			s = "w";
 			break;
 		default:
-			s= "Z";
+			s = "Z";
 			break;
 		}
 		return s;
 	}
+	
+	
 
 }

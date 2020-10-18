@@ -24,4 +24,5 @@ public class Wall extends Tile {
 			return Action.WALL;
 		return null;
 	}
+
 }

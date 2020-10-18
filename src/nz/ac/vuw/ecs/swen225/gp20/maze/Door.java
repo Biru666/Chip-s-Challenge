@@ -1,7 +1,8 @@
 package nz.ac.vuw.ecs.swen225.gp20.maze;
 
 /**
- * Door class which is locked by default
+ * Door class which can be opened with the corresponding color key. The door is
+ * locked by default.
  * 
  * @author wangding1 300422014
  *
@@ -10,6 +11,15 @@ public class Door extends Tile {
 
 	private Variation variation;
 
+	/**
+	 * Constructor which creates the Door tile.
+	 * 
+	 * @param tileName  - name
+	 * @param location  - location object
+	 * @param moveOn    - if the tile can be moved on
+	 * @param pickUp    - if the tile can be picked up
+	 * @param variation - variation enum
+	 */
 	public Door(TileName tileName, Location location, boolean canMoveOn, boolean canPickup, Variation variation) {
 		super(tileName, location, canMoveOn, canPickup);
 		this.variation = variation;
@@ -31,13 +41,12 @@ public class Door extends Tile {
 	}
 
 	/**
+	 * Returns the variation of this door
 	 * 
-	 * @return returns the variation
+	 * @return variation - variation enum
 	 */
 	public Variation getVariation() {
 		return this.variation;
 	}
-
-
 
 }

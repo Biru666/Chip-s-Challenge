@@ -44,15 +44,14 @@ public abstract class Actor {
 	/**
 	 * Manages the interaction between actors and tiles
 	 * 
-	 * @param t - Tile
-	 * @param a - Actor
+	 * @param t - Tile object
+	 * @param a - Actor object
 	 * @return Action enum
 	 */
 	protected abstract Action interact(Tile t, Actor a);
 
 	/**
 	 * Kills an actor by remove its reference
-	 * 
 	 */
 	public void kill() {
 		location.setActor(null);
@@ -71,19 +70,22 @@ public abstract class Actor {
 	}
 
 	/**
-	 * @return the location
+	 * @return location object
 	 */
 	public Location getLocation() {
 		return location;
 	}
 
 	/**
-	 * @return the actorName
+	 * @return actorName enum
 	 */
 	public ActorName getActorName() {
 		return actorName;
 	}
 
+	/**
+	 * To string method for testing
+	 */
 	public String toString() {
 		String s = "";
 		switch (actorName) {

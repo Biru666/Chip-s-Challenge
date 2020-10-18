@@ -42,11 +42,11 @@ public class Parser {
 						break;
 					// wall tile
 					case "2":
-						map[i][j] = new Location(i, j, TileName.WALL, null);
+						map[i][j] = new Location(i, j, TileName.WALL);
 						break;
 					// chips
 					case "3":
-						map[i][j] = new Location(i, j, TileName.CHIP, null);
+						map[i][j] = new Location(i, j, TileName.CHIP);
 						break;
 					// Yellow Key
 					case "4":
@@ -82,15 +82,15 @@ public class Parser {
 						break;
 					// Gate
 					case "12":
-						map[i][j] = new Location(i, j, TileName.GATE, null);
+						map[i][j] = new Location(i, j, TileName.GATE);
 						break;
 					// Portal
 					case "13":
-						map[i][j] = new Location(i, j, TileName.EXIT, null);
+						map[i][j] = new Location(i, j, TileName.EXIT);
 						break;
 					// Help
 					case "14":
-						map[i][j] = new Location(i, j, TileName.INFO, null);
+						map[i][j] = new Location(i, j, TileName.INFO);
 						break;
 					// Bug
 					case "15":
