@@ -135,18 +135,18 @@ public class Maze {
 		}
 		return s;
 	}
-	
+
 	public Location[][] getLocation() {
 		return locations;
 	}
 
-	/**
-	 * testing needs
-	 * 
-	 * @param args - testing
-	 */
-	public static void main(String[] args) {
-		new Maze();
-	}
+//	/**
+//	 * testing needs
+//	 * 
+//	 * @param args - testing
+//	 */
+//	public static void main(String[] args) {
+//		new Maze();
+//	}
 
 }
