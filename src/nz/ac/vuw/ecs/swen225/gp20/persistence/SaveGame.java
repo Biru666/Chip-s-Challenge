@@ -8,6 +8,7 @@ import nz.ac.vuw.ecs.swen225.gp20.maze.Maze;
 public class SaveGame {
 	Maze maze;
 	int chipNum;
+	boolean isStopped;
 	Location[][] currentState;
 	Map<String, Integer> inventory;
 
@@ -19,7 +20,9 @@ public class SaveGame {
 	}
 	
 	private void save() {
-		
+		if(isStopped){
+
+		}
 	}  
 	
 }
