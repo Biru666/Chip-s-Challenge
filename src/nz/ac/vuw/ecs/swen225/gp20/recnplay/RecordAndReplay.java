@@ -4,13 +4,17 @@ import java.awt.event.KeyEvent;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.StringReader;
 import java.io.StringWriter;
 import java.io.Writer;
 import java.util.ArrayList;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 import javax.json.Json;
 import javax.json.JsonArray;
@@ -18,12 +22,16 @@ import javax.json.JsonArrayBuilder;
 import javax.json.JsonObject;
 import javax.json.JsonObjectBuilder;
 import javax.json.JsonReader;
+import javax.json.JsonString;
 
 import nz.ac.vuw.ecs.swen225.gp20.persistence.Parser;
+import nz.ac.vuw.ecs.swen225.gp20.renderer.renderer;
 import nz.ac.vuw.ecs.swen225.gp20.application.GameController;
 import nz.ac.vuw.ecs.swen225.gp20.maze.ActorName;
+import nz.ac.vuw.ecs.swen225.gp20.maze.Direction;
 import nz.ac.vuw.ecs.swen225.gp20.maze.Door;
 import nz.ac.vuw.ecs.swen225.gp20.maze.Location;
+import nz.ac.vuw.ecs.swen225.gp20.maze.Maze;
 import nz.ac.vuw.ecs.swen225.gp20.maze.Key;
 import nz.ac.vuw.ecs.swen225.gp20.maze.Tile;
 import nz.ac.vuw.ecs.swen225.gp20.maze.TileName;
@@ -120,45 +128,126 @@ public class RecordAndReplay {
 	 * Load a recording
 	 * @param name
 	 */
-	public static void loadRecording(String name) {
+	public static void loadRecording(String name, renderer mazeRenderer) {
 		fileName = name;
-		//load game state
-		
+		// load game state
+		// select the gamestate from json file
+		String line;
+		try {
+			BufferedReader buffReader = new BufferedReader(new FileReader(fileName));
+			line = buffReader.readLine();
+			if (line == null) {
+			      line = "";
+			}
+		} catch (IOException e){
+	    	System.out.println("Error reading file: " + e);
+	        return;
+	    }
+		JsonObject game;
+	    JsonReader jsonReader1 = Json.createReader(new StringReader(line));
+	    game = jsonReader1.readObject();
+	    String buffer = game.getJsonString("game").toString();
+	    // try to write the game state to a new json file can be read by parser
+	    ArrayList<String> output = new ArrayList<String>();
+	    int start = 0, end = 0;
+	    for(int i=0; i<buffer.length(); i++) {
+	    	if(buffer.charAt(i)=='[') {
+	    		start = i;
+	    	}
+	    	if(buffer.charAt(i)==']') {
+	    		end = i;
+	    	}
+	    	if(end>start) {
+	    		String arr = buffer.substring(start,end-2);
+	    		arr += "]";
+	    		start = 0;
+	    		end = 0;
+	    		output.add(arr);
+	    	}
+	    }
+	    buffer+="]";    
+	    try {
+	    	File map = new File("map.json");
+	    	 FileWriter fileWritter = new FileWriter(map.getName());
+	    	 for(int i=0; i<output.size(); i++) {
+	    		 if(i==0) {
+	    			 fileWritter.write("["); 
+	    		 }
+	    		 fileWritter.write(output.get(i));
+	    		 if(i==output.size()-1) {
+	    			 fileWritter.write("]");
+	    		 }else {
+	    			 fileWritter.write("\n,");
+	    		 }
+	    	 }
+	         fileWritter.close();
+	    }catch(IOException e){
+	        e.printStackTrace();
+	     }
+	    // update the game state
+	    Parser parser = new Parser("map.json");
+	    Maze maze = new Maze();
+	    maze.setLevel(parser.map);
+	    mazeRenderer.setMaze(maze.getLocation());
+		mazeRenderer.playerPos = maze.getChap().getLocation();
+		mazeRenderer.Corner();
+	    
 		// load actions
+		// select the actions from json file
 		JsonObject object = null;
 		try {
 	        BufferedReader reader = new BufferedReader(new FileReader(fileName));
-	        JsonReader jsonReader = Json.createReader(new StringReader(reader.readLine()));
+	        JsonReader jsonReader2 = Json.createReader(new StringReader(reader.readLine()));
 	        reader.close();
-	        object = jsonReader.readObject();
+	        object = jsonReader2.readObject();
 	      } catch (IOException e) {
 	        System.out.println("Error reading file: " + e);
 	        return;
 	      }
 		 JsonArray movesJson = object != null ? object.getJsonArray("moves") : null;
 	      if (movesJson != null) {
-	    	  System.out.println("success");
-	    	  for (int i = 0; i < movesJson.size(); ++i) {
+	    	  for (int i = 0; i < movesJson.size(); i++) {
 	              JsonObject object2 = movesJson.getJsonObject(i);
 	              String direction = object2.getString("move");
 	              switch (direction) {
 	                case "West":
-	                  actions.add(KeyEvent.VK_LEFT, null);
+	                	maze.moveChap(Direction.WEST);
+						mazeRenderer.setMaze(maze.getLocation());
+						mazeRenderer.playerPos = maze.getChap().getLocation();
+						mazeRenderer.Corner();
+						
 	                  break;
 	                case "East":
-	                  actions.add(KeyEvent.VK_RIGHT, null);
+	                	maze.moveChap(Direction.EAST);
+						mazeRenderer.setMaze(maze.getLocation());
+						mazeRenderer.playerPos = maze.getChap().getLocation();
+						mazeRenderer.Corner();
 	                  break;
 	                case "North":
-	                  actions.add(KeyEvent.VK_UP, null);
+	                	maze.moveChap(Direction.NORTH);
+						mazeRenderer.setMaze(maze.getLocation());
+						mazeRenderer.playerPos = maze.getChap().getLocation();
+						mazeRenderer.Corner();
+						try {
+						Thread.sleep(500);
+						}catch(InterruptedException ex) {
+				            Thread.currentThread().interrupt();
+			            }
 	                  break;
 	                case "South":
-	                  actions.add(KeyEvent.VK_DOWN, null);
+	                	maze.moveChap(Direction.SOUTH);
+						mazeRenderer.setMaze(maze.getLocation());
+						mazeRenderer.playerPos = maze.getChap().getLocation();
+						mazeRenderer.Corner();
 	                  break;
 	                default:
 	                  break;
 	              }
 	            }
 	      }
+	      /**for(KeyEvent k:actions) {
+	    	  keyPressed(k, maze, mazeRenderer);
+	      }*/
 		
 	}
 	
@@ -297,6 +386,49 @@ public class RecordAndReplay {
 	 */
 	private static String add(String s1, String s2) {
 		return s1+s2;
+	}
+	
+	/**
+	 * update the move
+	 * @param e
+	 * @param maze
+	 * @param mazeRenderer
+	 */
+	private static void keyPressed(KeyEvent e, Maze maze, renderer mazeRenderer) {
+		AtomicBoolean isBusy = new AtomicBoolean(false);
+		new Thread(() -> {
+			if (isBusy.compareAndSet(false, true)) {
+				switch (e.getKeyCode()) {
+				case KeyEvent.VK_UP:
+					maze.moveChap(Direction.NORTH);
+					mazeRenderer.setMaze(maze.getLocation());
+					mazeRenderer.playerPos = maze.getChap().getLocation();
+					mazeRenderer.Corner();
+					break;
+				case KeyEvent.VK_DOWN:
+					maze.moveChap(Direction.SOUTH);
+					mazeRenderer.setMaze(maze.getLocation());
+					mazeRenderer.playerPos = maze.getChap().getLocation();
+					mazeRenderer.Corner();
+					break;
+				case KeyEvent.VK_LEFT:
+					maze.moveChap(Direction.WEST);
+					mazeRenderer.setMaze(maze.getLocation());
+					mazeRenderer.playerPos = maze.getChap().getLocation();
+					mazeRenderer.Corner();
+					break;
+				case KeyEvent.VK_RIGHT:
+					maze.moveChap(Direction.EAST);
+					mazeRenderer.setMaze(maze.getLocation());
+					mazeRenderer.playerPos = maze.getChap().getLocation();
+					mazeRenderer.Corner();
+					break;
+				default:
+					break;
+				}
+				isBusy.set(false);
+			}
+		}).start();
 	}
 	
 	/**
