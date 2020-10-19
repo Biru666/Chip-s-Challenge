@@ -46,19 +46,19 @@ public class Maze {
 		switch (direction) {
 		case NORTH:
 			if ((newL = getValidLocation(currentCol, currentRow - 1)) != null)
-				action = actor.move(newL);
+				action = actor.move(newL,direction);
 			break;
 		case SOUTH:
 			if ((newL = getValidLocation(currentCol, currentRow + 1)) != null)
-				action = actor.move(newL);
+				action = actor.move(newL,direction);
 			break;
 		case EAST:
 			if ((newL = getValidLocation(currentCol + 1, currentRow)) != null)
-				action = actor.move(newL);
+				action = actor.move(newL,direction);
 			break;
 		case WEST:
 			if ((newL = getValidLocation(currentCol - 1, currentRow)) != null)
-				action = actor.move(newL);
+				action = actor.move(newL,direction);
 			break;
 		}
 	}

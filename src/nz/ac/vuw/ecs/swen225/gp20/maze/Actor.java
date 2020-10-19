@@ -1,7 +1,9 @@
 package nz.ac.vuw.ecs.swen225.gp20.maze;
 
 /**
- * Actor class which represents an entity that may move.
+ * Actor class which represents an entity that may move. When two actors collide
+ * with each other, both of them will be killed before interacting with the tile
+ * it stands on.
  * 
  * @author wangding1 300422014
  *
@@ -26,15 +28,16 @@ public abstract class Actor {
 	 * Moves the actor to the new Location if its valid
 	 * 
 	 * @param newLocation - existing Location
+	 * @param direction   - Direction enum
 	 */
-	public Action move(Location newLocation) {
+	public Action move(Location newLocation, Direction direction) {
 		Actor a = newLocation.getActor();
 		Tile t = newLocation.getTile();
-		Action action = interact(t, a);
+		Action action = interact(t, a, direction);
 		t = newLocation.getTile();
 
-		// if the actor no longer exist
-		if (location.getActor() == null)
+		// if the actor no longer has a location reference then its dead
+		if (location == null)
 			return action;
 		if (t == null || t.canMoveOn())
 			doMove(newLocation);
@@ -42,13 +45,15 @@ public abstract class Actor {
 	}
 
 	/**
-	 * Manages the interaction between actors and tiles
+	 * Manages the interaction between the current actor and new location actors and
+	 * tiles.
 	 * 
-	 * @param t - Tile object
-	 * @param a - Actor object
+	 * @param t         - Tile object
+	 * @param a         - Actor object
+	 * @param direction - Direction enum
 	 * @return Action enum
 	 */
-	protected abstract Action interact(Tile t, Actor a);
+	protected abstract Action interact(Tile t, Actor a, Direction direction);
 
 	/**
 	 * Kills an actor by remove its reference

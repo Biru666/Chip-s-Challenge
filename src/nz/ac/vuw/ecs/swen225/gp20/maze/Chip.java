@@ -28,6 +28,7 @@ public class Chip extends Tile {
 			kill();
 			return Action.ITEM;
 		}
+		// not chap
 		return null;
 	}
 	

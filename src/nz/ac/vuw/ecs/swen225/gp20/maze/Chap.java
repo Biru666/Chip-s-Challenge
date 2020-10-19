@@ -28,7 +28,7 @@ public class Chap extends Actor {
 	}
 
 	@Override
-	protected Action interact(Tile t, Actor a) {
+	protected Action interact(Tile t, Actor a, Direction dir) {
 		// collided with another actor, kill each other
 		if (a != null) {
 			kill();

@@ -1,7 +1,8 @@
 package nz.ac.vuw.ecs.swen225.gp20.maze;
 
 /**
- * Tile class representing a single tile thats in a location.
+ * Tile class representing a single tile thats in a location. Every tile which
+ * extends this will have different interactions based on its actor.
  * 
  * @author wangding1 300422014
  *
@@ -120,13 +121,14 @@ public abstract class Tile {
 		case WALL:
 			s = "w";
 			break;
+		case LAVA:
+			s = "l";
+			break;
 		default:
 			s = "Z";
 			break;
 		}
 		return s;
 	}
-	
-	
 
 }

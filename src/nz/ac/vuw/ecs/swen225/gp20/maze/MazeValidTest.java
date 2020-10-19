@@ -5,7 +5,6 @@ import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.Test;
 
 class MazeValidTest {
-
 	@Test
 	void test_setLocation() {
 		Maze m = makeMaze();
@@ -19,7 +18,7 @@ class MazeValidTest {
 	void test_stringMap() {
 		Maze m = makeMaze();
 		String map = "w w w w w w w w \n" + "w d _ _ _ _ d w \n" + "w k _ _ _ _ k w \n" + "w _ _ _ _ _ _ w \n"
-				+ "w c c _ _ _ _ w \n" + "w _ _ _ _ C i w \n" + "w _ _ _ e _ g w \n" + "w w w w w w w w \n";
+				+ "w c c _ _ _ l w \n" + "w _ _ _ _ C i w \n" + "w _ _ _ e _ g w \n" + "w w w w w w w w \n";
 		// Checks
 		assertTrue(m.toString().equals(map));
 		assertTrue(m.getChap() != null);
@@ -152,6 +151,23 @@ class MazeValidTest {
 		assertTrue(m.getAction() == Action.ITEM); // Takes the chips
 		assertTrue(l != m.getChap().getLocation()); // Valid move, location can't to be the same
 		assertTrue(m.getChap().getInventory().size() == 1); // should have a entry item
+	}
+
+	@Test
+	void test_moveToLava() {
+		Maze m = makeMaze();
+
+		// Moves
+		m.moveChap(Direction.NORTH);
+		Location l = m.getChap().getLocation(); // Location just b4 checking
+		m.moveChap(Direction.EAST);
+
+		System.out.println(m.toString());
+
+		// Checks
+		assertTrue(m.getAction() == Action.DIE); // Dies
+		assertTrue(l != m.getChap().getLocation()); // Valid move, location can't to be the same
+
 	}
 
 	@Test
@@ -304,6 +320,9 @@ class MazeValidTest {
 
 		// Info
 		loc[5][6] = new Location(5, 6, TileName.INFO);
+		
+		// Lava
+		loc[4][6] = new Location(4, 6, TileName.LAVA);
 
 		// exit
 		loc[6][4] = new Location(6, 4, TileName.EXIT);

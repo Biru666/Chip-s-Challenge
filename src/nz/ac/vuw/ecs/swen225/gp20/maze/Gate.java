@@ -31,6 +31,7 @@ public class Gate extends Tile {
 			}
 			return Action.WALL;
 		}
+		// not chap
 		return null;
 	}
 

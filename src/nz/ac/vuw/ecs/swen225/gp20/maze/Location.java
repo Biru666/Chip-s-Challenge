@@ -43,7 +43,7 @@ public class Location {
 		this.col = col;
 		this.actor = null;
 
-		// Creating Tile object: Tile("name","canMoveOn",canPickUp","variation")
+		// Creating Tile object: Tile("name","canMoveOn",canPickUp")
 		switch (tileName) {
 		case WALL:
 			this.tile = new Wall(tileName, this, false, false);
@@ -59,6 +59,9 @@ public class Location {
 			break;
 		case INFO:
 			this.tile = new Info(tileName, this, true, false);
+			break;
+		case LAVA:
+			this.tile = new Lava(tileName, this, true, false);
 			break;
 		default:
 			this.tile = null;
