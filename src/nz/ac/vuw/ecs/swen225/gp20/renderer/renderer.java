@@ -94,6 +94,9 @@ public class renderer {
 		canvas.setGameTiles(map);
 	}
 
+	public void chapDie() {
+		canvas.paintTiles();
+	}
 
 	}
 

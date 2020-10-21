@@ -69,6 +69,15 @@ public class GameInfoRendererImpl implements GameInfoRenderer {
 		view.showLevelSuccessfulDialog();
 	}
 
+	@Override
+	public void chapDie() {
+		if (timer != null) {
+			timer.stop();
+			timer = null;
+		}
+		view.showChapDieDialog();
+	}
+
 	public GameInfoView getView() {
 		return view;
 	}

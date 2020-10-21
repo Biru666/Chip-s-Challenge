@@ -117,4 +117,10 @@ public class GameInfoView extends JPanel {
 			JOptionPane.showMessageDialog(window, "Contatulations! All levels clear!");
 		}
 	}
+	public void showChapDieDialog() {
+		int confirm = JOptionPane.showConfirmDialog(window, "Chap is dead. Would you like to retry level?", "Level Failed", JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE);
+		if (confirm == JOptionPane.YES_OPTION) {
+			controller.startLastUnfinishedGame();
+		}
+	}
 }
