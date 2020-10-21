@@ -1,9 +1,13 @@
 package nz.ac.vuw.ecs.swen225.gp20.application;
 
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.HashMap;
 import java.util.Map;
+
+import javax.swing.Timer;
 
 import nz.ac.vuw.ecs.swen225.gp20.maze.Action;
 import nz.ac.vuw.ecs.swen225.gp20.maze.Direction;
@@ -30,6 +34,7 @@ public class GameController {
 	private Maze maze = new Maze();
 	private GameStatus status = GameStatus.NOT_STARTED;
 	private int currentLevel = 1;
+	private Timer tickTimer = null;
 
 	public void startLevel1() {
 		startLevel(currentLevel = 1);
@@ -62,8 +67,12 @@ public class GameController {
 		try {
 			maze.moveChap(direction);
 			Action action = maze.getAction();
-			System.out.println("action = " + action);
-			if (action != Action.WALL) {
+			if (action == Action.DIE) {
+				status = GameStatus.LEVEL_FINISHED;
+				mazeRenderer.chapDie();
+				gameInfoRenderer.chapDie();
+				return;
+			} else if (action != Action.WALL) {
 				renderMap();
 				if (action == Action.ITEM
 						|| action == Action.DOOR) {
@@ -105,6 +114,20 @@ public class GameController {
 		gameInfoRenderer.countdown(() -> timeout());
 		renderMap();
 		status = GameStatus.LEVEL_STARTED;
+		if (tickTimer == null) {
+			tickTimer = new Timer(1000, new ActionListener() {
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					if (maze != null && status == GameStatus.LEVEL_STARTED) {
+						maze.tick();
+						renderMap();
+					} else {
+						tickTimer.stop();
+					}
+				}
+			});
+		}
+		tickTimer.start();
 	}
 
 	private void renderMap() {
