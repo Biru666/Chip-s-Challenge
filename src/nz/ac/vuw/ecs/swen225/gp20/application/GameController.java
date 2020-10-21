@@ -120,14 +120,20 @@ public class GameController {
 				public void actionPerformed(ActionEvent e) {
 					if (maze != null && status == GameStatus.LEVEL_STARTED) {
 						maze.tick();
-						renderMap();
+						if (maze.getChap() == null || maze.getChap().isDead()) {
+							status = GameStatus.LEVEL_FINISHED;
+							mazeRenderer.chapDie();
+							gameInfoRenderer.chapDie();
+						} else {
+							renderMap();
+						}
 					} else {
 						tickTimer.stop();
 					}
 				}
 			});
 		}
-		tickTimer.start();
+		tickTimer.restart();
 	}
 
 	private void renderMap() {
