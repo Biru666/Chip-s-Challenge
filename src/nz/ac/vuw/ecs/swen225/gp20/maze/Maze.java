@@ -171,6 +171,15 @@ public class Maze {
 	}
 
 	/**
+	 * Returns the Bot mannager object
+	 * 
+	 * @return bm - BotMannager object
+	 */
+	public BotMannager getBM() {
+		return bm;
+	}
+
+	/**
 	 * Maze toString for debugging
 	 */
 	public String toString() {

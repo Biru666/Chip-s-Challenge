@@ -1,11 +1,14 @@
 package nz.ac.vuw.ecs.swen225.gp20.maze;
 
-import static org.junit.jupiter.api.Assertions.*;
-import org.junit.jupiter.api.Test;
+import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
-class MazeValidTest {
+import org.junit.Test;
+
+public class MazeValidTest1 {
+
 	@Test
-	void test_setLocation() {
+	public void test_setLocation() {
 		Maze m = makeMaze();
 
 		// Checks
@@ -14,7 +17,7 @@ class MazeValidTest {
 	}
 
 	@Test
-	void test_stringMap() {
+	public void test_stringMap() {
 		Maze m = makeMaze();
 		String map = "w w w w w w w w \n" + "w d _ _ _ _ d w \n" + "w k _ _ _ _ k w \n" + "w _ _ _ _ _ _ w \n"
 				+ "w c c _ _ _ l w \n" + "w _ _ _ _ C i w \n" + "w _ _ _ e _ g w \n" + "w w w w w w w w \n";
@@ -25,7 +28,7 @@ class MazeValidTest {
 	}
 
 	@Test
-	void test_move() {
+	public void test_move() {
 		Maze m = makeMaze();
 
 		// Moves
@@ -38,7 +41,7 @@ class MazeValidTest {
 	}
 
 	@Test
-	void test_moveToInfo() {
+	public void test_moveToInfo() {
 		Maze m = makeMaze();
 
 		// Moves
@@ -51,7 +54,7 @@ class MazeValidTest {
 	}
 
 	@Test
-	void test_moveToExit() {
+	public void test_moveToExit() {
 		Maze m = makeMaze();
 
 		// Moves
@@ -65,7 +68,7 @@ class MazeValidTest {
 	}
 
 	@Test
-	void test_moveToWall() {
+	public void test_moveToWall() {
 		Maze m = makeMaze();
 
 		// Moves
@@ -80,7 +83,7 @@ class MazeValidTest {
 	}
 
 	@Test
-	void test_moveToGate() {
+	public void test_moveToGate() {
 		Maze m = makeMaze();
 
 		// Moves
@@ -94,7 +97,7 @@ class MazeValidTest {
 	}
 
 	@Test
-	void test_moveToDoor() {
+	public void test_moveToDoor() {
 		Maze m = makeMaze();
 
 		// Moves
@@ -114,7 +117,7 @@ class MazeValidTest {
 	}
 
 	@Test
-	void test_moveToChips() {
+	public void test_moveToChips() {
 		Maze m = makeMaze();
 
 		// Moves
@@ -133,7 +136,7 @@ class MazeValidTest {
 	}
 
 	@Test
-	void test_moveToKey() {
+	public void test_moveToKey() {
 		Maze m = makeMaze();
 
 		// Moves
@@ -153,7 +156,7 @@ class MazeValidTest {
 	}
 
 	@Test
-	void test_moveToLava() {
+	public void test_moveToLava() {
 		Maze m = makeMaze();
 
 		// Moves
@@ -170,7 +173,7 @@ class MazeValidTest {
 	}
 
 	@Test
-	void test_openGate() {
+	public void test_openGate() {
 		Maze m = makeMaze();
 
 		// Moves
@@ -194,7 +197,7 @@ class MazeValidTest {
 	}
 
 	@Test
-	void test_openDoor() {
+	public void test_openDoor() {
 		Maze m = makeMaze();
 
 		// Moves
@@ -216,7 +219,7 @@ class MazeValidTest {
 	}
 
 	@Test
-	void test_openWrongDoors() {
+	public void test_openWrongDoors() {
 		Maze m = makeMaze();
 
 		// Moves
@@ -239,7 +242,7 @@ class MazeValidTest {
 	}
 
 	@Test
-	void test_openRightDoors() {
+	public void test_openRightDoors() {
 		Maze m = makeMaze();
 
 		// Moves
@@ -319,7 +322,7 @@ class MazeValidTest {
 
 		// Info
 		loc[5][6] = new Location(5, 6, TileName.INFO);
-		
+
 		// Lava
 		loc[4][6] = new Location(4, 6, TileName.LAVA);
 

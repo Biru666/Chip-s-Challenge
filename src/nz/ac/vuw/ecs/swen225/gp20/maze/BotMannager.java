@@ -64,4 +64,13 @@ public class BotMannager {
 		}
 	}
 
+	/**
+	 * Returns the set of actors
+	 * 
+	 * @return actors - HashSet
+	 */
+	public HashSet<Actor> getActors() {
+		return actors;
+	}
+
 }

@@ -2,6 +2,7 @@ package nz.ac.vuw.ecs.swen225.gp20.maze;
 
 /**
  * The Bot class which extends Actor and will move by itself using BotMannager.
+ * This bot will constantly move by sticking to its left wall.
  * 
  * @author wangding1 300422014
  *

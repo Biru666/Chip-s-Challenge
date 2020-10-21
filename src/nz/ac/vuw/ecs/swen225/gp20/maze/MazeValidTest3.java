@@ -1,12 +1,14 @@
 package nz.ac.vuw.ecs.swen225.gp20.maze;
 
-import static org.junit.jupiter.api.Assertions.*;
-import org.junit.jupiter.api.Test;
+import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
-public class MazeValidTest2 {
+import org.junit.Test;
+
+public class MazeValidTest3 {
 
 	@Test
-	void test_botKillChap() {
+	public void test_botKillChap() {
 		System.out.println("Test 1______________________");
 
 		Maze m = makeMaze();
@@ -26,7 +28,7 @@ public class MazeValidTest2 {
 	}
 
 	@Test
-	void test_ChapKillSelf() {
+	public void test_ChapKillSelf() {
 		System.out.println("Test 2______________________");
 
 		Maze m = makeMaze();
@@ -43,6 +45,23 @@ public class MazeValidTest2 {
 
 		// Checks chap is dead
 		assertTrue(m.getChap().isDead());
+
+	}
+
+	@Test
+	public void test_botInLava() {
+		System.out.println("Test 3______________________");
+
+		Maze m = makeMaze();
+		System.out.println(m);
+
+		for (int i = 0; i < 10; i++) {
+			m.tick();
+			System.out.println(m);
+
+		}
+
+		assertTrue(m.getBM().getActors().size() == 0);
 
 	}
 
@@ -94,6 +113,10 @@ public class MazeValidTest2 {
 		loc[3][3] = new Location(3, 3, TileName.WALL);
 		loc[4][3] = new Location(4, 3, TileName.WALL);
 
+		// Lava
+		loc[1][3] = new Location(1, 3, TileName.LAVA);
+
 		return loc;
 	}
+
 }
