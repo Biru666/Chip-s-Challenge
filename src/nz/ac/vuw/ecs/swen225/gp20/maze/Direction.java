@@ -7,5 +7,60 @@ package nz.ac.vuw.ecs.swen225.gp20.maze;
  *
  */
 public enum Direction {
-	NORTH, SOUTH, EAST, WEST
+	NORTH, SOUTH, EAST, WEST;
+
+	/**
+	 * Returns the direction enum thats to its Left
+	 * 
+	 * @param dir - Direction enum
+	 * @return Direction enum to its left
+	 */
+	public Direction left(Direction dir) {
+		Direction newD = null;
+		switch (dir) {
+		case NORTH:
+			newD = WEST;
+			break;
+		case EAST:
+			newD = NORTH;
+			break;
+		case SOUTH:
+			newD = EAST;
+			break;
+		case WEST:
+			newD = SOUTH;
+			break;
+		default:
+			break;
+		}
+		return newD;
+	}
+
+	/**
+	 * Returns the direction enum thats to its Right
+	 * 
+	 * @param dir - Direction enum
+	 * @return Direction enum to its Right
+	 */
+	public Direction right(Direction dir) {
+		Direction newD = null;
+		switch (dir) {
+		case NORTH:
+			newD = EAST;
+			break;
+		case EAST:
+			newD = SOUTH;
+			break;
+		case SOUTH:
+			newD = WEST;
+			break;
+		case WEST:
+			newD = NORTH;
+			break;
+		default:
+			break;
+		}
+		return newD;
+	}
+
 }

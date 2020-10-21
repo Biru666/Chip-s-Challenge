@@ -22,9 +22,7 @@ public class Wall extends Tile {
 
 	@Override
 	protected Action interact(Actor actor) {
-		if (actor instanceof Chap)
-			return Action.WALL;
-		return null;
+		return Action.WALL;
 	}
 
 }

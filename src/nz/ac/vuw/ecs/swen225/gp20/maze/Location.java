@@ -134,6 +134,9 @@ public class Location {
 		case CHAP:
 			this.actor = new Chap(actorName, this);
 			break;
+		case BOT:
+			this.actor = new Bot(actorName, this);
+			break;
 		default:
 			this.actor = null;
 		}

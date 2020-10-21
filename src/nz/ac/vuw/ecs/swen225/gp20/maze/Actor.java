@@ -10,6 +10,7 @@ package nz.ac.vuw.ecs.swen225.gp20.maze;
  */
 public abstract class Actor {
 
+	private boolean dead = false;
 	private ActorName actorName;
 	private Location location;
 
@@ -59,8 +60,10 @@ public abstract class Actor {
 	 * Kills an actor by remove its reference
 	 */
 	public void kill() {
+		dead = true;
 		location.setActor(null);
 		location = null;
+
 	}
 
 	/**
@@ -89,6 +92,22 @@ public abstract class Actor {
 	}
 
 	/**
+	 * Returns the state of weather chap is dead
+	 * 
+	 * @return dead boolean
+	 */
+	public boolean isDead() {
+		return dead;
+	}
+
+	/**
+	 * Sets chap to dead state
+	 */
+	public void setDead() {
+		dead = true;
+	}
+
+	/**
 	 * To string method for testing
 	 */
 	public String toString() {
@@ -96,6 +115,9 @@ public abstract class Actor {
 		switch (actorName) {
 		case CHAP:
 			s = "C";
+			break;
+		case BOT:
+			s = "B";
 			break;
 		default:
 			s = "X";
