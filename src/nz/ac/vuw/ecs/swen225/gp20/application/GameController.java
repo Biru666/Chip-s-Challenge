@@ -11,6 +11,8 @@ import javax.swing.Timer;
 
 import nz.ac.vuw.ecs.swen225.gp20.maze.Action;
 import nz.ac.vuw.ecs.swen225.gp20.maze.Direction;
+import nz.ac.vuw.ecs.swen225.gp20.maze.Info;
+import nz.ac.vuw.ecs.swen225.gp20.maze.Location;
 import nz.ac.vuw.ecs.swen225.gp20.maze.Maze;
 import nz.ac.vuw.ecs.swen225.gp20.persistence.Parser;
 import nz.ac.vuw.ecs.swen225.gp20.renderer.renderer;
@@ -84,6 +86,18 @@ public class GameController {
 				} else if (action == Action.EXIT) {
 					status = GameStatus.LEVEL_FINISHED;
 					gameInfoRenderer.levelFinished();
+				} else if (action == Action.INFO) {
+					Location[][] locations = maze.getLocation();
+					for (Location[] loc : locations) {
+						for (Location l : loc) {
+							if (l.getTile() instanceof Info) {
+								Info info = (Info)l.getTile();
+								System.out.println(info.getInfo());
+								gameInfoRenderer.popupInfo(info.getInfo());
+								
+							}
+						}
+					}
 				}
 			}
 		} catch (Exception e) {
