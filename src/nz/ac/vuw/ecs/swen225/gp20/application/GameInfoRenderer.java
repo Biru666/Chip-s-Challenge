@@ -23,4 +23,6 @@ public interface GameInfoRenderer {
 
 	void chapDie();
 
+	void popupInfo(String info);
+
 }

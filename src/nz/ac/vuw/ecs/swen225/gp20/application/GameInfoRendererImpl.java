@@ -78,6 +78,11 @@ public class GameInfoRendererImpl implements GameInfoRenderer {
 		view.showChapDieDialog();
 	}
 
+	@Override
+	public void popupInfo(String info) {
+		view.popupInfo(info);
+	}
+
 	public GameInfoView getView() {
 		return view;
 	}
