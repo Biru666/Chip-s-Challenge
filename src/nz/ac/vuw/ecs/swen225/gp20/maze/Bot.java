@@ -19,6 +19,17 @@ public class Bot extends Actor {
 		super(actorName, loaction);
 	}
 
+	/**
+	 * Chap actor constructor
+	 * 
+	 * @param actorName - ActorName enum
+	 * @param loaction  - Location object
+	 * @param d         - Direction enum
+	 */
+	public Bot(ActorName actorName, Location location, Direction d) {
+		super(actorName, location, d);
+	}
+
 	@Override
 	protected Action interact(Tile t, Actor a, Direction dir) {
 		// collided with another actor, kill each other
@@ -38,7 +49,7 @@ public class Bot extends Actor {
 	protected Location nextLocation(Maze maze) {
 		int face = 0;
 		Location l = maze.findNewLocation(this, left());
-		
+
 		while (l.getTile() != null && !l.getTile().canMoveOn() && face < 4) {
 			l = maze.findNewLocation(this, right());
 			face++;
