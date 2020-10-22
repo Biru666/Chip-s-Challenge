@@ -43,7 +43,7 @@ public class Location {
 		this.col = col;
 		this.actor = null;
 
-		// Creating Tile object: Tile("name","canMoveOn",canPickUp")
+		// Creating Tile object: Tile("name","location","canMoveOn","canPickUp")
 		switch (tileName) {
 		case WALL:
 			this.tile = new Wall(tileName, this, false, false);
@@ -81,7 +81,7 @@ public class Location {
 		this.col = col;
 		this.actor = null;
 
-		// Creating Tile object: Tile("name","canMoveOn",canPickUp","variation")
+		// Creating Tile object: Tile("name","Location","canMoveOn","canPickUp","variation")
 		switch (tileName) {
 		case KEY:
 			this.tile = new Key(tileName, this, true, true, variation);
@@ -107,7 +107,7 @@ public class Location {
 		this.col = col;
 		this.actor = null;
 
-		// Creating Tile object: Tile("name","canMoveOn",canPickUp","variation")
+		// Creating Tile object: Tile("name",:location","canMoveOn","canPickUp","variation")
 		switch (tileName) {
 		case INFO:
 			this.tile = new Info(tileName, this, true, false, txt);
@@ -136,6 +136,31 @@ public class Location {
 			break;
 		case BOT:
 			this.actor = new Bot(actorName, this);
+			break;
+		default:
+			this.actor = null;
+		}
+	}
+	
+	/**
+	 * Default Actor Location constructor.
+	 * 
+	 * @param row       - the row coordinate in the 2D array
+	 * @param col       - the col coordinate in the 2D array
+	 * @param actorName - the specified Enum ActorName
+	 */
+	public Location(int row, int col, ActorName actorName, Direction d) {
+		this.row = row;
+		this.col = col;
+		this.tile = null;
+
+		// Creating actor object
+		switch (actorName) {
+		case CHAP:
+			this.actor = new Chap(actorName, this,d);
+			break;
+		case BOT:
+			this.actor = new Bot(actorName, this,d);
 			break;
 		default:
 			this.actor = null;

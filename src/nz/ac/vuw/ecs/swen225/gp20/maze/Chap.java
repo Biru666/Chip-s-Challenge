@@ -21,8 +21,20 @@ public class Chap extends Actor {
 	 * @param actorName - Enum actorName
 	 * @param loaction  - Location
 	 */
-	public Chap(ActorName actorName, Location loaction) {
-		super(actorName, loaction);
+	public Chap(ActorName actorName, Location location) {
+		super(actorName, location);
+		this.inventory = new HashMap<>();
+		this.chips = 0;
+	}
+
+	/**
+	 * Chap actor constructor
+	 * 
+	 * @param actorName - Enum actorName
+	 * @param loaction  - Location
+	 */
+	public Chap(ActorName actorName, Location location, Direction d) {
+		super(actorName, location, d);
 		this.inventory = new HashMap<>();
 		this.chips = 0;
 	}
