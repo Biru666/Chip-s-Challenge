@@ -7,5 +7,44 @@ package nz.ac.vuw.ecs.swen225.gp20.maze;
  *
  */
 public enum Action {
-	MOVE, WALL, DOOR, ITEM, INFO, EXIT, DIE, BOT_MOVE, BOT_DIE, INVALID
+	/**
+	 * Valid move
+	 */
+	MOVE,
+	/**
+	 * Invalid move
+	 */
+	WALL,
+	/**
+	 * Opened a door
+	 */
+	DOOR,
+	/**
+	 * Picked up an Item
+	 */
+	ITEM,
+	/**
+	 * Stepped on info
+	 */
+	INFO,
+	/**
+	 * Reached exit
+	 */
+	EXIT,
+	/**
+	 * Chap died
+	 */
+	DIE,
+	/**
+	 * Bot Valid move
+	 */
+	BOT_MOVE,
+	/**
+	 * Bot died
+	 */
+	BOT_DIE,
+	/**
+	 * for testing purposes
+	 */
+	INVALID
 }

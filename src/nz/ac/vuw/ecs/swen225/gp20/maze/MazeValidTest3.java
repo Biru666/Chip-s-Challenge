@@ -5,8 +5,17 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.Test;
 
+/**
+ * Unit test for Bot AI interactions
+ * 
+ * @author wangding1 300422014
+ *
+ */
 public class MazeValidTest3 {
 
+	/**
+	 * Test for bots moving in to kill Chap
+	 */
 	@Test
 	public void test_botKillChap() {
 		System.out.println("Test 1______________________");
@@ -27,6 +36,9 @@ public class MazeValidTest3 {
 
 	}
 
+	/**
+	 * Test for chap walking into Bots
+	 */
 	@Test
 	public void test_ChapKillSelf() {
 		System.out.println("Test 2______________________");
@@ -48,6 +60,9 @@ public class MazeValidTest3 {
 
 	}
 
+	/**
+	 * Test for bots dropping into lava
+	 */
 	@Test
 	public void test_botInLava() {
 		System.out.println("Test 3______________________");
@@ -58,7 +73,6 @@ public class MazeValidTest3 {
 		for (int i = 0; i < 10; i++) {
 			m.tick();
 			System.out.println(m);
-
 		}
 
 		assertTrue(m.getBM().getActors().size() == 0);
@@ -106,6 +120,7 @@ public class MazeValidTest3 {
 
 		// enemy
 		loc[2][2] = new Location(2, 2, ActorName.BOT);
+		loc[3][2] = new Location(3, 2, ActorName.BOT);
 		loc[4][2] = new Location(4, 2, ActorName.BOT);
 
 		// Wall (middle)

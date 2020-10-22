@@ -8,7 +8,6 @@ package nz.ac.vuw.ecs.swen225.gp20.maze;
  *
  */
 public class Bot extends Actor {
-	Direction dir = Direction.SOUTH;
 
 	/**
 	 * Chap actor constructor
@@ -35,22 +34,34 @@ public class Bot extends Actor {
 		return Action.BOT_MOVE;
 	}
 
+	@Override
+	protected Location nextLocation(Maze maze) {
+		int face = 0;
+		Location l = maze.findNewLocation(this, left());
+
+		while (l.getTile() != null && !l.getTile().canMoveOn() && face < 4) {
+			l = maze.findNewLocation(this, right());
+			face++;
+		}
+		return l;
+	}
+
 	/**
-	 * Returns the direction enum to its Left
+	 * Returns the direction enum to its Left and face it
 	 * 
 	 * @return Direction enum to its left
 	 */
-	public Direction left() {
+	private Direction left() {
 		dir = dir.left(dir);
 		return dir;
 	}
 
 	/**
-	 * Returns the direction enum to its Right
+	 * Returns the direction enum to its Right and face it
 	 * 
 	 * @return Direction enum to its Right
 	 */
-	public Direction right() {
+	private Direction right() {
 		dir = dir.right(dir);
 		return dir;
 	}
