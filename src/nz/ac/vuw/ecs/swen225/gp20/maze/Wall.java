@@ -15,8 +15,6 @@ public class Wall extends Tile {
 	 * @param location  - location object
 	 * @param canMoveOn - boolean if the player can be moved on
 	 * @param canPickUp - boolean if the player can pick up
-	 * @param moveOn    - if the tile can be moved on
-	 * @param pickUp    - if the tile can be picked up
 	 */
 	public Wall(TileName tileName, Location location, boolean canMoveOn, boolean canPickUp) {
 		super(tileName, location, canMoveOn, canPickUp);

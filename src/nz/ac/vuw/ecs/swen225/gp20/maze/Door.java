@@ -18,8 +18,6 @@ public class Door extends Tile {
 	 * @param location  - location object
 	 * @param canMoveOn - boolean if can be moved on
 	 * @param canPickup - boolean if can be picked up
-	 * @param moveOn    - if the tile can be moved on
-	 * @param pickUp    - if the tile can be picked up
 	 * @param variation - variation enum
 	 */
 	public Door(TileName tileName, Location location, boolean canMoveOn, boolean canPickup, Variation variation) {

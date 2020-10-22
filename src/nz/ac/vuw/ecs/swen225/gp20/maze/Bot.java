@@ -23,7 +23,7 @@ public class Bot extends Actor {
 	 * Chap actor constructor
 	 * 
 	 * @param actorName - ActorName enum
-	 * @param loaction  - Location object
+	 * @param location  - location object
 	 * @param d         - Direction enum
 	 */
 	public Bot(ActorName actorName, Location location, Direction d) {

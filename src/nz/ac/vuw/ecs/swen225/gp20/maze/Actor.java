@@ -33,7 +33,7 @@ public abstract class Actor {
 	 * Actor constructor with direction parameter
 	 * 
 	 * @param actorName - Enum for type of actor.
-	 * @param loaction  - Location in which the actor is currently on.
+	 * @param location  - location in which the actor is currently on.
 	 * @param d         - Direction enum
 	 */
 	public Actor(ActorName actorName, Location location, Direction d) {
@@ -107,6 +107,8 @@ public abstract class Actor {
 	}
 
 	/**
+	 * Returns the location object
+	 * 
 	 * @return location object
 	 */
 	public Location getLocation() {
@@ -114,6 +116,8 @@ public abstract class Actor {
 	}
 
 	/**
+	 * Returns the actorName enum
+	 * 
 	 * @return actorName enum
 	 */
 	public ActorName getActorName() {
