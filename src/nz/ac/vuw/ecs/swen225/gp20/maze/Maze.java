@@ -138,6 +138,9 @@ public class Maze {
 
 			// for each location in row
 			for (Location loc : row) {
+				if (loc == null) {
+					continue;
+				}
 				Actor a = loc.getActor();
 				Tile t = loc.getTile();
 				if (a != null) {

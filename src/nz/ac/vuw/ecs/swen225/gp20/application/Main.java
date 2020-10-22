@@ -12,6 +12,7 @@ import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
 
 import nz.ac.vuw.ecs.swen225.gp20.maze.Direction;
+import nz.ac.vuw.ecs.swen225.gp20.recnplay.RecordAndReplay;
 import nz.ac.vuw.ecs.swen225.gp20.renderer.renderer;
 
 /**
@@ -68,6 +69,9 @@ public class Main extends JFrame {
 							break;
 						default:
 							break;
+						}
+						if(RecordAndReplay.isRecording()) { //
+							RecordAndReplay.addAction(e);
 						}
 						isBusy.set(false);
 					});
