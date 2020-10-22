@@ -53,7 +53,7 @@ public class RecordAndReplay {
 	private static String gameState;
 	private static boolean isStepReplay = false;
 	private static ArrayList<String> moveList = new ArrayList<>();
-	
+	private static int delay = 700;
 
 	/**
 	 * To start a new record
@@ -218,14 +218,26 @@ public class RecordAndReplay {
 	              moveList.add(object2.getString("move"));
 	          }
 	      }
-	      for(int i=0; i<moveList.size(); i++) {
+	      /**for(int i=0; i<moveList.size(); i++) {
 	    	  if(isStepReplay==false) {
 	    		  String direction = moveList.get(i);
 	    		  replay(direction,gc);
 	    		  moveList.remove(i);
 	    		  i--;
 	    	  }
-	      }
+	      }*/
+	      Runnable runnable = () -> {
+	          while (moveList.size() > 0) {
+	            try {
+	            	Thread.sleep(delay);
+	            	replay(gc);
+	            } catch (InterruptedException e) {
+	            	e.printStackTrace();
+	            }
+	          }
+	        };
+	        Thread thread = new Thread(runnable);
+	        thread.start();
 	}
 	
 	public static void stepReplay(GameController gc) {
@@ -234,12 +246,13 @@ public class RecordAndReplay {
 		System.out.println(moveList.size());
 		if(moveList.size()>0) {
 			String direction = moveList.get(0);
-			replay(direction,gc);
+			//replay(direction,gc);
 			moveList.remove(0);
 		}
 	}
 	
-	private static void replay(String direction, GameController gc) {
+	private static void replay(GameController gc) {
+			String direction = moveList.get(0);
 			AtomicBoolean isBusy = new AtomicBoolean(false);
 			if (isBusy.compareAndSet(false, true)) {
 				SwingUtilities.invokeLater(() -> {
@@ -262,6 +275,8 @@ public class RecordAndReplay {
 					isBusy.set(false);
 				});
 			}
+			moveList.remove(0);
+		
 	}
 	
 	/**
@@ -392,7 +407,13 @@ public class RecordAndReplay {
 	}
 	
 	public static void setDelay(double d) {
-		
+		if(d==0.5) {
+			delay = 1400;
+		}else if(d==1) {
+			delay = 700;
+		}else {
+			delay = 350;
+		}
 	}
 	
 	
