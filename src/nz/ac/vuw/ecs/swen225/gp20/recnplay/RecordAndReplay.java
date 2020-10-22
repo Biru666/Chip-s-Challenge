@@ -14,15 +14,19 @@ import java.io.StringReader;
 import java.io.StringWriter;
 import java.io.Writer;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 import javax.json.Json;
 import javax.json.JsonArray;
 import javax.json.JsonArrayBuilder;
+import javax.json.JsonBuilderFactory;
 import javax.json.JsonObject;
 import javax.json.JsonObjectBuilder;
 import javax.json.JsonReader;
 import javax.json.JsonString;
+import javax.json.JsonValue;
 import javax.swing.JFileChooser;
 import javax.swing.SwingUtilities;
 
@@ -30,6 +34,8 @@ import javax.swing.SwingUtilities;
 import nz.ac.vuw.ecs.swen225.gp20.persistence.Parser;
 import nz.ac.vuw.ecs.swen225.gp20.renderer.renderer;
 import nz.ac.vuw.ecs.swen225.gp20.application.GameController;
+import nz.ac.vuw.ecs.swen225.gp20.application.GameInfoModel;
+import nz.ac.vuw.ecs.swen225.gp20.application.GameInfoRenderer;
 import nz.ac.vuw.ecs.swen225.gp20.maze.ActorName;
 import nz.ac.vuw.ecs.swen225.gp20.maze.Direction;
 import nz.ac.vuw.ecs.swen225.gp20.maze.Door;
@@ -57,6 +63,11 @@ public class RecordAndReplay {
 	private static boolean isReplaying = false;
 	private static boolean isStepReplay = false;
 	
+	private static int chipsLeft;
+	private static int level;
+	private static Map<String,Integer> inventoryMap = new HashMap<String,Integer>();
+	
+	
 	private static int delay = 700;
 
 	/**
@@ -68,7 +79,13 @@ public class RecordAndReplay {
 		isRecording = true;
 		fileName = name;
 		board = getGameState(gc);
+		chipsLeft = gc.getMaze().getChap().getTotalChips() - gc.getMaze().getChap().getChips();
+		level = gc.getInfoModel().getLevel();
+		inventoryMap = gc.getMaze().getChap().getInventory();
+		
 	}
+	
+	
 	
 	/**
 	 * Add actions to the action list
@@ -115,9 +132,22 @@ public class RecordAndReplay {
 		            .add("move", action);
 		        arrayBuilder.add(builder.build());
 		      }
+			
+			/**JsonBuilderFactory factory = Json.createBuilderFactory(inventory);
+			JsonArrayBuilder arrayBuilder2 = Json.createArrayBuilder();
+			for(String s:inventory.keySet()) {
+				JsonObjectBuilder value = factory.createObjectBuilder()
+								.add("name",s)
+								.add("number", inventory.get(s));
+				arrayBuilder2.add(value);	
+			}*/
+			
 			// add game state and action array to a new builder
 			JsonObjectBuilder builder = Json.createObjectBuilder()
 					.add("game", board)
+					.add("chips", chipsLeft)
+					.add("level", level)
+					//.add("inventory", (JsonValue) inventory)
 			        .add("moves", arrayBuilder);
 			// write text to json file
 			Writer writer = new StringWriter();
@@ -143,6 +173,7 @@ public class RecordAndReplay {
 	public static void loadRecording(String name, GameController gc) {
 		isReplaying = true;
 		fileName = name;
+		gc.stopCountdown();
 		// load game state
 		// select the gamestate from json file
 		String line;
@@ -226,6 +257,23 @@ public class RecordAndReplay {
 	              directionList.add(object2.getString("move"));
 	          }
 	      }
+	      
+	      // load game information
+	      chipsLeft = object.getInt("chips");
+	      level = object.getInt("level");
+	      GameInfoModel model = gc.getInfoModel();
+		  model.setChipsLeft(chipsLeft);
+		  if(level==1) model.setTime(100);
+		  if(level==2) model.setTime(60);
+		  if(level==3) model.setTime(90);
+		  model.setLevel(level);
+		  model.setInventory(inventoryMap);
+		  GameInfoRenderer infoRenderer = gc.getInfoRenderer();
+		  infoRenderer.render(model);
+		  infoRenderer.update(model);
+		  gc.setInfoModel(model);
+		  gc.setGameInfoRenderer(infoRenderer);
+	      
 	      // replay the actions
 	      if(!isStepReplay) {
 	      Runnable runnable = () -> {
@@ -246,37 +294,39 @@ public class RecordAndReplay {
 	
 	public static void stepReplay(GameController gc) {
 		isStepReplay = true;
+		gc.pause();
+		/**
 		System.out.println(isStepReplay);
 		System.out.println(directionList.size());
 		if(directionList.size()>0) {
 			replay(gc);
-		}
+		}*/
 	}
 	
 	private static void replay(GameController gc) {
 			String direction = directionList.get(0);
-			AtomicBoolean isBusy = new AtomicBoolean(false);
-			if (isBusy.compareAndSet(false, true)) {
-				SwingUtilities.invokeLater(() -> {
-					switch (direction) {
-					case "West":
-						gc.move(Direction.WEST);
-						break;
-					case "East":
-						gc.move(Direction.EAST);
-						break;
-					case "North":
-						gc.move(Direction.NORTH);
-						break;
-					case "South":
-						gc.move(Direction.SOUTH);
-						break;
-					default:
-						break;
-					}
-					isBusy.set(false);
-				});
-			}
+				AtomicBoolean isBusy = new AtomicBoolean(false);
+				if (isBusy.compareAndSet(false, true)) {
+					SwingUtilities.invokeLater(() -> {
+						switch (direction) {
+						case "West":
+							gc.move(Direction.WEST);
+							break;
+						case "East":
+							gc.move(Direction.EAST);
+							break;
+						case "North":
+							gc.move(Direction.NORTH);
+							break;
+						case "South":
+							gc.move(Direction.SOUTH);
+							break;
+						default:
+							break;
+						}
+						isBusy.set(false);
+					});
+				}
 			directionList.remove(0);
 		
 	}
@@ -325,6 +375,7 @@ public class RecordAndReplay {
 						gs = "15, ";
 						gamestate = add(gamestate,gs);
 						continue;
+					
 					}
 				}
 				switch (tileName) {
@@ -395,6 +446,11 @@ public class RecordAndReplay {
 				// Help
 				case INFO:
 					gs = "14, ";
+					gamestate = add(gamestate,gs);
+					continue;
+				// Lava
+				case LAVA:
+					gs = "16, ";
 					gamestate = add(gamestate,gs);
 					continue;
 				}
