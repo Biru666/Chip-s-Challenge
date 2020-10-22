@@ -50,38 +50,55 @@ public class Maze {
 	}
 
 	/**
-	 * Moves the desierd actor in a given direction
+	 * Moves the desired actor in a given direction
 	 * 
 	 * @param actor     - Actor object
 	 * @param direction - Direction enum
 	 */
 	public void move(Actor actor, Direction direction) {
 		Preconditions.checkArgument(actor != null, "The specified Actor object does not exist");
+		action = Action.INVALID;
+		Location newL = findNewLocation(actor, direction);
+		if (newL != null) {
+			action = actor.move(newL, direction);
+		}
+
+	}
+
+	/**
+	 * Helper method for returning a new Location based on the current actor
+	 * position with a giving direction
+	 * 
+	 * @param actor     - Actor object
+	 * @param direction - Direction enum
+	 * @return Location - new Location in that direction, null if its invalid
+	 */
+	public Location findNewLocation(Actor actor, Direction direction) {
 		int currentRow = actor.getLocation().getRow();
 		int currentCol = actor.getLocation().getCol();
-		action = Action.INVALID;
 		Location newL = null;
-
 		switch (direction) {
 		case NORTH:
 			if ((newL = getValidLocation(currentCol, currentRow - 1)) != null)
-				action = actor.move(newL, direction);
+				return newL;
 			break;
 		case SOUTH:
 			if ((newL = getValidLocation(currentCol, currentRow + 1)) != null)
-				action = actor.move(newL, direction);
+				return newL;
 			break;
 		case EAST:
 			if ((newL = getValidLocation(currentCol + 1, currentRow)) != null)
-				action = actor.move(newL, direction);
+				return newL;
 			break;
 		case WEST:
 			if ((newL = getValidLocation(currentCol - 1, currentRow)) != null)
-				action = actor.move(newL, direction);
+				return newL;
 			break;
 		default:
 			assertTrue("Direction enum is not a valid direction", true);
 		}
+		assertTrue("The new Location is out of bound", true);
+		return null;
 	}
 
 	/**

@@ -20,8 +20,8 @@ public class Location {
 	/**
 	 * Empty tile constructor.
 	 * 
-	 * @param x - the x coordinate in the 2D array.
-	 * @param y - the y coordinate in the 2D array.
+	 * @param row - the row coordinate in the 2D array.
+	 * @param col - the col coordinate in the 2D array.
 	 */
 	public Location(int row, int col) {
 		this.row = row;
@@ -34,8 +34,8 @@ public class Location {
 	/**
 	 * Default Tile constructor.
 	 * 
-	 * @param x        - the x coordinate in the 2D array.
-	 * @param y        - the y coordinate in the 2D array.
+	 * @param row      - the row coordinate in the 2D array.
+	 * @param col      - the col coordinate in the 2D array.
 	 * @param tileName - the specified Enum TileName.
 	 */
 	public Location(int row, int col, TileName tileName) {
@@ -71,8 +71,8 @@ public class Location {
 	/**
 	 * Default Tile constructor with variation.
 	 * 
-	 * @param x         - the x coordinate in the 2D array.
-	 * @param y         - the y coordinate in the 2D array.
+	 * @param row       - the row coordinate in the 2D array.
+	 * @param col       - the col coordinate in the 2D array.
 	 * @param tileName  - the specified Enum TileName.
 	 * @param variation - the specified Enum variation, null if no need.
 	 */
@@ -97,8 +97,8 @@ public class Location {
 	/**
 	 * Default Info constructor for constructing an Info file with help message.
 	 * 
-	 * @param x        - the x coordinate in the 2D array.
-	 * @param y        - the y coordinate in the 2D array.
+	 * @param row      - the row coordinate in the 2D array.
+	 * @param col      - the col coordinate in the 2D array.
 	 * @param tileName - the specified Enum TileName.
 	 * @param txt      - the help message that will get stored.
 	 */
@@ -120,8 +120,8 @@ public class Location {
 	/**
 	 * Default Actor Location constructor.
 	 * 
-	 * @param x         - the x coordinate in the 2D array
-	 * @param y         - the y coordinate in the 2D array
+	 * @param row       - the row coordinate in the 2D array
+	 * @param col       - the col coordinate in the 2D array
 	 * @param actorName - the specified Enum ActorName
 	 */
 	public Location(int row, int col, ActorName actorName) {

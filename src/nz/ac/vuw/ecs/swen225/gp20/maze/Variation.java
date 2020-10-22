@@ -7,5 +7,20 @@ package nz.ac.vuw.ecs.swen225.gp20.maze;
  *
  */
 public enum Variation {
-	GREEN, BLUE, RED, YELLOW
+	/**
+	 * Green color
+	 */
+	GREEN,
+	/**
+	 * Blue color
+	 */
+	BLUE,
+	/**
+	 * Red color
+	 */
+	RED,
+	/**
+	 * Yellow color
+	 */
+	YELLOW
 }

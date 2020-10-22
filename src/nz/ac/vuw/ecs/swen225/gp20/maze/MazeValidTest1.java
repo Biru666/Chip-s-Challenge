@@ -5,8 +5,18 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.Test;
 
+/**
+ * Unit test for the Maze packages integrity. With all tile and chap
+ * interactions.
+ * 
+ * @author wangding1 300422014
+ *
+ */
 public class MazeValidTest1 {
 
+	/**
+	 * Testing for init maze setup.
+	 */
 	@Test
 	public void test_setLocation() {
 		Maze m = makeMaze();
@@ -16,6 +26,9 @@ public class MazeValidTest1 {
 		assertTrue(m.getAction() == null);
 	}
 
+	/**
+	 * Test for maze correctness
+	 */
 	@Test
 	public void test_stringMap() {
 		Maze m = makeMaze();
@@ -27,6 +40,9 @@ public class MazeValidTest1 {
 		assertTrue(m.getAction() == null);
 	}
 
+	/**
+	 * Test for simple move
+	 */
 	@Test
 	public void test_move() {
 		Maze m = makeMaze();
@@ -40,6 +56,9 @@ public class MazeValidTest1 {
 		assertTrue(m.getAction() == Action.MOVE);
 	}
 
+	/**
+	 * Testing for info Tile
+	 */
 	@Test
 	public void test_moveToInfo() {
 		Maze m = makeMaze();
@@ -53,6 +72,9 @@ public class MazeValidTest1 {
 		assertTrue(m.getAction() == Action.INFO);
 	}
 
+	/**
+	 * Testing for Exit tile
+	 */
 	@Test
 	public void test_moveToExit() {
 		Maze m = makeMaze();
@@ -67,6 +89,9 @@ public class MazeValidTest1 {
 		assertTrue(m.getAction() == Action.EXIT);
 	}
 
+	/**
+	 * Testing for wall interaction
+	 */
 	@Test
 	public void test_moveToWall() {
 		Maze m = makeMaze();
@@ -82,6 +107,9 @@ public class MazeValidTest1 {
 
 	}
 
+	/**
+	 * Testing for gate interaction without chips
+	 */
 	@Test
 	public void test_moveToGate() {
 		Maze m = makeMaze();
@@ -96,6 +124,9 @@ public class MazeValidTest1 {
 		assertTrue(l == m.getChap().getLocation()); // can't move, location have to be the same
 	}
 
+	/**
+	 * Testing for interaction with Door without key
+	 */
 	@Test
 	public void test_moveToDoor() {
 		Maze m = makeMaze();
@@ -116,6 +147,9 @@ public class MazeValidTest1 {
 		assertTrue(l == m.getChap().getLocation()); // can't move, location have to be the same
 	}
 
+	/**
+	 * Testing for picking up Chip tile
+	 */
 	@Test
 	public void test_moveToChips() {
 		Maze m = makeMaze();
@@ -135,6 +169,9 @@ public class MazeValidTest1 {
 
 	}
 
+	/**
+	 * Testing for picking up key
+	 */
 	@Test
 	public void test_moveToKey() {
 		Maze m = makeMaze();
@@ -155,6 +192,9 @@ public class MazeValidTest1 {
 		assertTrue(m.getChap().getInventory().size() == 1); // should have a entry item
 	}
 
+	/**
+	 * Testing for moving into lava
+	 */
 	@Test
 	public void test_moveToLava() {
 		Maze m = makeMaze();
@@ -172,6 +212,9 @@ public class MazeValidTest1 {
 
 	}
 
+	/**
+	 * Testing for opening gate with all the chips
+	 */
 	@Test
 	public void test_openGate() {
 		Maze m = makeMaze();
@@ -196,6 +239,9 @@ public class MazeValidTest1 {
 		assertTrue(l != m.getChap().getLocation()); // Valid move, location can't to be the same
 	}
 
+	/**
+	 * Testing for opening doors with correct key
+	 */
 	@Test
 	public void test_openDoor() {
 		Maze m = makeMaze();
@@ -218,6 +264,9 @@ public class MazeValidTest1 {
 		assertTrue(m.getChap().getInventory().size() == 0); // should have used the key
 	}
 
+	/**
+	 * Test for opening door with the wrong key
+	 */
 	@Test
 	public void test_openWrongDoors() {
 		Maze m = makeMaze();
@@ -241,6 +290,9 @@ public class MazeValidTest1 {
 		assertTrue(m.getChap().getInventory().size() == 1); // shoulden't have used the key
 	}
 
+	/**
+	 * Test for opening correct door with relative key
+	 */
 	@Test
 	public void test_openRightDoors() {
 		Maze m = makeMaze();

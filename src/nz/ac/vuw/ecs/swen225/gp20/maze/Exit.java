@@ -12,10 +12,12 @@ public class Exit extends Tile {
 	/**
 	 * Constructor which creates the Exit tile.
 	 * 
-	 * @param tileName - name
-	 * @param location - location object
-	 * @param moveOn   - if the tile can be moved on
-	 * @param pickUp   - if the tile can be picked up
+	 * @param tileName  - name
+	 * @param location  - location object
+	 * @param canMoveOn - boolean if can be moved on
+	 * @param canPickup - boolean if can be picked up
+	 * @param moveOn    - if the tile can be moved on
+	 * @param pickUp    - if the tile can be picked up
 	 */
 	public Exit(TileName tileName, Location location, boolean canMoveOn, boolean canPickup) {
 		super(tileName, location, canMoveOn, canPickup);
