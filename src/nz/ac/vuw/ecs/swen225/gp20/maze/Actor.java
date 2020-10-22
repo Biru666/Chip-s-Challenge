@@ -10,10 +10,13 @@ package nz.ac.vuw.ecs.swen225.gp20.maze;
  */
 public abstract class Actor {
 
-	protected Direction dir = Direction.SOUTH;
-	private boolean dead = false;
-	private ActorName actorName;
+	// Location and Direction of the current Actor
 	private Location location;
+	protected Direction dir = Direction.SOUTH;
+
+	// State and name of the current Actor
+	private ActorName actorName;
+	private boolean dead = false;
 
 	/**
 	 * Constructor for creating an actor on a single location.

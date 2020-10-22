@@ -11,7 +11,7 @@ import org.junit.Test;
  * @author wangding1 300422014
  *
  */
-public class MazeValidTest3 {
+public class MazeAITest {
 
 	/**
 	 * Test for bots moving in to kill Chap

@@ -38,7 +38,7 @@ public class Bot extends Actor {
 	protected Location nextLocation(Maze maze) {
 		int face = 0;
 		Location l = maze.findNewLocation(this, left());
-
+		
 		while (l.getTile() != null && !l.getTile().canMoveOn() && face < 4) {
 			l = maze.findNewLocation(this, right());
 			face++;

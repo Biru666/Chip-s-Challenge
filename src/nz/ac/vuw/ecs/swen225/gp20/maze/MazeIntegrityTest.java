@@ -12,7 +12,7 @@ import org.junit.Test;
  * @author wangding1 300422014
  *
  */
-public class MazeValidTest1 {
+public class MazeIntegrityTest {
 
 	/**
 	 * Testing for init maze setup.
