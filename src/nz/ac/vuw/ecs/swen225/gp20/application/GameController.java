@@ -15,7 +15,7 @@ import nz.ac.vuw.ecs.swen225.gp20.maze.Info;
 import nz.ac.vuw.ecs.swen225.gp20.maze.Location;
 import nz.ac.vuw.ecs.swen225.gp20.maze.Maze;
 import nz.ac.vuw.ecs.swen225.gp20.persistence.Parser;
-import nz.ac.vuw.ecs.swen225.gp20.recnplay.RecordAndReplay;
+import nz.ac.vuw.ecs.swen225.gp20.persistence.SaveGame;
 import nz.ac.vuw.ecs.swen225.gp20.renderer.renderer;
 
 /**
@@ -40,11 +40,12 @@ public class GameController {
 	private Timer tickTimer = null;
 
 	public void startLevel1() {
-		startLevel(currentLevel = 2);
+		startLevel(currentLevel = 1);
 	}
 
 	public void saveLevel() {
-		
+		SaveGame sg = new SaveGame(maze, currentLevel);
+		sg.save("SavedMap");
 	}
 
 	public void resumeSavedGame() {
@@ -107,9 +108,7 @@ public class GameController {
 	}
 
 	public void pause() {
-		if (tickTimer != null) {
-			tickTimer.stop();
-		}
+		// maze.pause();
 		gameInfoRenderer.pause();
 		resume();
 	}
@@ -150,7 +149,7 @@ public class GameController {
 				}
 			});
 		}
-		tickTimer.start();
+		tickTimer.restart();
 	}
 
 	private void renderMap() {
@@ -158,51 +157,17 @@ public class GameController {
 		mazeRenderer.playerPos = maze.getChap().getLocation();
 		mazeRenderer.Corner();
 	}
-	
-	public void startRecording() { //
-		RecordAndReplay.startNewRecord("record.json", this);
-		System.out.println("start recording");
-	}
-	
-	public void saveRecording() { //
-		RecordAndReplay.saveRecording(this);
-		System.out.println("save recording");
-	}
-	
-	public void loadRecording() { //
-		RecordAndReplay.loadRecording("record.json", this);
-		System.out.println("load recording");
-	}
-	
-	public void stepReplay() { //
-		RecordAndReplay.stepReplay(this);
-		System.out.println("step replay");
-	}
-	
-	public void oneSpeed() { //
-		RecordAndReplay.setDelay(1);
-		System.out.println("1.0 speed replay");
-	}
-	
-	public void halfSpeed() { //
-		RecordAndReplay.setDelay(0.5);
-		System.out.println("0.5 speed replay");
-	}
-	
-	public void twiceSpeed() { //
-		RecordAndReplay.setDelay(2);
-		System.out.println("2.0 speed replay");
-	}
-	
 
 	public void resume() {
-		if (tickTimer != null) {
-			tickTimer.start();
-		}
+		 //maze.resume();
 	}
 
 	public GameStatus getStatus() {
 		return status;
+	}
+
+	public void setStatus(GameStatus status) {
+		this.status = status;
 	}
 
 	public void setGameInfoRenderer(GameInfoRenderer gameInfoRenderer) {
@@ -211,26 +176,6 @@ public class GameController {
 
 	public void setMazeRenderer(renderer mazeRenderer) {
 		this.mazeRenderer = mazeRenderer;
-	}
-
-	public void setMaze(Maze m) { //
-		this.maze = m;
-	}
-	
-	public void setInfoRenderer(GameInfoRenderer info) { //
-		this.gameInfoRenderer = info;
-	}
-	
-	public Maze getMaze() { //
-		return this.maze;
-	}
-	
-	public renderer getRenderer() { //
-		return this.mazeRenderer;
-	}
-	
-	public GameInfoRenderer setInfoRenderer() { //
-		return this.gameInfoRenderer;
 	}
 
 }
