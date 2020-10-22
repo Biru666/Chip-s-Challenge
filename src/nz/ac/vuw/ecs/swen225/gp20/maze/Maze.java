@@ -1,7 +1,13 @@
 package nz.ac.vuw.ecs.swen225.gp20.maze;
 
+import static org.junit.Assert.assertTrue;
+
+import java.util.HashSet;
+
+import com.google.common.base.Preconditions;
+
 /**
- * Maze class which stores the current level infomation of the game
+ * Maze class which stores the current level information of the game
  * 
  * @author wangding1 300422014
  *
@@ -9,6 +15,7 @@ package nz.ac.vuw.ecs.swen225.gp20.maze;
 public class Maze {
 
 	private Location[][] locations; // 2D array of maze locations (row,col)
+	private BotMannager bm = null;
 	private Chap chap;
 	private Action action;
 
@@ -18,8 +25,19 @@ public class Maze {
 	 * @param locations - 2d Array of Locations (x,y)
 	 */
 	public void setLevel(Location[][] locations) {
+		Preconditions.checkArgument(locations != null, "2D Location array cannot be null"); // Precondition check
 		this.locations = locations;
-		this.chap = findChap(locations);
+		findActors(locations);
+	}
+
+	/**
+	 * Performs a time tick for all the other actors that will move on its own.
+	 */
+	public void tick() {
+		if (bm == null)
+			return;
+		else
+			bm.tick();
 	}
 
 	/**
@@ -38,6 +56,7 @@ public class Maze {
 	 * @param direction - Direction enum
 	 */
 	public void move(Actor actor, Direction direction) {
+		Preconditions.checkArgument(actor != null, "The specified Actor object does not exist");
 		int currentRow = actor.getLocation().getRow();
 		int currentCol = actor.getLocation().getCol();
 		action = Action.INVALID;
@@ -46,20 +65,22 @@ public class Maze {
 		switch (direction) {
 		case NORTH:
 			if ((newL = getValidLocation(currentCol, currentRow - 1)) != null)
-				action = actor.move(newL);
+				action = actor.move(newL, direction);
 			break;
 		case SOUTH:
 			if ((newL = getValidLocation(currentCol, currentRow + 1)) != null)
-				action = actor.move(newL);
+				action = actor.move(newL, direction);
 			break;
 		case EAST:
 			if ((newL = getValidLocation(currentCol + 1, currentRow)) != null)
-				action = actor.move(newL);
+				action = actor.move(newL, direction);
 			break;
 		case WEST:
 			if ((newL = getValidLocation(currentCol - 1, currentRow)) != null)
-				action = actor.move(newL);
+				action = actor.move(newL, direction);
 			break;
+		default:
+			assertTrue("Direction enum is not a valid direction", true);
 		}
 	}
 
@@ -74,14 +95,20 @@ public class Maze {
 		Location newL = null;
 		if ((newX >= 0 && newX <= locations[0].length) && (newY >= 0 && newY <= locations.length))
 			newL = locations[newX][newY];
+		assertTrue("The new Location is currently out of bounds", newL != null);
 		return newL;
 	}
 
 	/**
-	 * Helper method for finding Chap in the current level
+	 * Helper method for finding Chap and total chips on the map, as well as other
+	 * actors that may be in the level
+	 * 
+	 * @param level - 2d Array Locations
 	 */
-	private Chap findChap(Location[][] level) {
-		Chap c = null;
+	private void findActors(Location[][] level) {
+		HashSet<Actor> actors = new HashSet<>();
+		bm = null;
+		chap = null;
 		int totChips = 0;
 		// for each row array
 		for (Location[] row : level) {
@@ -90,24 +117,37 @@ public class Maze {
 			for (Location loc : row) {
 				Actor a = loc.getActor();
 				Tile t = loc.getTile();
-
-				// if actor is chap, set chap
-				if (a != null && a.getActorName() == ActorName.CHAP)
-					c = (Chap) a;
-
+				if (a != null) {
+					// if actor is chap, set chap
+					if (a.getActorName() == ActorName.CHAP) {
+						assertTrue("Multiple Chaps has been detected in the current level.", chap == null);
+						chap = (Chap) a;
+					}
+					// adding other actors
+					else {
+						actors.add(a);
+					}
+				}
+				// counting total chips
 				if (t != null && t.getTileName() == TileName.CHIP)
 					totChips++;
 			}
 		}
-		if (c != null)
-			c.setTotalChips(totChips);
-		return c;
+		// Check if thier is a Chap, then set fields
+		assertTrue("No Chap has been detected in the current level.", chap != null);
+		chap.setTotalChips(totChips);
+		if (!actors.isEmpty())
+			bm = new BotMannager(actors, this);
 	}
 
 	/**
-	 * @return the chap
+	 * Returns Chap
+	 * 
+	 * @return chap - Chap object
 	 */
 	public Chap getChap() {
+		Preconditions.checkArgument(locations != null,
+				"Chap dose not currently exsist because thier is no exsisting level");
 		return chap;
 	}
 
@@ -118,6 +158,25 @@ public class Maze {
 	 */
 	public Action getAction() {
 		return action;
+	}
+
+	/**
+	 * Returns the 2d array of Locations
+	 * 
+	 * @return locations - 2d Array of Location objects
+	 */
+	public Location[][] getLocation() {
+		Preconditions.checkArgument(locations != null, "2d array Locations dose not currently exsist");
+		return locations;
+	}
+
+	/**
+	 * Returns the Bot mannager object
+	 * 
+	 * @return bm - BotMannager object
+	 */
+	public BotMannager getBM() {
+		return bm;
 	}
 
 	/**
@@ -135,18 +194,14 @@ public class Maze {
 		}
 		return s;
 	}
-	
-	public Location[][] getLocation() {
-		return locations;
-	}
 
-	/**
-	 * testing needs
-	 * 
-	 * @param args - testing
-	 */
-	public static void main(String[] args) {
-		new Maze();
-	}
+//	/**
+//	 * testing needs
+//	 * 
+//	 * @param args - testing
+//	 */
+//	public static void main(String[] args) {
+//		new Maze();
+//	}
 
 }

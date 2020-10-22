@@ -21,4 +21,8 @@ public interface GameInfoRenderer {
 
 	void levelFinished();
 
+	void chapDie();
+
+	void popupInfo(String info);
+
 }

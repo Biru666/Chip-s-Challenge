@@ -1,13 +1,14 @@
 package nz.ac.vuw.ecs.swen225.gp20.maze;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import org.junit.jupiter.api.Test;
+import org.junit.Test;
 
-class MazeValidTest {
+public class MazeValidTest1 {
 
 	@Test
-	void test_setLocation() {
+	public void test_setLocation() {
 		Maze m = makeMaze();
 
 		// Checks
@@ -16,16 +17,10 @@ class MazeValidTest {
 	}
 
 	@Test
-	void test_stringMap() {
+	public void test_stringMap() {
 		Maze m = makeMaze();
-		String map = 	"w w w w w w w w \n" + 
-						"w d _ _ _ _ d w \n" + 
-						"w k _ _ _ _ k w \n" + 
-						"w _ _ _ _ _ _ w \n" + 
-						"w c c _ _ _ _ w \n" + 
-						"w _ _ _ _ C i w \n" + 
-						"w _ _ _ e _ g w \n" + 
-						"w w w w w w w w \n";
+		String map = "w w w w w w w w \n" + "w d _ _ _ _ d w \n" + "w k _ _ _ _ k w \n" + "w _ _ _ _ _ _ w \n"
+				+ "w c c _ _ _ l w \n" + "w _ _ _ _ C i w \n" + "w _ _ _ e _ g w \n" + "w w w w w w w w \n";
 		// Checks
 		assertTrue(m.toString().equals(map));
 		assertTrue(m.getChap() != null);
@@ -33,7 +28,7 @@ class MazeValidTest {
 	}
 
 	@Test
-	void test_move() {
+	public void test_move() {
 		Maze m = makeMaze();
 
 		// Moves
@@ -46,7 +41,7 @@ class MazeValidTest {
 	}
 
 	@Test
-	void test_moveToInfo() {
+	public void test_moveToInfo() {
 		Maze m = makeMaze();
 
 		// Moves
@@ -59,7 +54,7 @@ class MazeValidTest {
 	}
 
 	@Test
-	void test_moveToExit() {
+	public void test_moveToExit() {
 		Maze m = makeMaze();
 
 		// Moves
@@ -73,7 +68,7 @@ class MazeValidTest {
 	}
 
 	@Test
-	void test_moveToWall() {
+	public void test_moveToWall() {
 		Maze m = makeMaze();
 
 		// Moves
@@ -88,7 +83,7 @@ class MazeValidTest {
 	}
 
 	@Test
-	void test_moveToGate() {
+	public void test_moveToGate() {
 		Maze m = makeMaze();
 
 		// Moves
@@ -102,7 +97,7 @@ class MazeValidTest {
 	}
 
 	@Test
-	void test_moveToDoor() {
+	public void test_moveToDoor() {
 		Maze m = makeMaze();
 
 		// Moves
@@ -122,7 +117,7 @@ class MazeValidTest {
 	}
 
 	@Test
-	void test_moveToChips() {
+	public void test_moveToChips() {
 		Maze m = makeMaze();
 
 		// Moves
@@ -141,7 +136,7 @@ class MazeValidTest {
 	}
 
 	@Test
-	void test_moveToKey() {
+	public void test_moveToKey() {
 		Maze m = makeMaze();
 
 		// Moves
@@ -161,7 +156,24 @@ class MazeValidTest {
 	}
 
 	@Test
-	void test_openGate() {
+	public void test_moveToLava() {
+		Maze m = makeMaze();
+
+		// Moves
+		m.moveChap(Direction.NORTH);
+		Location l = m.getChap().getLocation(); // Location just b4 checking
+		m.moveChap(Direction.EAST);
+
+		System.out.println(m.toString());
+
+		// Checks
+		assertTrue(m.getAction() == Action.DIE); // Dies
+		assertTrue(l != m.getChap().getLocation()); // Valid move, location can't to be the same
+
+	}
+
+	@Test
+	public void test_openGate() {
 		Maze m = makeMaze();
 
 		// Moves
@@ -185,7 +197,7 @@ class MazeValidTest {
 	}
 
 	@Test
-	void test_openDoor() {
+	public void test_openDoor() {
 		Maze m = makeMaze();
 
 		// Moves
@@ -207,7 +219,7 @@ class MazeValidTest {
 	}
 
 	@Test
-	void test_openWrongDoors() {
+	public void test_openWrongDoors() {
 		Maze m = makeMaze();
 
 		// Moves
@@ -230,7 +242,7 @@ class MazeValidTest {
 	}
 
 	@Test
-	void test_openRightDoors() {
+	public void test_openRightDoors() {
 		Maze m = makeMaze();
 
 		// Moves
@@ -270,7 +282,7 @@ class MazeValidTest {
 				Location loc = null;
 				// Wall tile
 				if (i == 0 || i == x - 1 || j == 0 || j == y - 1)
-					loc = new Location(i, j, TileName.WALL, null);
+					loc = new Location(i, j, TileName.WALL);
 				// empty tile
 				else {
 					loc = new Location(i, j);
@@ -302,17 +314,20 @@ class MazeValidTest {
 		loc[2][1] = new Location(2, 1, TileName.KEY, Variation.BLUE);
 
 		// Chips
-		loc[4][1] = new Location(4, 1, TileName.CHIP, null);
-		loc[4][2] = new Location(4, 2, TileName.CHIP, null);
+		loc[4][1] = new Location(4, 1, TileName.CHIP);
+		loc[4][2] = new Location(4, 2, TileName.CHIP);
 
 		// Gate
-		loc[6][6] = new Location(6, 6, TileName.GATE, null);
+		loc[6][6] = new Location(6, 6, TileName.GATE);
 
 		// Info
-		loc[5][6] = new Location(5, 6, TileName.INFO, null);
+		loc[5][6] = new Location(5, 6, TileName.INFO);
+
+		// Lava
+		loc[4][6] = new Location(4, 6, TileName.LAVA);
 
 		// exit
-		loc[6][4] = new Location(6, 4, TileName.EXIT, null);
+		loc[6][4] = new Location(6, 4, TileName.EXIT);
 
 		return loc;
 	}

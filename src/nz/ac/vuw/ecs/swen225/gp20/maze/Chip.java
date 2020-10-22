@@ -1,7 +1,7 @@
 package nz.ac.vuw.ecs.swen225.gp20.maze;
 
 /**
- * Chip class represents the chips that chap can collect inorder to open the
+ * Chip class represents the chips that chap can collect in order to open the
  * final game and progress to the next level.
  * 
  * @author wangding1 300422014
@@ -10,12 +10,12 @@ package nz.ac.vuw.ecs.swen225.gp20.maze;
 public class Chip extends Tile {
 
 	/**
-	 * Chip constructor
+	 * Constructor which creates the Chip tile.
 	 * 
-	 * @param tileName  - Enum TileName
-	 * @param location  - Location
-	 * @param canMoveOn - boolean
-	 * @param canPickup - boolean
+	 * @param tileName - tileName enum
+	 * @param location - location object
+	 * @param moveOn   - if the tile can be moved on
+	 * @param pickUp   - if the tile can be picked up
 	 */
 	public Chip(TileName tileName, Location location, boolean canMoveOn, boolean canPickup) {
 		super(tileName, location, canMoveOn, canPickup);
@@ -28,7 +28,10 @@ public class Chip extends Tile {
 			kill();
 			return Action.ITEM;
 		}
+		// not chap
 		return null;
 	}
+	
+	
 
 }

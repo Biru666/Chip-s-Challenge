@@ -9,6 +9,7 @@ import java.util.Map;
 import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
 import javax.swing.JLabel;
+import javax.swing.JLayeredPane;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
@@ -116,5 +117,22 @@ public class GameInfoView extends JPanel {
 		} else {
 			JOptionPane.showMessageDialog(window, "Contatulations! All levels clear!");
 		}
+	}
+	public void showChapDieDialog() {
+		int confirm = JOptionPane.showConfirmDialog(window, "Chap is dead. Would you like to retry level?", "Level Failed", JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE);
+		if (confirm == JOptionPane.YES_OPTION) {
+			controller.startLastUnfinishedGame();
+		}
+	}
+	public void popupInfo(String info) {
+		JLayeredPane layeredPane = window.getLayeredPane();
+		JPanel panel = new JPanel();
+		JLabel label = new JLabel("<html><div style=\"color: purple; font-size: 26px;\">Don't let the bugs hurt you.</div></html>");
+		panel.add(label);
+		panel.setPreferredSize(new Dimension(100, 100));
+		layeredPane.add(panel, JLayeredPane.PALETTE_LAYER);
+//		this.add(layeredPane);
+		window.revalidate();
+//		this.revalidate();
 	}
 }

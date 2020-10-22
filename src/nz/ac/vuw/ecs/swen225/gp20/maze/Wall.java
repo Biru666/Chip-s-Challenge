@@ -9,10 +9,12 @@ package nz.ac.vuw.ecs.swen225.gp20.maze;
 public class Wall extends Tile {
 
 	/**
-	 * @param tileName  - Enum TileName
-	 * @param location  - Location
-	 * @param canMoveOn - boolean
-	 * @param canPickUp - booleansb
+	 * Constructor which creates the Wall tile.
+	 * 
+	 * @param tileName - tileName enum
+	 * @param location - location object
+	 * @param moveOn   - if the tile can be moved on
+	 * @param pickUp   - if the tile can be picked up
 	 */
 	public Wall(TileName tileName, Location location, boolean canMoveOn, boolean canPickUp) {
 		super(tileName, location, canMoveOn, canPickUp);
@@ -20,8 +22,7 @@ public class Wall extends Tile {
 
 	@Override
 	protected Action interact(Actor actor) {
-		if (actor instanceof Chap)
-			return Action.WALL;
-		return null;
+		return Action.WALL;
 	}
+
 }

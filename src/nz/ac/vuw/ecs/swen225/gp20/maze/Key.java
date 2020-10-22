@@ -2,7 +2,7 @@ package nz.ac.vuw.ecs.swen225.gp20.maze;
 
 /**
  * Key class for creating the key Tile which can be picked up and unlocks
- * certain doors
+ * certain doors based on variation.
  * 
  * @author wangding1 300422014
  *
@@ -10,6 +10,15 @@ package nz.ac.vuw.ecs.swen225.gp20.maze;
 public class Key extends Tile {
 	private Variation variation;
 
+	/**
+	 * Constructor which creates the Key tile.
+	 * 
+	 * @param tileName  - name
+	 * @param location  - location object
+	 * @param moveOn    - if the tile can be moved on
+	 * @param pickUp    - if the tile can be picked up
+	 * @param variation - variation enum
+	 */
 	public Key(TileName tileName, Location location, boolean canMoveOn, boolean canPickup, Variation variation) {
 		super(tileName, location, canMoveOn, canPickup);
 		this.variation = variation;
@@ -26,8 +35,9 @@ public class Key extends Tile {
 	}
 
 	/**
+	 * Returns the key variation
 	 * 
-	 * @return returns the variation
+	 * @return variation - variation enum
 	 */
 	public Variation getVariation() {
 		return this.variation;

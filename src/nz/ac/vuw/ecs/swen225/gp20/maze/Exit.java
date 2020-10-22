@@ -1,10 +1,24 @@
 package nz.ac.vuw.ecs.swen225.gp20.maze;
 
+/**
+ * The Exit class which represents a Exit on the map, when chap has stepped onto
+ * the exit the level should end.
+ * 
+ * @author wangding1 300422014
+ *
+ */
 public class Exit extends Tile {
 
+	/**
+	 * Constructor which creates the Exit tile.
+	 * 
+	 * @param tileName - name
+	 * @param location - location object
+	 * @param moveOn   - if the tile can be moved on
+	 * @param pickUp   - if the tile can be picked up
+	 */
 	public Exit(TileName tileName, Location location, boolean canMoveOn, boolean canPickup) {
 		super(tileName, location, canMoveOn, canPickup);
-		// TODO Auto-generated constructor stub
 	}
 
 	@Override

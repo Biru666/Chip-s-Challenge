@@ -1,7 +1,9 @@
 package nz.ac.vuw.ecs.swen225.gp20.maze;
 
 /**
- * Location class which represents a single grid in the game
+ * Location class which represents a single grid in the game which consists of a
+ * Tile and an Actor class object. They both can be null for representing their
+ * occupancy.
  * 
  * @author wangding1 300422014
  *
@@ -30,7 +32,44 @@ public class Location {
 	}
 
 	/**
-	 * Defualt Tile constructor.
+	 * Default Tile constructor.
+	 * 
+	 * @param x        - the x coordinate in the 2D array.
+	 * @param y        - the y coordinate in the 2D array.
+	 * @param tileName - the specified Enum TileName.
+	 */
+	public Location(int row, int col, TileName tileName) {
+		this.row = row;
+		this.col = col;
+		this.actor = null;
+
+		// Creating Tile object: Tile("name","canMoveOn",canPickUp")
+		switch (tileName) {
+		case WALL:
+			this.tile = new Wall(tileName, this, false, false);
+			break;
+		case CHIP:
+			this.tile = new Chip(tileName, this, true, true);
+			break;
+		case GATE:
+			this.tile = new Gate(tileName, this, false, false);
+			break;
+		case EXIT:
+			this.tile = new Exit(tileName, this, true, false);
+			break;
+		case INFO:
+			this.tile = new Info(tileName, this, true, false);
+			break;
+		case LAVA:
+			this.tile = new Lava(tileName, this, true, false);
+			break;
+		default:
+			this.tile = null;
+		}
+	}
+
+	/**
+	 * Default Tile constructor with variation.
 	 * 
 	 * @param x         - the x coordinate in the 2D array.
 	 * @param y         - the y coordinate in the 2D array.
@@ -44,26 +83,34 @@ public class Location {
 
 		// Creating Tile object: Tile("name","canMoveOn",canPickUp","variation")
 		switch (tileName) {
-		case WALL:
-			this.tile = new Wall(tileName, this, false, false);
-			break;
-		case CHIP:
-			this.tile = new Chip(tileName, this, true, true);
-			break;
 		case KEY:
 			this.tile = new Key(tileName, this, true, true, variation);
 			break;
 		case DOOR:
 			this.tile = new Door(tileName, this, false, false, variation);
 			break;
-		case GATE:
-			this.tile = new Gate(tileName, this, false, false);
-			break;
-		case EXIT:
-			this.tile = new Exit(tileName, this, true, false);
-			break;
+		default:
+			this.tile = null;
+		}
+	}
+
+	/**
+	 * Default Info constructor for constructing an Info file with help message.
+	 * 
+	 * @param x        - the x coordinate in the 2D array.
+	 * @param y        - the y coordinate in the 2D array.
+	 * @param tileName - the specified Enum TileName.
+	 * @param txt      - the help message that will get stored.
+	 */
+	public Location(int row, int col, TileName tileName, String txt) {
+		this.row = row;
+		this.col = col;
+		this.actor = null;
+
+		// Creating Tile object: Tile("name","canMoveOn",canPickUp","variation")
+		switch (tileName) {
 		case INFO:
-			this.tile = new Info(tileName, this, true, false);
+			this.tile = new Info(tileName, this, true, false, txt);
 			break;
 		default:
 			this.tile = null;
@@ -87,48 +134,63 @@ public class Location {
 		case CHAP:
 			this.actor = new Chap(actorName, this);
 			break;
+		case BOT:
+			this.actor = new Bot(actorName, this);
+			break;
 		default:
 			this.actor = null;
 		}
 	}
 
 	/**
-	 * @return the x
+	 * Returns the row position
+	 * 
+	 * @return row - int row position
 	 */
 	public int getRow() {
 		return row;
 	}
 
 	/**
-	 * @return the y
+	 * Returns the col position
+	 * 
+	 * @return col - int col position
 	 */
 	public int getCol() {
 		return col;
 	}
 
 	/**
-	 * @return the tile
+	 * Returns the Tile object for this Location
+	 * 
+	 * @return tile - Tile object or null for empty
 	 */
 	public Tile getTile() {
 		return tile;
 	}
 
 	/**
-	 * @param tile the tile to set
+	 * Sets the Location with a Tile
+	 * 
+	 * @param tile - Tile object or null for empty
 	 */
 	public void setTile(Tile tile) {
 		this.tile = tile;
 	}
 
 	/**
-	 * @return the actor
+	 * Returns the Actor object for this Location
+	 * 
+	 * @return actor - Actor object or null for empty
 	 */
 	public Actor getActor() {
 		return actor;
 	}
 
 	/**
-	 * @param actor the actor to set
+	 * Sets the Actor object for this Location
+	 * 
+	 * @param actor - Actor object or null for empty
 	 */
 	public void setActor(Actor actor) {
 		this.actor = actor;
