@@ -2,12 +2,9 @@ package nz.ac.vuw.ecs.swen225.gp20.persistence;
 
 import java.io.FileNotFoundException;
 import java.io.FileReader;
-import java.util.List;
 
 import javax.json.Json;
 import javax.json.JsonArray;
-import javax.json.JsonObject;
-import javax.json.JsonValue;
 import javax.json.stream.JsonParser;
 import javax.json.stream.JsonParser.Event;
 
@@ -94,8 +91,12 @@ public class Parser {
 					case 13:
 						map[i][j] = new Location(i, j, TileName.EXIT);
 						break;
-					// Help
+					// Level 1 Help
 					case 14:
+						map[i][j] = new Location(i, j, TileName.INFO);
+						break;
+					// Level 1 Help
+					case 17:
 						map[i][j] = new Location(i, j, TileName.INFO);
 						break;
 					// Bug
