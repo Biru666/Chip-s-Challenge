@@ -14,15 +14,19 @@ import java.io.StringReader;
 import java.io.StringWriter;
 import java.io.Writer;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 import javax.json.Json;
 import javax.json.JsonArray;
 import javax.json.JsonArrayBuilder;
+import javax.json.JsonBuilderFactory;
 import javax.json.JsonObject;
 import javax.json.JsonObjectBuilder;
 import javax.json.JsonReader;
 import javax.json.JsonString;
+import javax.json.JsonValue;
 import javax.swing.JFileChooser;
 import javax.swing.SwingUtilities;
 
@@ -30,6 +34,8 @@ import javax.swing.SwingUtilities;
 import nz.ac.vuw.ecs.swen225.gp20.persistence.Parser;
 import nz.ac.vuw.ecs.swen225.gp20.renderer.renderer;
 import nz.ac.vuw.ecs.swen225.gp20.application.GameController;
+import nz.ac.vuw.ecs.swen225.gp20.application.GameInfoModel;
+import nz.ac.vuw.ecs.swen225.gp20.application.GameInfoRenderer;
 import nz.ac.vuw.ecs.swen225.gp20.maze.ActorName;
 import nz.ac.vuw.ecs.swen225.gp20.maze.Direction;
 import nz.ac.vuw.ecs.swen225.gp20.maze.Door;
@@ -56,19 +62,33 @@ public class RecordAndReplay {
 	private static boolean isRecording = false;
 	private static boolean isReplaying = false;
 	private static boolean isStepReplay = false;
+	private static boolean isAutoReplay = true;
+	
+	private static int chipsLeft;
+	private static int level;
+	private static Map<String,Integer> inventoryMap = new HashMap<String,Integer>();
+	
 	
 	private static int delay = 700;
 
 	/**
 	 * To start a new record
 	 * @param name the file name to save
+	 * @param gc current game controller
 	 */
 	public static void startNewRecord(String name, GameController gc) {
-		actionList.clear();
-		isRecording = true;
-		fileName = name;
-		board = getGameState(gc);
+		if(!isRecording && !isReplaying) {
+			actionList.clear();
+			isRecording = true;
+			fileName = name;
+			board = getGameState(gc);
+			chipsLeft = gc.getMaze().getChap().getTotalChips() - gc.getMaze().getChap().getChips();
+			level = gc.getInfoModel().getLevel();
+			inventoryMap = gc.getMaze().getChap().getInventory();
+		}
 	}
+	
+	
 	
 	/**
 	 * Add actions to the action list
@@ -85,7 +105,7 @@ public class RecordAndReplay {
 	 * @param gc current game controller
 	 */
 	public static void saveRecording(GameController gc) {
-		if(isRecording) {
+		if(isRecording && !isReplaying) {
 			/** if using the saveGame in persistence package
 			 * SaveGame s = new SaveGame(maze, currentState);
 			 * gameState = s.save();
@@ -115,9 +135,21 @@ public class RecordAndReplay {
 		            .add("move", action);
 		        arrayBuilder.add(builder.build());
 		      }
+			
+			/**JsonBuilderFactory factory = Json.createBuilderFactory(inventory);
+			JsonArrayBuilder arrayBuilder2 = Json.createArrayBuilder();
+			for(String s:inventory.keySet()) {
+				JsonObjectBuilder value = factory.createObjectBuilder()
+								.add("name",s)
+								.add("number", inventory.get(s));
+				arrayBuilder2.add(value);	
+			}*/
+			
 			// add game state and action array to a new builder
 			JsonObjectBuilder builder = Json.createObjectBuilder()
 					.add("game", board)
+					.add("chips", chipsLeft)
+					.add("level", level)
 			        .add("moves", arrayBuilder);
 			// write text to json file
 			Writer writer = new StringWriter();
@@ -136,155 +168,214 @@ public class RecordAndReplay {
 	
 	/**
 	 * Load a recording from json file
-	 * @param name Name of file to load
-	 * @param mazeRenderer
-	 * @param gc
+	 * @param name name of file to load
+	 * @param gc gamestate
 	 */
 	public static void loadRecording(String name, GameController gc) {
-		isReplaying = true;
-		fileName = name;
-		// load game state
-		// select the gamestate from json file
-		String line;
-		JsonObject gameState = null;
-		try {
-			BufferedReader buffReader1 = new BufferedReader(new FileReader(fileName));
-			JsonReader jsonReader1 = Json.createReader(new StringReader(buffReader1.readLine()));
-	        buffReader1.close();
-	        gameState = jsonReader1.readObject();
-		} catch (IOException e){
-	    	System.out.println("Error reading file: " + e);
-	        return;
-	    }
-	    String buffer = gameState.getJsonString("game").toString();
-	    // try to write the game state to a new json file can be read by parser
-	    // adjust to fit the  pattern of the board
-	    ArrayList<String> output = new ArrayList<String>();
-	    int start = 0, end = 0;
-	    for(int i=0; i<buffer.length(); i++) {
-	    	if(buffer.charAt(i)=='[') {
-	    		start = i;
-	    	}
-	    	if(buffer.charAt(i)==']') {
-	    		end = i;
-	    	}
-	    	if(end>start) {
-	    		String arr = buffer.substring(start,end-2);
-	    		arr += "]";
-	    		start = 0;
-	    		end = 0;
-	    		output.add(arr);
-	    	}
-	    }
-	    // write to json file
-	    buffer+="]";    
-	    try {
-	    	File map = new File("board.json");
-	    	 FileWriter fileWritter = new FileWriter(map.getName());
-	    	 for(int i=0; i<output.size(); i++) {
-	    		 if(i==0) {
-	    			 fileWritter.write("["); 
-	    		 }
-	    		 fileWritter.write(output.get(i));
-	    		 if(i==output.size()-1) {
-	    			 fileWritter.write("]");
-	    		 }else {
-	    			 fileWritter.write("\n,");
-	    		 }
-	    	 }
-	         fileWritter.close();
-	    }catch(IOException e){
-	        e.printStackTrace();
-	     }
-	    // update the game state
-	    Parser parser = new Parser("board.json");
-	    Maze maze = new Maze();
-	    renderer mazeRenderer = gc.getRenderer();
-	    maze.setLevel(parser.map);
-	    mazeRenderer.setMaze(maze.getLocation());
-		mazeRenderer.playerPos = maze.getChap().getLocation();
-		mazeRenderer.Corner();
-		gc.setMazeRenderer(mazeRenderer);
-		gc.setMaze(maze);
-	    
-		// load actions
-		// select the actions from json file
-		JsonObject object = null;
-		try {
-	        BufferedReader buffReader2 = new BufferedReader(new FileReader(fileName));
-	        JsonReader jsonReader2 = Json.createReader(new StringReader(buffReader2.readLine()));
-	        buffReader2.close();
-	        object = jsonReader2.readObject();
-	      } catch (IOException e) {
-	        System.out.println("Error reading file: " + e);
-	        return;
-	      }
-		 JsonArray movesJson = object != null ? object.getJsonArray("moves") : null;
-	      if (movesJson != null) {
-	    	  for (int i = 0; i < movesJson.size(); i++) {
-	              JsonObject object2 = movesJson.getJsonObject(i);
-	              directionList.add(object2.getString("move"));
-	          }
-	      }
-	      // replay the actions
-	      if(!isStepReplay) {
-	      Runnable runnable = () -> {
-	          while (directionList.size() > 0 && !isStepReplay) {
-	            try {
-	            	Thread.sleep(delay);
-	            	replay(gc);
-	            } catch (InterruptedException e) {
-	            	e.printStackTrace();
-	            }
-	          }
-	        };
-	        Thread thread = new Thread(runnable);
-	        thread.start();
-	      }
-	      isReplaying = false;
-	}
-	
-	public static void stepReplay(GameController gc) {
-		isStepReplay = true;
-		System.out.println(isStepReplay);
-		System.out.println(directionList.size());
-		if(directionList.size()>0) {
-			replay(gc);
+		if(!isRecording) {
+			isReplaying = true;
+			fileName = name;
+			gc.stopCountdown();
+			// load game state
+			// select the gamestate from json file
+			String line;
+			JsonObject gameState = null;
+			try {
+				BufferedReader buffReader1 = new BufferedReader(new FileReader(fileName));
+				JsonReader jsonReader1 = Json.createReader(new StringReader(buffReader1.readLine()));
+				buffReader1.close();
+				gameState = jsonReader1.readObject();
+			} catch (IOException e){
+				System.out.println("Error reading file: " + e);
+				return;
+			}
+			String buffer = gameState.getJsonString("game").toString();
+			// try to write the game state to a new json file can be read by parser
+			// adjust to fit the  pattern of the board
+			ArrayList<String> output = new ArrayList<String>();
+			int start = 0, end = 0;
+			for(int i=0; i<buffer.length(); i++) {
+				if(buffer.charAt(i)=='[') {
+					start = i;
+				}
+				if(buffer.charAt(i)==']') {
+					end = i;
+				}
+				if(end>start) {
+					String arr = buffer.substring(start,end-2);
+					arr += "]";
+					start = 0;
+					end = 0;
+					output.add(arr);
+				}
+			}
+			// write to json file
+			buffer+="]";    
+			try {
+				File map = new File("board.json");
+				FileWriter fileWritter = new FileWriter(map.getName());
+				for(int i=0; i<output.size(); i++) {
+					if(i==0) {
+						fileWritter.write("["); 
+					}
+					fileWritter.write(output.get(i));
+					if(i==output.size()-1) {
+						fileWritter.write("]");
+					}else {
+						fileWritter.write("\n,");
+					}
+				}
+				fileWritter.close();
+			}catch(IOException e){
+				e.printStackTrace();
+			}
+			// update the game state
+			Parser parser = new Parser("board.json");
+			Maze maze = new Maze();
+			renderer mazeRenderer = gc.getRenderer();
+			maze.setLevel(parser.map);
+			mazeRenderer.setMaze(maze.getLocation());
+			mazeRenderer.playerPos = maze.getChap().getLocation();
+			mazeRenderer.Corner();
+			gc.setMazeRenderer(mazeRenderer);
+			gc.setMaze(maze);
+
+			// load actions
+			// select the actions from json file
+			JsonObject object = null;
+			try {
+				BufferedReader buffReader2 = new BufferedReader(new FileReader(fileName));
+				JsonReader jsonReader2 = Json.createReader(new StringReader(buffReader2.readLine()));
+				buffReader2.close();
+				object = jsonReader2.readObject();
+			} catch (IOException e) {
+				System.out.println("Error reading file: " + e);
+				return;
+			}
+			JsonArray movesJson = object != null ? object.getJsonArray("moves") : null;
+			if (movesJson != null) {
+				for (int i = 0; i < movesJson.size(); i++) {
+					JsonObject object2 = movesJson.getJsonObject(i);
+					directionList.add(object2.getString("move"));
+				}
+			}
+
+			// load game information
+			chipsLeft = object.getInt("chips");
+			level = object.getInt("level");
+			GameInfoModel model = gc.getInfoModel();
+			model.setChipsLeft(chipsLeft);
+			if(level==1) model.setTime(100);
+			if(level==2) model.setTime(60);
+			if(level==3) model.setTime(90);
+			model.setLevel(level);
+			model.setInventory(inventoryMap);
+			GameInfoRenderer infoRenderer = gc.getInfoRenderer();
+			infoRenderer.render(model);
+			infoRenderer.update(model);
+			gc.setInfoModel(model);
+			gc.setGameInfoRenderer(infoRenderer);
+
+			// replay the actions
+			if(!isStepReplay) {
+				autoReplay(gc);
+			}
+			if(directionList.size()==0) isReplaying = false;
 		}
 	}
 	
-	private static void replay(GameController gc) {
-			String direction = directionList.get(0);
-			AtomicBoolean isBusy = new AtomicBoolean(false);
-			if (isBusy.compareAndSet(false, true)) {
-				SwingUtilities.invokeLater(() -> {
-					switch (direction) {
-					case "West":
-						gc.move(Direction.WEST);
-						break;
-					case "East":
-						gc.move(Direction.EAST);
-						break;
-					case "North":
-						gc.move(Direction.NORTH);
-						break;
-					case "South":
-						gc.move(Direction.SOUTH);
-						break;
-					default:
-						break;
-					}
-					isBusy.set(false);
-				});
+	/**
+	 * Replay by step
+	 * @param gc game controller
+	 */
+	public static void stepReplay(GameController gc) {
+		isStepReplay = true;
+		isAutoReplay = false;
+		if(isReplaying && !isRecording) {
+			if(directionList.size()>0) {
+				replay(gc);
+			}else {
+				isReplaying = false;
 			}
-			directionList.remove(0);
-		
+		}
+	}
+	
+	/**
+	 * Auto replay
+	 * @param gc game controller
+	 */
+	public static void autoReplay(GameController gc) {
+		isAutoReplay = true;
+		isStepReplay = false;
+		if(isReplaying && !isRecording) {
+			if(directionList.size()>0) {
+				Runnable runnable = () -> {
+					while (directionList.size() > 0 && !isStepReplay) {
+						try {
+							Thread.sleep(delay);
+							replay(gc);
+						} catch (InterruptedException e) {
+							e.printStackTrace();
+						}
+					}
+				};
+				Thread thread = new Thread(runnable);
+				thread.start();
+			}else {
+				isReplaying = false;
+			}
+		}
+	}
+	
+	/**
+	 * Replay the load actions
+	 * @param gc game controller
+	 */
+	private static void replay(GameController gc) {
+		String direction = directionList.get(0);
+		AtomicBoolean isBusy = new AtomicBoolean(false);
+		if (isBusy.compareAndSet(false, true)) {
+			SwingUtilities.invokeLater(() -> {
+				switch (direction) {
+				case "West":
+					gc.move(Direction.WEST);
+					break;
+				case "East":
+					gc.move(Direction.EAST);
+					break;
+				case "North":
+					gc.move(Direction.NORTH);
+					break;
+				case "South":
+					gc.move(Direction.SOUTH);
+					break;
+				default:
+					break;
+				}
+				isBusy.set(false);
+			});
+		}
+		directionList.remove(0);
+	}
+	
+	/**
+	 * Set delay number to change the speed of replay
+	 * @param speed times
+	 */
+	public static void setDelay(double d) {
+		if(d==0.5) {
+			delay = 1400;
+		}else if(d==1) {
+			delay = 700;
+		}else {
+			delay = 350;
+		}
 	}
 	
 	/**
 	 * Get the game state
-	 * @param gc
-	 * @return
+	 * @param gc game controller
+	 * @return String game state
 	 */
 	private static String getGameState(GameController gc) {
 		String gamestate = "";
@@ -325,6 +416,7 @@ public class RecordAndReplay {
 						gs = "15, ";
 						gamestate = add(gamestate,gs);
 						continue;
+					
 					}
 				}
 				switch (tileName) {
@@ -397,6 +489,11 @@ public class RecordAndReplay {
 					gs = "14, ";
 					gamestate = add(gamestate,gs);
 					continue;
+				// Lava
+				case LAVA:
+					gs = "16, ";
+					gamestate = add(gamestate,gs);
+					continue;
 				}
 			}
 			if(i==map.length-1) {
@@ -406,15 +503,6 @@ public class RecordAndReplay {
 		return gamestate;
 	}
 	
-	public static void setDelay(double d) {
-		if(d==0.5) {
-			delay = 1400;
-		}else if(d==1) {
-			delay = 700;
-		}else {
-			delay = 350;
-		}
-	}
 	
 	
 	/**
@@ -450,6 +538,15 @@ public class RecordAndReplay {
 	public static boolean isStepReplay() {
 		return isStepReplay;
 	}
+	
+	/**
+	 * Get isStepReplay
+	 * @return
+	 */
+	public static boolean isAutoReplay() {
+		return isAutoReplay;
+	}
+	
 	
 	/**
 	 * Get actions list
