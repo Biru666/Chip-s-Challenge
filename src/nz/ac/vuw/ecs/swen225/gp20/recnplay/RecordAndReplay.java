@@ -1,216 +1,440 @@
-package nz.ac.vuw.ecs.swen225.gp20.application;
+package nz.ac.vuw.ecs.swen225.gp20.recnplay;
 
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.nio.file.Files;
-import java.nio.file.Paths;
-import java.util.HashMap;
-import java.util.Map;
+import java.awt.event.KeyEvent;
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.StringReader;
+import java.io.StringWriter;
+import java.io.Writer;
+import java.util.ArrayList;
+import java.util.concurrent.atomic.AtomicBoolean;
 
-import javax.swing.Timer;
+import javax.json.Json;
+import javax.json.JsonArray;
+import javax.json.JsonArrayBuilder;
+import javax.json.JsonObject;
+import javax.json.JsonObjectBuilder;
+import javax.json.JsonReader;
+import javax.json.JsonString;
+import javax.swing.SwingUtilities;
 
-import nz.ac.vuw.ecs.swen225.gp20.maze.Action;
+
+import nz.ac.vuw.ecs.swen225.gp20.persistence.Parser;
+import nz.ac.vuw.ecs.swen225.gp20.renderer.renderer;
+import nz.ac.vuw.ecs.swen225.gp20.application.GameController;
+import nz.ac.vuw.ecs.swen225.gp20.maze.ActorName;
 import nz.ac.vuw.ecs.swen225.gp20.maze.Direction;
-import nz.ac.vuw.ecs.swen225.gp20.maze.Info;
+import nz.ac.vuw.ecs.swen225.gp20.maze.Door;
 import nz.ac.vuw.ecs.swen225.gp20.maze.Location;
 import nz.ac.vuw.ecs.swen225.gp20.maze.Maze;
-import nz.ac.vuw.ecs.swen225.gp20.persistence.Parser;
-import nz.ac.vuw.ecs.swen225.gp20.recnplay.RecordAndReplay;
-import nz.ac.vuw.ecs.swen225.gp20.renderer.renderer;
+import nz.ac.vuw.ecs.swen225.gp20.maze.Key;
+import nz.ac.vuw.ecs.swen225.gp20.maze.Tile;
+import nz.ac.vuw.ecs.swen225.gp20.maze.TileName;
+import nz.ac.vuw.ecs.swen225.gp20.maze.Variation;
+
+
 
 /**
- * 
- * @author Wang Conglang 300472254
+ * Class to record game play and replay it.
+ * @author Jasmine Liang
  *
  */
-public class GameController {
-	private static Map<Integer, Integer> LEVEL_TIME = new HashMap<>();
-	static {
-		LEVEL_TIME.put(1, 100);
-		LEVEL_TIME.put(2, 60);
-		LEVEL_TIME.put(3, 90);
-		LEVEL_TIME.put(4, 200);
-		LEVEL_TIME.put(5, 250);
-	}
-	private GameInfoRenderer gameInfoRenderer;
-	private renderer mazeRenderer;
-	private Maze maze = new Maze();
-	private GameStatus status = GameStatus.NOT_STARTED;
-	private int currentLevel = 1;
-	private Timer tickTimer = null;
+public class RecordAndReplay {
+	private static String fileName;
+	private static ArrayList<KeyEvent> actions = new ArrayList<KeyEvent>();
+	private static boolean isRecording = false;
+	private static String gameState;
+	private static boolean isStepReplay = false;
+	private static ArrayList<String> moveList = new ArrayList<>();
+	
 
-	public void startLevel1() {
-		startLevel(currentLevel = 1);
+	/**
+	 * To start a new record
+	 * @param name the file name to save
+	 */
+	public static void startNewRecord(String name, GameController gc) {
+		actions.clear();
+		isRecording = true;
+		fileName = name;
+		gameState = getGameState(gc);
 	}
-
-	public void saveLevel() {
-		
-	}
-
-	public void resumeSavedGame() {
-		startLevel(1);
-	}
-
-	public void startLastUnfinishedGame() {
-		startLevel(currentLevel);
-	}
-
-	public void startNextLevel() {
-		startLevel(++currentLevel);
-	}
-
-	public boolean hasNextLevel() {
-		return Files.exists(Paths.get("levels/level" + (currentLevel + 1) + ".json"));
-	}
-
-	public void move(Direction direction) {
-		if (status != GameStatus.LEVEL_STARTED) {
-			return;
+	
+	/**
+	 * Add actions to the action list
+	 * @param e the actions need to save
+	 */
+	public static void addAction(KeyEvent e) {
+		if(isRecording) {
+			actions.add(e);
 		}
+	}
+	
+	/**
+	 * Save recording to json file
+	 */
+	public static void saveRecording(GameController gc) {
+		if(isRecording) {
+			/** if using the saveGame in persistence package
+			 * SaveGame s = new SaveGame(maze, currentState);
+			 * gameState = s.save();
+			*/
+			JsonArrayBuilder arrayBuilder = Json.createArrayBuilder();
+			// add actions to array builder
+			for (int i = 0; i < actions.size(); ++i) {
+				KeyEvent e = actions.get(i);
+				String action = null;
+				switch (e.getKeyCode()) {
+				case KeyEvent.VK_UP:
+					action = "North";
+					break;
+				case KeyEvent.VK_DOWN:
+					action = "South";
+					break;
+				case KeyEvent.VK_LEFT:
+					action = "West";
+					break;
+				case KeyEvent.VK_RIGHT:
+					action = "East";
+					break;
+				default:
+					break;
+				}
+		        JsonObjectBuilder builder = Json.createObjectBuilder()
+		            .add("move", action);
+		        arrayBuilder.add(builder.build());
+		      }
+			// add game state and action array to a new builder
+			JsonObjectBuilder builder = Json.createObjectBuilder()
+					.add("game", gameState)
+			        .add("moves", arrayBuilder);
+			// write text to json file
+			Writer writer = new StringWriter();
+			Json.createWriter(writer).write(builder.build());
+			try {
+				BufferedWriter bw = new BufferedWriter(new FileWriter(fileName));
+			    bw.write(writer.toString());
+			    bw.close();
+			    } catch (IOException e) {
+			      throw new Error("Failed to save moves");
+			    }
+			isRecording = false;
+			
+		}
+	}
+	
+	/**
+	 * Load a recording
+	 * @param name
+	 */
+	public static void loadRecording(String name, renderer mazeRenderer, GameController gc) {
+		fileName = name;
+		// load game state
+		// select the gamestate from json file
+		String line;
 		try {
-			maze.moveChap(direction);
-			Action action = maze.getAction();
-			if (action == Action.DIE) {
-				status = GameStatus.LEVEL_FINISHED;
-				mazeRenderer.chapDie();
-				gameInfoRenderer.chapDie();
-				return;
-			} else if (action != Action.WALL) {
-				renderMap();
-				if (action == Action.ITEM
-						|| action == Action.DOOR) {
-					GameInfoModel model = new GameInfoModel();
-					model.setChipsLeft(maze.getChap().getTotalChips() - maze.getChap().getChips());
-					Map<String, Integer> inventory = maze.getChap().getInventory();
-					model.setInventory(inventory);
-					gameInfoRenderer.update(model);
-				} else if (action == Action.EXIT) {
-					status = GameStatus.LEVEL_FINISHED;
-					gameInfoRenderer.levelFinished();
-				} else if (action == Action.INFO) {
-					Location[][] locations = maze.getLocation();
-					for (Location[] loc : locations) {
-						for (Location l : loc) {
-							if (l.getTile() instanceof Info) {
-								Info info = (Info)l.getTile();
-								System.out.println(info.getInfo());
-								gameInfoRenderer.popupInfo(info.getInfo());
-								
-							}
-						}
-					}
-				}
+			BufferedReader buffReader = new BufferedReader(new FileReader(fileName));
+			line = buffReader.readLine();
+			if (line == null) {
+			      line = "";
 			}
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-	}
-
-	public void pause() {
-		// maze.pause();
-		gameInfoRenderer.pause();
-		resume();
-	}
-
-	public void timeout() {
-		status = GameStatus.LEVEL_FINISHED;
-	}
-
-	private void startLevel(int level) {
-		Parser parser = new Parser("levels/level" + level + ".json");
-		maze.setLevel(parser.map);
-
-		// Maze - get a new Maze from level 1.
-		GameInfoModel gameInfoModel = new GameInfoModel();
-		gameInfoModel.setLevel(level);
-		gameInfoModel.setTime(LEVEL_TIME.get(level));
-		gameInfoModel.setChipsLeft(maze.getChap().getTotalChips() - maze.getChap().getChips());
-		gameInfoRenderer.render(gameInfoModel);
-		gameInfoRenderer.countdown(() -> timeout());
-		renderMap();
-		status = GameStatus.LEVEL_STARTED;
-		if (tickTimer == null) {
-			tickTimer = new Timer(1000, new ActionListener() {
-				@Override
-				public void actionPerformed(ActionEvent e) {
-					if (maze != null && status == GameStatus.LEVEL_STARTED) {
-						maze.tick();
-						if (maze.getChap() == null || maze.getChap().isDead()) {
-							status = GameStatus.LEVEL_FINISHED;
-							mazeRenderer.chapDie();
-							gameInfoRenderer.chapDie();
-						} else {
-							renderMap();
-						}
-					} else {
-						tickTimer.stop();
-					}
-				}
-			});
-		}
-		tickTimer.restart();
-	}
-
-	private void renderMap() {
-		mazeRenderer.setMaze(maze.getLocation());
+		} catch (IOException e){
+	    	System.out.println("Error reading file: " + e);
+	        return;
+	    }
+		JsonObject game;
+	    JsonReader jsonReader1 = Json.createReader(new StringReader(line));
+	    game = jsonReader1.readObject();
+	    String buffer = game.getJsonString("game").toString();
+	    // try to write the game state to a new json file can be read by parser
+	    ArrayList<String> output = new ArrayList<String>();
+	    int start = 0, end = 0;
+	    for(int i=0; i<buffer.length(); i++) {
+	    	if(buffer.charAt(i)=='[') {
+	    		start = i;
+	    	}
+	    	if(buffer.charAt(i)==']') {
+	    		end = i;
+	    	}
+	    	if(end>start) {
+	    		String arr = buffer.substring(start,end-2);
+	    		arr += "]";
+	    		start = 0;
+	    		end = 0;
+	    		output.add(arr);
+	    	}
+	    }
+	    buffer+="]";    
+	    try {
+	    	File map = new File("map.json");
+	    	 FileWriter fileWritter = new FileWriter(map.getName());
+	    	 for(int i=0; i<output.size(); i++) {
+	    		 if(i==0) {
+	    			 fileWritter.write("["); 
+	    		 }
+	    		 fileWritter.write(output.get(i));
+	    		 if(i==output.size()-1) {
+	    			 fileWritter.write("]");
+	    		 }else {
+	    			 fileWritter.write("\n,");
+	    		 }
+	    	 }
+	         fileWritter.close();
+	    }catch(IOException e){
+	        e.printStackTrace();
+	     }
+	    // update the game state
+	    Parser parser = new Parser("map.json");
+	    Maze maze = new Maze();
+	    maze.setLevel(parser.map);
+	    mazeRenderer.setMaze(maze.getLocation());
 		mazeRenderer.playerPos = maze.getChap().getLocation();
 		mazeRenderer.Corner();
+		gc.setMazeRenderer(mazeRenderer);
+		gc.setMaze(maze);
+	    
+		// load actions
+		// select the actions from json file
+		JsonObject object = null;
+		try {
+	        BufferedReader reader = new BufferedReader(new FileReader(fileName));
+	        JsonReader jsonReader2 = Json.createReader(new StringReader(reader.readLine()));
+	        reader.close();
+	        object = jsonReader2.readObject();
+	      } catch (IOException e) {
+	        System.out.println("Error reading file: " + e);
+	        return;
+	      }
+		 JsonArray movesJson = object != null ? object.getJsonArray("moves") : null;
+	      if (movesJson != null) {
+	    	  for (int i = 0; i < movesJson.size(); i++) {
+	              JsonObject object2 = movesJson.getJsonObject(i);
+	              moveList.add(object2.getString("move"));
+	          }
+	      }
+	      for(int i=0; i<moveList.size(); i++) {
+	    	  if(isStepReplay==false) {
+	    		  String direction = moveList.get(i);
+	    		  replay(direction,gc);
+	    		  moveList.remove(i);
+	    		  i--;
+	    	  }
+	      }
 	}
 	
-	public void startRecording() { //
-		RecordAndReplay.startNewRecord("record.json");
-		System.out.println("start recording");
+	public static void stepReplay(GameController gc) {
+		isStepReplay = true;
+		System.out.println(isStepReplay);
+		System.out.println(moveList.size());
+		if(moveList.size()>0) {
+			String direction = moveList.get(0);
+			replay(direction,gc);
+			moveList.remove(0);
+		}
 	}
 	
-	public void saveRecording() { //
-		RecordAndReplay.saveRecording(this);
-		System.out.println("save recording");
+	private static void replay(String direction, GameController gc) {
+			AtomicBoolean isBusy = new AtomicBoolean(false);
+			if (isBusy.compareAndSet(false, true)) {
+				SwingUtilities.invokeLater(() -> {
+					switch (direction) {
+					case "West":
+						gc.move(Direction.WEST);
+						break;
+					case "East":
+						gc.move(Direction.EAST);
+						break;
+					case "North":
+						gc.move(Direction.NORTH);
+						break;
+					case "South":
+						gc.move(Direction.SOUTH);
+						break;
+					default:
+						break;
+					}
+					isBusy.set(false);
+				});
+			}
 	}
 	
-	public void loadRecording() { //
-		RecordAndReplay.loadRecording("record.json",mazeRenderer,this);
-		System.out.println("load recording");
+	/**
+	 * Get the game state
+	 * @return
+	 */
+	private static String getGameState(GameController gc) {
+		String gamestate = "";
+		Location[][]map = gc.getMaze().getLocation();
+		//Parser parser = new Parser("levels/level1.json");
+		//map = parser.map;
+		for(int i=0; i<map.length; i++) {
+			for(int j=0; j<map[0].length; j++) {
+				String gs = "";
+				if(j==0 && i!=0) {
+					gamestate+="]\n[";
+				}
+				if(j==0 && i==0) {
+					gamestate+="[";
+				}
+				Location object = map[i][j];
+				//System.out.print(object.toString() + " ");
+				// Blank
+				if(object.toString().equals("_")) {
+					gs = "1, ";
+					gamestate = add(gamestate,gs);
+					continue;
+				}
+				// get tile name of the cell
+				TileName tileName = null;
+				if(object.getTile()!=null) {
+					tileName = object.getTile().getTileName();
+				}
+				// get actor name of the cell
+				ActorName actorName = null;
+				if(object.getActor()!=null) {
+					actorName = object.getActor().getActorName();
+					switch(actorName) {
+					// Chap
+					case CHAP:
+						gs = "0, ";
+						gamestate = add(gamestate,gs);
+						continue;
+					// Bot
+					case BOT:
+						gs = "15, ";
+						gamestate = add(gamestate,gs);
+						continue;
+					}
+				}
+				switch (tileName) {
+				// Wall
+				case WALL:
+					gs = "2, ";
+					gamestate = add(gamestate,gs);
+					continue;
+				// Chip
+				case CHIP:
+					gs = "3, ";
+					gamestate = add(gamestate,gs);
+					continue;
+				// Key
+				case KEY:
+					Key k = (Key) object.getTile();
+					Variation v = k.getVariation();
+					switch(v) {
+					case YELLOW:
+						gs = "4, ";
+						gamestate = add(gamestate,gs);
+						continue;
+					case RED:
+						gs = "5, ";
+						gamestate = add(gamestate,gs);
+						continue;
+					case GREEN:
+						gs = "6, ";
+						gamestate = add(gamestate,gs);
+						continue;
+					case BLUE:
+						gs = "7, ";
+						gamestate = add(gamestate,gs);
+						continue;
+					}
+				// Door
+				case DOOR:
+					Door d = (Door) object.getTile();
+					Variation v2 = d.getVariation();
+					switch(v2) {
+					case YELLOW:
+						gs = "8, ";
+						gamestate = add(gamestate,gs);
+						continue;
+					case RED:
+						gs = "9, ";
+						gamestate = add(gamestate,gs);
+						continue;
+					case GREEN:
+						gs = "10, ";
+						gamestate = add(gamestate,gs);
+						continue;
+					case BLUE:
+						gs = "11, ";
+						gamestate = add(gamestate,gs);
+						continue;
+					}
+				// Gate
+				case GATE:
+					gs = "12, ";
+					gamestate = add(gamestate,gs);
+					continue;
+				// Portal
+				case EXIT:
+					gs = "13, ";
+					gamestate = add(gamestate,gs);
+					continue;
+				// Help
+				case INFO:
+					gs = "14, ";
+					gamestate = add(gamestate,gs);
+					continue;
+				}
+			}
+			if(i==map.length-1) {
+				gamestate += "]";
+			}
+		}
+		return gamestate;
 	}
 	
-	public void stepReplay() { //
-		RecordAndReplay.stepReplay();
-		System.out.println("step replay");
+	public static void setDelay(double d) {
+		
 	}
 	
-	public void oneSpeed() { //
-		RecordAndReplay.setDelay(1);
-		System.out.println("one speed replay");
+	
+	/**
+	 * Help method for adding two strings
+	 * @param s1
+	 * @param s2
+	 * @return 
+	 */
+	private static String add(String s1, String s2) {
+		return s1+s2;
 	}
 	
-	public void halfSpeed() { //
-		RecordAndReplay.setDelay(0.5);
-		System.out.println("half speed replay");
+	/**
+	 * update the move
+	 * @param e
+	 * @param maze
+	 * @param mazeRenderer
+	 */
+	/**
+	 * Get isRecording
+	 * @return
+	 */
+	public static boolean isRecording() {
+		if(isRecording) return true;
+		return false;
 	}
 	
-	public void twiceSpeed() { //
-		RecordAndReplay.setDelay(2);
-		System.out.println("twice speed replay");
+	/**
+	 * Get actions list
+	 * @return
+	 */
+	public ArrayList<KeyEvent> getActions(){
+		return actions;
 	}
 	
-
-	public void resume() {
-		// maze.resume();
-	}
-
-	public void setGameInfoRenderer(GameInfoRenderer gameInfoRenderer) {
-		this.gameInfoRenderer = gameInfoRenderer;
-	}
-
-	public void setMazeRenderer(renderer mazeRenderer) {
-		this.mazeRenderer = mazeRenderer;
-	}
-
-	public void setMaze(Maze m) { //
-		this.maze = m;
+	/**
+	 * Get file name
+	 * @return
+	 */
+	public String getFileName() {
+		return fileName;
 	}
 	
-	public Maze getMaze() { //
-		return this.maze;
-	}
-
 }
