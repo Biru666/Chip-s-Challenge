@@ -157,7 +157,11 @@ public class GameController {
 	}
 
 	public void resume() {
-		// maze.resume();
+		 //maze.resume();
+	}
+
+	public GameStatus getStatus() {
+		return status;
 	}
 
 	public void setGameInfoRenderer(GameInfoRenderer gameInfoRenderer) {
