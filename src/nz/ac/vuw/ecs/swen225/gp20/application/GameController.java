@@ -15,6 +15,7 @@ import nz.ac.vuw.ecs.swen225.gp20.maze.Info;
 import nz.ac.vuw.ecs.swen225.gp20.maze.Location;
 import nz.ac.vuw.ecs.swen225.gp20.maze.Maze;
 import nz.ac.vuw.ecs.swen225.gp20.persistence.Parser;
+import nz.ac.vuw.ecs.swen225.gp20.persistence.SaveGame;
 import nz.ac.vuw.ecs.swen225.gp20.renderer.renderer;
 
 /**
@@ -43,7 +44,8 @@ public class GameController {
 	}
 
 	public void saveLevel() {
-		
+		SaveGame sg = new SaveGame(maze, currentLevel);
+		sg.save("SavedMap");
 	}
 
 	public void resumeSavedGame() {
@@ -162,6 +164,10 @@ public class GameController {
 
 	public GameStatus getStatus() {
 		return status;
+	}
+
+	public void setStatus(GameStatus status) {
+		this.status = status;
 	}
 
 	public void setGameInfoRenderer(GameInfoRenderer gameInfoRenderer) {

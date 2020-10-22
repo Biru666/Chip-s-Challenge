@@ -95,7 +95,7 @@ public class Parser {
 					case 14:
 						map[i][j] = new Location(i, j, TileName.INFO);
 						break;
-					// Level 1 Help
+					// Level 2 Help
 					case 17:
 						map[i][j] = new Location(i, j, TileName.INFO);
 						break;

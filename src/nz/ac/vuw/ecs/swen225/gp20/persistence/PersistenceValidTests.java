@@ -11,7 +11,7 @@ public class PersistenceValidTests {
 	@Test
 	public void test_save() {
 		Maze m = maze();
-		SaveGame saveGame = new SaveGame(m, "testMap");
+		SaveGame saveGame = new SaveGame(m, 1);
 		
 	}
 
