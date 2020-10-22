@@ -71,12 +71,13 @@ public class BotMannager {
 		if (nl == null)
 			return;
 
-		// If there is a new Location, and has an actor, Recurse move
-		if (nl.getActor() != null) {
+		// If there is a new Location, and has an actor that haven't moved, Recurse move
+		if (nl.getActor() != null && turn.contains(nl.getActor())) {
 			turn.remove(nl.getActor());
 			moveBot(nl.getActor(), turn);
 		}
-		maze.move(a, a.getDir());
+		if (!a.isDead())
+			maze.move(a, a.getDir());
 	}
 
 	/**
