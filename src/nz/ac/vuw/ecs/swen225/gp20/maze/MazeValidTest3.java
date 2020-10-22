@@ -73,13 +73,6 @@ public class MazeValidTest3 {
 		for (int i = 0; i < 10; i++) {
 			m.tick();
 			System.out.println(m);
-			try {
-				Thread.sleep(500);
-			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-
 		}
 
 		assertTrue(m.getBM().getActors().size() == 0);
@@ -127,6 +120,7 @@ public class MazeValidTest3 {
 
 		// enemy
 		loc[2][2] = new Location(2, 2, ActorName.BOT);
+		loc[3][2] = new Location(3, 2, ActorName.BOT);
 		loc[4][2] = new Location(4, 2, ActorName.BOT);
 
 		// Wall (middle)

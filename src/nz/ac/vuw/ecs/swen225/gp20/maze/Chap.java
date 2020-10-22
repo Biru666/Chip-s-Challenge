@@ -42,6 +42,11 @@ public class Chap extends Actor {
 		return Action.MOVE;
 	}
 
+	@Override
+	protected Location nextLocation(Maze maze) {
+		return null;
+	}
+
 	/**
 	 * Sets the total amount of chips
 	 * 

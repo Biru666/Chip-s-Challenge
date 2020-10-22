@@ -24,9 +24,7 @@ public class Lava extends Tile {
 	@Override
 	protected Action interact(Actor actor) {
 		actor.kill();
-		if (actor instanceof Chap)
-			return Action.DIE;
-		return null;
+		return Action.DIE;
 	}
 
 }

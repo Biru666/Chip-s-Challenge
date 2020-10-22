@@ -10,6 +10,7 @@ package nz.ac.vuw.ecs.swen225.gp20.maze;
  */
 public abstract class Actor {
 
+	protected Direction dir = Direction.SOUTH;
 	private boolean dead = false;
 	private ActorName actorName;
 	private Location location;
@@ -26,6 +27,26 @@ public abstract class Actor {
 	}
 
 	/**
+	 * Manages the interaction between the current actor and new location actors and
+	 * tiles.
+	 * 
+	 * @param t         - Tile object
+	 * @param a         - Actor object
+	 * @param direction - Direction enum
+	 * @return Action enum
+	 */
+	protected abstract Action interact(Tile t, Actor a, Direction direction);
+
+	/**
+	 * Returns the next valid location of the inherited actor based on its own move
+	 * algorithm
+	 * 
+	 * @param maze - Maze object
+	 * @return Location - next location the Actor should go
+	 */
+	protected abstract Location nextLocation(Maze maze);
+
+	/**
 	 * Moves the actor to the new Location if its valid
 	 * 
 	 * @param newLocation - existing Location
@@ -39,23 +60,25 @@ public abstract class Actor {
 		t = newLocation.getTile();
 
 		// if the actor no longer has a location reference then its dead
-		if (location == null)
+		if (dead)
 			return action;
 		if (t == null || t.canMoveOn())
-			doMove(newLocation);
+			doMove(newLocation, direction);
 		return action;
 	}
 
 	/**
-	 * Manages the interaction between the current actor and new location actors and
-	 * tiles.
+	 * A valid move, moves the Actor into the new Location.
 	 * 
-	 * @param t         - Tile object
-	 * @param a         - Actor object
-	 * @param direction - Direction enum
-	 * @return Action enum
+	 * @param newLocation - new valid Location object
+	 * @param direction   - Direction enum
 	 */
-	protected abstract Action interact(Tile t, Actor a, Direction direction);
+	private void doMove(Location newLocation, Direction direction) {
+		newLocation.setActor(this);
+		location.setActor(null);
+		location = newLocation;
+		dir = direction;
+	}
 
 	/**
 	 * Kills an actor by remove its reference
@@ -65,17 +88,6 @@ public abstract class Actor {
 		location.setActor(null);
 		location = null;
 
-	}
-
-	/**
-	 * A valid move, moves the Actor into the new Location.
-	 * 
-	 * @param newLocation - new valid Location object
-	 */
-	private void doMove(Location newLocation) {
-		newLocation.setActor(this);
-		location.setActor(null);
-		location = newLocation;
 	}
 
 	/**
@@ -102,10 +114,12 @@ public abstract class Actor {
 	}
 
 	/**
-	 * Sets chap to dead state
+	 * Returns the current direction that its facing
+	 * 
+	 * @return Direction enum its facing
 	 */
-	public void setDead() {
-		dead = true;
+	public Direction getDir() {
+		return dir;
 	}
 
 	/**
