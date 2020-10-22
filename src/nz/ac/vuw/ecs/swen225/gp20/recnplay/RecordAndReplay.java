@@ -23,6 +23,7 @@ import javax.json.JsonObject;
 import javax.json.JsonObjectBuilder;
 import javax.json.JsonReader;
 import javax.json.JsonString;
+import javax.swing.JFileChooser;
 import javax.swing.SwingUtilities;
 
 
@@ -48,11 +49,14 @@ import nz.ac.vuw.ecs.swen225.gp20.maze.Variation;
  */
 public class RecordAndReplay {
 	private static String fileName;
-	private static ArrayList<KeyEvent> actions = new ArrayList<KeyEvent>();
+	private static String board;
+	private static ArrayList<KeyEvent> actionList = new ArrayList<>();
+	private static ArrayList<String> directionList = new ArrayList<>();
+	
 	private static boolean isRecording = false;
-	private static String gameState;
+	private static boolean isReplaying = false;
 	private static boolean isStepReplay = false;
-	private static ArrayList<String> moveList = new ArrayList<>();
+	
 	private static int delay = 700;
 
 	/**
@@ -60,10 +64,10 @@ public class RecordAndReplay {
 	 * @param name the file name to save
 	 */
 	public static void startNewRecord(String name, GameController gc) {
-		actions.clear();
+		actionList.clear();
 		isRecording = true;
 		fileName = name;
-		gameState = getGameState(gc);
+		board = getGameState(gc);
 	}
 	
 	/**
@@ -72,12 +76,13 @@ public class RecordAndReplay {
 	 */
 	public static void addAction(KeyEvent e) {
 		if(isRecording) {
-			actions.add(e);
+			actionList.add(e);
 		}
 	}
 	
 	/**
 	 * Save recording to json file
+	 * @param gc current game controller
 	 */
 	public static void saveRecording(GameController gc) {
 		if(isRecording) {
@@ -87,8 +92,8 @@ public class RecordAndReplay {
 			*/
 			JsonArrayBuilder arrayBuilder = Json.createArrayBuilder();
 			// add actions to array builder
-			for (int i = 0; i < actions.size(); ++i) {
-				KeyEvent e = actions.get(i);
+			for (int i = 0; i < actionList.size(); i++) {
+				KeyEvent e = actionList.get(i);
 				String action = null;
 				switch (e.getKeyCode()) {
 				case KeyEvent.VK_UP:
@@ -112,7 +117,7 @@ public class RecordAndReplay {
 		      }
 			// add game state and action array to a new builder
 			JsonObjectBuilder builder = Json.createObjectBuilder()
-					.add("game", gameState)
+					.add("game", board)
 			        .add("moves", arrayBuilder);
 			// write text to json file
 			Writer writer = new StringWriter();
@@ -122,7 +127,7 @@ public class RecordAndReplay {
 			    bw.write(writer.toString());
 			    bw.close();
 			    } catch (IOException e) {
-			      throw new Error("Failed to save moves");
+			      throw new Error("Failed to save record");
 			    }
 			isRecording = false;
 			
@@ -130,29 +135,30 @@ public class RecordAndReplay {
 	}
 	
 	/**
-	 * Load a recording
-	 * @param name
+	 * Load a recording from json file
+	 * @param name Name of file to load
+	 * @param mazeRenderer
+	 * @param gc
 	 */
-	public static void loadRecording(String name, renderer mazeRenderer, GameController gc) {
+	public static void loadRecording(String name, GameController gc) {
+		isReplaying = true;
 		fileName = name;
 		// load game state
 		// select the gamestate from json file
 		String line;
+		JsonObject gameState = null;
 		try {
-			BufferedReader buffReader = new BufferedReader(new FileReader(fileName));
-			line = buffReader.readLine();
-			if (line == null) {
-			      line = "";
-			}
+			BufferedReader buffReader1 = new BufferedReader(new FileReader(fileName));
+			JsonReader jsonReader1 = Json.createReader(new StringReader(buffReader1.readLine()));
+	        buffReader1.close();
+	        gameState = jsonReader1.readObject();
 		} catch (IOException e){
 	    	System.out.println("Error reading file: " + e);
 	        return;
 	    }
-		JsonObject game;
-	    JsonReader jsonReader1 = Json.createReader(new StringReader(line));
-	    game = jsonReader1.readObject();
-	    String buffer = game.getJsonString("game").toString();
+	    String buffer = gameState.getJsonString("game").toString();
 	    // try to write the game state to a new json file can be read by parser
+	    // adjust to fit the  pattern of the board
 	    ArrayList<String> output = new ArrayList<String>();
 	    int start = 0, end = 0;
 	    for(int i=0; i<buffer.length(); i++) {
@@ -170,9 +176,10 @@ public class RecordAndReplay {
 	    		output.add(arr);
 	    	}
 	    }
+	    // write to json file
 	    buffer+="]";    
 	    try {
-	    	File map = new File("map.json");
+	    	File map = new File("board.json");
 	    	 FileWriter fileWritter = new FileWriter(map.getName());
 	    	 for(int i=0; i<output.size(); i++) {
 	    		 if(i==0) {
@@ -190,8 +197,9 @@ public class RecordAndReplay {
 	        e.printStackTrace();
 	     }
 	    // update the game state
-	    Parser parser = new Parser("map.json");
+	    Parser parser = new Parser("board.json");
 	    Maze maze = new Maze();
+	    renderer mazeRenderer = gc.getRenderer();
 	    maze.setLevel(parser.map);
 	    mazeRenderer.setMaze(maze.getLocation());
 		mazeRenderer.playerPos = maze.getChap().getLocation();
@@ -203,9 +211,9 @@ public class RecordAndReplay {
 		// select the actions from json file
 		JsonObject object = null;
 		try {
-	        BufferedReader reader = new BufferedReader(new FileReader(fileName));
-	        JsonReader jsonReader2 = Json.createReader(new StringReader(reader.readLine()));
-	        reader.close();
+	        BufferedReader buffReader2 = new BufferedReader(new FileReader(fileName));
+	        JsonReader jsonReader2 = Json.createReader(new StringReader(buffReader2.readLine()));
+	        buffReader2.close();
 	        object = jsonReader2.readObject();
 	      } catch (IOException e) {
 	        System.out.println("Error reading file: " + e);
@@ -215,19 +223,13 @@ public class RecordAndReplay {
 	      if (movesJson != null) {
 	    	  for (int i = 0; i < movesJson.size(); i++) {
 	              JsonObject object2 = movesJson.getJsonObject(i);
-	              moveList.add(object2.getString("move"));
+	              directionList.add(object2.getString("move"));
 	          }
 	      }
-	      /**for(int i=0; i<moveList.size(); i++) {
-	    	  if(isStepReplay==false) {
-	    		  String direction = moveList.get(i);
-	    		  replay(direction,gc);
-	    		  moveList.remove(i);
-	    		  i--;
-	    	  }
-	      }*/
+	      // replay the actions
+	      if(!isStepReplay) {
 	      Runnable runnable = () -> {
-	          while (moveList.size() > 0) {
+	          while (directionList.size() > 0 && !isStepReplay) {
 	            try {
 	            	Thread.sleep(delay);
 	            	replay(gc);
@@ -238,21 +240,21 @@ public class RecordAndReplay {
 	        };
 	        Thread thread = new Thread(runnable);
 	        thread.start();
+	      }
+	      isReplaying = false;
 	}
 	
 	public static void stepReplay(GameController gc) {
 		isStepReplay = true;
 		System.out.println(isStepReplay);
-		System.out.println(moveList.size());
-		if(moveList.size()>0) {
-			String direction = moveList.get(0);
-			//replay(direction,gc);
-			moveList.remove(0);
+		System.out.println(directionList.size());
+		if(directionList.size()>0) {
+			replay(gc);
 		}
 	}
 	
 	private static void replay(GameController gc) {
-			String direction = moveList.get(0);
+			String direction = directionList.get(0);
 			AtomicBoolean isBusy = new AtomicBoolean(false);
 			if (isBusy.compareAndSet(false, true)) {
 				SwingUtilities.invokeLater(() -> {
@@ -275,19 +277,18 @@ public class RecordAndReplay {
 					isBusy.set(false);
 				});
 			}
-			moveList.remove(0);
+			directionList.remove(0);
 		
 	}
 	
 	/**
 	 * Get the game state
+	 * @param gc
 	 * @return
 	 */
 	private static String getGameState(GameController gc) {
 		String gamestate = "";
 		Location[][]map = gc.getMaze().getLocation();
-		//Parser parser = new Parser("levels/level1.json");
-		//map = parser.map;
 		for(int i=0; i<map.length; i++) {
 			for(int j=0; j<map[0].length; j++) {
 				String gs = "";
@@ -298,7 +299,6 @@ public class RecordAndReplay {
 					gamestate+="[";
 				}
 				Location object = map[i][j];
-				//System.out.print(object.toString() + " ");
 				// Blank
 				if(object.toString().equals("_")) {
 					gs = "1, ";
@@ -428,26 +428,43 @@ public class RecordAndReplay {
 	}
 	
 	/**
-	 * update the move
-	 * @param e
-	 * @param maze
-	 * @param mazeRenderer
-	 */
-	/**
 	 * Get isRecording
 	 * @return
 	 */
 	public static boolean isRecording() {
-		if(isRecording) return true;
-		return false;
+		return isRecording;
+	}
+	
+	/**
+	 * Get isReplaying
+	 * @return
+	 */
+	public static boolean isReplaying() {
+		return isReplaying;
+	}
+	
+	/**
+	 * Get isStepReplay
+	 * @return
+	 */
+	public static boolean isStepReplay() {
+		return isStepReplay;
 	}
 	
 	/**
 	 * Get actions list
 	 * @return
 	 */
-	public ArrayList<KeyEvent> getActions(){
-		return actions;
+	public ArrayList<KeyEvent> getActionList(){
+		return actionList;
+	}
+	
+	/**
+	 * Get directions list
+	 * @return
+	 */
+	public ArrayList<String> getDirectionList(){
+		return directionList;
 	}
 	
 	/**
@@ -456,6 +473,22 @@ public class RecordAndReplay {
 	 */
 	public String getFileName() {
 		return fileName;
+	}
+	
+	/**
+	 * Get board
+	 * @return
+	 */
+	public String getBoard() {
+		return board;
+	}
+	
+	/**
+	 * Get delay
+	 * @return
+	 */
+	public int getDelay() {
+		return delay;
 	}
 	
 }
