@@ -25,4 +25,6 @@ public interface GameInfoRenderer {
 
 	void popupInfo(String info);
 
+	void stopCountdown();
+
 }

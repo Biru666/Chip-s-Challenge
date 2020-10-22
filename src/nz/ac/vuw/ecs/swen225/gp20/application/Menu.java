@@ -40,7 +40,8 @@ public class Menu extends JMenuBar {
 		JMenu help = new JMenu("Help");
 		JMenu record = new JMenu("Record"); //
 		JMenu replay = new JMenu("Replay"); //
-		JMenuItem stepReplay = new JMenuItem("Step Replay");//
+		JMenuItem stepReplay = new JMenuItem("Step Replay"); //
+		JMenuItem autoReplay = new JMenuItem("Auto Replay"); ////
 		this.add(game);
 		this.add(options);
 		this.add(level);
@@ -48,6 +49,7 @@ public class Menu extends JMenuBar {
 		this.add(record); //
 		this.add(replay); //
 		this.add(stepReplay); //
+		this.add(autoReplay); ////
 		// Menu Items in Game.
 		JMenuItem startLevel1 = new JMenuItem("Start Level 1");
 		JMenuItem resumeSavedGame = new JMenuItem("Resume A Saved Game");
@@ -88,8 +90,9 @@ public class Menu extends JMenuBar {
 		registerHalfSpeed(halfSpeed);//
 		registerOneSpeed(oneSpeed); //
 		registerTwiceSpeed(twiceSpeed); //
-		// Menu Item in Step Replay
+		// Menu Item in Step Replay and Auto Replay
 		registerStepReplay(stepReplay);
+		registerAutoReplay(autoReplay);
 		// Menu Items in Help.
 		JMenuItem rules = new JMenuItem("Rules");
 		help.add(rules);
@@ -325,6 +328,18 @@ public class Menu extends JMenuBar {
 			}
 		};
 		stepReplay.setAction(stepReplayAction);
+	}
+	
+	private void registerAutoReplay(JMenuItem autoReplay) { ////
+		Action autoReplayAction = new AbstractAction("Auto Replay") {
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				controller.autoReplay();
+			}
+		};
+		autoReplay.setAction(autoReplayAction);
 	}
 
 	public GameController getController() {
