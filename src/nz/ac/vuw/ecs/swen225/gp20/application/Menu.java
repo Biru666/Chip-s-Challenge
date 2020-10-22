@@ -38,10 +38,16 @@ public class Menu extends JMenuBar {
 		JMenu options = new JMenu("Options");
 		JMenu level = new JMenu("Level");
 		JMenu help = new JMenu("Help");
+		JMenu record = new JMenu("Record"); //
+		JMenu replay = new JMenu("Replay"); //
+		JMenuItem stepReplay = new JMenuItem("Step Replay");//
 		this.add(game);
 		this.add(options);
 		this.add(level);
 		this.add(help);
+		this.add(record); //
+		this.add(replay); //
+		this.add(stepReplay); //
 		// Menu Items in Game.
 		JMenuItem startLevel1 = new JMenuItem("Start Level 1");
 		JMenuItem resumeSavedGame = new JMenuItem("Resume A Saved Game");
@@ -62,6 +68,28 @@ public class Menu extends JMenuBar {
 		JMenuItem pause = new JMenuItem("Pause");
 		options.add(pause);
 		registerPauseAction(pause);
+		// Menu Items in Record
+		JMenuItem startRecord = new JMenuItem("Start Record"); //
+		JMenuItem saveRecord = new JMenuItem("Save Record"); //
+		JMenuItem loadRecord = new JMenuItem("Load Record"); //
+		record.add(startRecord); //
+		record.add(saveRecord); //
+		record.add(loadRecord); //
+		registerStartRecording(startRecord); //
+		registerSaveRecording(saveRecord); //
+		registerLoadRecording(loadRecord); //
+		// Menu Items in Replay
+		JMenuItem halfSpeed = new JMenuItem("0.5 Speed"); //
+		JMenuItem oneSpeed = new JMenuItem("1.0 Speed"); //
+		JMenuItem twiceSpeed = new JMenuItem("2.0 Speed"); //
+		replay.add(halfSpeed); //
+		replay.add(oneSpeed); //
+		replay.add(twiceSpeed); //
+		registerHalfSpeed(halfSpeed);//
+		registerOneSpeed(oneSpeed); //
+		registerTwiceSpeed(twiceSpeed); //
+		// Menu Item in Step Replay
+		registerStepReplay(stepReplay);
 		// Menu Items in Help.
 		JMenuItem rules = new JMenuItem("Rules");
 		help.add(rules);
@@ -213,6 +241,90 @@ public class Menu extends JMenuBar {
 		startLastUnfinishedGameAction.putValue(Action.ACCELERATOR_KEY,
 				KeyStroke.getKeyStroke(KeyEvent.VK_P, KeyEvent.CTRL_DOWN_MASK));
 		startLastUnfinishedGame.setAction(startLastUnfinishedGameAction);
+	}
+	
+	private void registerStartRecording(JMenuItem startRecording) { //
+		Action startRecordingAction = new AbstractAction("Start Recording") {
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				controller.startRecording();
+			}
+		};
+		startRecording.setAction(startRecordingAction);
+	}
+	
+	private void registerSaveRecording(JMenuItem saveRecording) { //
+		Action saveRecordingAction = new AbstractAction("Save Recording") {
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				controller.saveRecording();
+			}
+		};
+		saveRecording.setAction(saveRecordingAction);
+	}
+	
+	private void registerLoadRecording(JMenuItem loadRecording) { //
+		Action loadRecordingAction = new AbstractAction("Load Recording") {
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				controller.loadRecording();
+			}
+		};
+		loadRecording.setAction(loadRecordingAction);
+	}
+	
+	private void registerHalfSpeed(JMenuItem halfSpeed) { //
+		Action halfSpeedAction = new AbstractAction("0.5 Speed") {
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				controller.halfSpeed();
+			}
+		};
+		halfSpeed.setAction(halfSpeedAction);
+	}
+	
+	private void registerOneSpeed(JMenuItem oneSpeed) { //
+		Action oneSpeedAction = new AbstractAction("1.0 Speed") {
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				controller.oneSpeed();
+			}
+		};
+		oneSpeed.setAction(oneSpeedAction);
+	}
+	
+	private void registerTwiceSpeed(JMenuItem twiceSpeed) { //
+		Action twiceSpeedAction = new AbstractAction("2.0 Speed") {
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				controller.twiceSpeed();
+			}
+		};
+		twiceSpeed.setAction(twiceSpeedAction);
+	}
+	
+	private void registerStepReplay(JMenuItem stepReplay) { //
+		Action stepReplayAction = new AbstractAction("Step Replay") {
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				controller.stepReplay();
+			}
+		};
+		stepReplay.setAction(stepReplayAction);
 	}
 
 	public GameController getController() {

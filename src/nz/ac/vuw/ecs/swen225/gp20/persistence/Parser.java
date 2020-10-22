@@ -35,7 +35,7 @@ public class Parser {
 			map = new Location[row][col];
 			for (int i = 0; i < row; i++) {
 				JsonArray rowArr = arr.get(i).asJsonArray();
-				for (int j = 0; j < col; j++) {
+				for (int j = 0; j < rowArr.asJsonArray().size(); j++) {
 					int obj = rowArr.getInt(j);
 					switch (obj) {
 					// Chap's initial place
