@@ -1,5 +1,6 @@
 package nz.ac.vuw.ecs.swen225.gp20.application;
 
+import java.awt.Component;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.nio.file.Files;
@@ -16,6 +17,7 @@ import nz.ac.vuw.ecs.swen225.gp20.maze.Location;
 import nz.ac.vuw.ecs.swen225.gp20.maze.Maze;
 import nz.ac.vuw.ecs.swen225.gp20.persistence.Parser;
 import nz.ac.vuw.ecs.swen225.gp20.persistence.SaveGame;
+import nz.ac.vuw.ecs.swen225.gp20.recnplay.RecordAndReplay;
 import nz.ac.vuw.ecs.swen225.gp20.renderer.renderer;
 
 /**
@@ -45,7 +47,7 @@ public class GameController {
 
 	public void saveLevel() {
 		SaveGame sg = new SaveGame(maze, currentLevel);
-		sg.save("SavedMap");
+		sg.save("SavedMap.json");
 	}
 
 	public void resumeSavedGame() {
@@ -78,8 +80,7 @@ public class GameController {
 				return;
 			} else if (action != Action.WALL) {
 				renderMap();
-				if (action == Action.ITEM
-						|| action == Action.DOOR) {
+				if (action == Action.ITEM || action == Action.DOOR) {
 					GameInfoModel model = new GameInfoModel();
 					model.setChipsLeft(maze.getChap().getTotalChips() - maze.getChap().getChips());
 					Map<String, Integer> inventory = maze.getChap().getInventory();
@@ -93,10 +94,10 @@ public class GameController {
 					for (Location[] loc : locations) {
 						for (Location l : loc) {
 							if (l.getTile() instanceof Info) {
-								Info info = (Info)l.getTile();
+								Info info = (Info) l.getTile();
 								System.out.println(info.getInfo());
 								gameInfoRenderer.popupInfo(info.getInfo());
-								
+
 							}
 						}
 					}
@@ -108,7 +109,9 @@ public class GameController {
 	}
 
 	public void pause() {
-		// maze.pause();
+		if (tickTimer != null) {
+			tickTimer.stop();
+		}
 		gameInfoRenderer.pause();
 		resume();
 	}
@@ -159,7 +162,10 @@ public class GameController {
 	}
 
 	public void resume() {
-		 //maze.resume();
+		if (tickTimer != null) {
+			tickTimer.start();
+		}
+		
 	}
 
 	public GameStatus getStatus() {
@@ -176,6 +182,58 @@ public class GameController {
 
 	public void setMazeRenderer(renderer mazeRenderer) {
 		this.mazeRenderer = mazeRenderer;
+	}
+
+	public void startRecording() {
+		RecordAndReplay.startNewRecord("record.json", this);
+		System.out.println("start recording");
+	}
+
+	public void saveRecording() {
+		RecordAndReplay.saveRecording(this);
+		System.out.println("save recording");
+	}
+
+	public void loadRecording() {
+		RecordAndReplay.loadRecording("record.json", this);
+		System.out.println("load recording");
+	}
+
+	public void halfSpeed() {
+		RecordAndReplay.setDelay(0.5);
+		System.out.println("0.5 speed replay");
+	}
+
+	public void oneSpeed() {
+		RecordAndReplay.setDelay(1);
+		System.out.println("1.0 speed replay");
+
+	}
+
+	public void twiceSpeed() {
+		RecordAndReplay.setDelay(2);
+		System.out.println("2.0 speed replay");
+	}
+
+	public void stepReplay() {
+		RecordAndReplay.stepReplay(this);
+		System.out.println("step replay");
+	}
+
+	public renderer getRenderer() {
+		return this.mazeRenderer;
+	}
+
+	public GameInfoRenderer setInfoRenderer() { //
+		return this.gameInfoRenderer;
+	}
+
+	public void setMaze(Maze maze2) {
+		this.maze = maze2;
+	}
+
+	public Maze getMaze() {
+		return this.maze;
 	}
 
 }
