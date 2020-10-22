@@ -38,7 +38,7 @@ public class BotMannager {
 		// moves all actors
 		ArrayList<Actor> turn = new ArrayList<>(actors); // bots turn
 
-		// Since we cant remove lists in a forloop, we can remove it in while loop
+		// Since we can't remove lists in a for loop, we can remove it in while loop
 		while (!turn.isEmpty()) {
 			Actor a = turn.get(0);
 

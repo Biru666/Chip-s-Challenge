@@ -5,8 +5,17 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.Test;
 
+/**
+ * Unit test for Bot AI interactions
+ * 
+ * @author wangding1 300422014
+ *
+ */
 public class MazeValidTest3 {
 
+	/**
+	 * Test for bots moving in to kill Chap
+	 */
 	@Test
 	public void test_botKillChap() {
 		System.out.println("Test 1______________________");
@@ -27,6 +36,9 @@ public class MazeValidTest3 {
 
 	}
 
+	/**
+	 * Test for chap walking into Bots
+	 */
 	@Test
 	public void test_ChapKillSelf() {
 		System.out.println("Test 2______________________");
@@ -48,6 +60,9 @@ public class MazeValidTest3 {
 
 	}
 
+	/**
+	 * Test for bots dropping into lava
+	 */
 	@Test
 	public void test_botInLava() {
 		System.out.println("Test 3______________________");
@@ -58,6 +73,12 @@ public class MazeValidTest3 {
 		for (int i = 0; i < 10; i++) {
 			m.tick();
 			System.out.println(m);
+			try {
+				Thread.sleep(500);
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 
 		}
 

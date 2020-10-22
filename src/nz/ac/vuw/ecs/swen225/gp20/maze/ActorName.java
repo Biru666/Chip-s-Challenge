@@ -7,5 +7,12 @@ package nz.ac.vuw.ecs.swen225.gp20.maze;
  *
  */
 public enum ActorName {
-	CHAP, BOT
+	/**
+	 * Our main character Chap
+	 */
+	CHAP,
+	/**
+	 * Enemy bot which stick along its right wall
+	 */
+	BOT
 }

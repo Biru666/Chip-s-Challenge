@@ -30,6 +30,7 @@ public abstract class Actor {
 	 * 
 	 * @param newLocation - existing Location
 	 * @param direction   - Direction enum
+	 * @return Action enum
 	 */
 	public Action move(Location newLocation, Direction direction) {
 		Actor a = newLocation.getActor();

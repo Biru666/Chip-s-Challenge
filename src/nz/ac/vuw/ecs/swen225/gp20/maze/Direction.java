@@ -7,7 +7,22 @@ package nz.ac.vuw.ecs.swen225.gp20.maze;
  *
  */
 public enum Direction {
-	NORTH, SOUTH, EAST, WEST;
+	/**
+	 * North of the board view
+	 */
+	NORTH,
+	/**
+	 * South of the board view
+	 */
+	SOUTH,
+	/**
+	 * East of the board view
+	 */
+	EAST,
+	/**
+	 * West of the board view
+	 */
+	WEST;
 
 	/**
 	 * Returns the direction enum thats to its Left
