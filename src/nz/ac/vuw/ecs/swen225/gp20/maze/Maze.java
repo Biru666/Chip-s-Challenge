@@ -14,10 +14,16 @@ import com.google.common.base.Preconditions;
  */
 public class Maze {
 
-	private Location[][] locations; // 2D array of maze locations (row,col)
+	// 2D array of maze locations (row,col)
+	private Location[][] locations;
+
+	// Bot manager which will control all bot movements per tick
 	private BotMannager bm = null;
-	private Chap chap;
+
+	// Action enum to determine what was the last action performed
 	private Action action;
+
+	private Chap chap; // Main character Chap
 
 	/**
 	 * Sets the current level of the maze with all fields being reset.

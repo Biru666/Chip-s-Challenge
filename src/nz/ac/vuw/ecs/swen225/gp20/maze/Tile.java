@@ -9,8 +9,11 @@ package nz.ac.vuw.ecs.swen225.gp20.maze;
  */
 public abstract class Tile {
 
-	private TileName tileName;
+	// Location and Name of the current Tile
 	private Location location;
+	private TileName tileName;
+
+	// Booleans which handles some interation logic
 	private boolean moveOn;
 	private boolean pickUp;
 
