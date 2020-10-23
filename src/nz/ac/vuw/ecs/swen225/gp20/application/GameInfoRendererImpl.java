@@ -8,6 +8,8 @@ import java.util.concurrent.atomic.AtomicInteger;
 import javax.swing.SwingUtilities;
 import javax.swing.Timer;
 
+import nz.ac.vuw.ecs.swen225.gp20.persistence.SaveGame;
+
 /**
  * 
  * @author Wang Conglang 300472254
@@ -57,6 +59,13 @@ public class GameInfoRendererImpl implements GameInfoRenderer {
 			timer.stop();
 			view.showPauseDialog();
 			timer.start();
+		}
+	}
+	
+	@Override
+	public void stopCountdown() { ////
+		if (timer != null) {
+			timer.stop();
 		}
 	}
 
