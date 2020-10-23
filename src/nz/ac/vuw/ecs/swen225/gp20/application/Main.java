@@ -28,6 +28,9 @@ public class Main extends JFrame {
 	private Menu menu = new Menu();
 
 	public Main() {
+		init();
+		equiptController();
+		setVisible(true);
 	}
 
 	private void init() {
@@ -92,9 +95,26 @@ public class Main extends JFrame {
 		gameInfoView.setWindow(this);
 	}
 	public static void main(String[] args) {
-		Main main = new Main();
-		main.init();
-		main.equiptController();
-		main.setVisible(true);
+		   Main m = new Main();
+		   
+	   }
+
+	
+	/**
+	 * 
+	 * Getter of GameController for testing
+	 *
+	 */
+	public GameController getGameController() {
+		return this.controller;
+	}
+	
+	/**
+	 * 
+	 * Getter of GameInfoView for testing
+	 *
+	 */
+	public GameInfoView getGameInfoView() {
+		return this.gameInfoView;
 	}
 }
