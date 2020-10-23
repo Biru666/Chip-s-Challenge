@@ -61,6 +61,13 @@ public class GameInfoRendererImpl implements GameInfoRenderer {
 			timer.start();
 		}
 	}
+	
+	@Override
+	public void stopCountdown() { ////
+		if (timer != null) {
+			timer.stop();
+		}
+	}
 
 	@Override
 	public void levelFinished() {

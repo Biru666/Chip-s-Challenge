@@ -16,8 +16,6 @@ public class Chip extends Tile {
 	 * @param location  - location object
 	 * @param canMoveOn - boolean if can be moved on
 	 * @param canPickup - boolean if can be picked up
-	 * @param moveOn    - if the tile can be moved on
-	 * @param pickUp    - if the tile can be picked up
 	 */
 	public Chip(TileName tileName, Location location, boolean canMoveOn, boolean canPickup) {
 		super(tileName, location, canMoveOn, canPickup);

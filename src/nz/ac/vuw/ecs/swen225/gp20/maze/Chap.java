@@ -19,10 +19,23 @@ public class Chap extends Actor {
 	 * Chap actor constructor
 	 * 
 	 * @param actorName - Enum actorName
-	 * @param loaction  - Location
+	 * @param location  - location
 	 */
-	public Chap(ActorName actorName, Location loaction) {
-		super(actorName, loaction);
+	public Chap(ActorName actorName, Location location) {
+		super(actorName, location);
+		this.inventory = new HashMap<>();
+		this.chips = 0;
+	}
+
+	/**
+	 * Chap actor constructor
+	 * 
+	 * @param actorName - Enum actorName
+	 * @param location  - location
+	 * @param d         - Direction enum
+	 */
+	public Chap(ActorName actorName, Location location, Direction d) {
+		super(actorName, location, d);
 		this.inventory = new HashMap<>();
 		this.chips = 0;
 	}
@@ -84,7 +97,7 @@ public class Chap extends Actor {
 	/**
 	 * Return chaps current inventory
 	 * 
-	 * @return inventory - HashMap of <String,Integer> for name and amount
+	 * @return inventory - HashMap of String, Integer for name and amount
 	 */
 	public HashMap<String, Integer> getInventory() {
 		return inventory;
