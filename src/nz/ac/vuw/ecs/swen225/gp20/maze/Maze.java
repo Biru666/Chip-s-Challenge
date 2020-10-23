@@ -116,9 +116,10 @@ public class Maze {
 	 */
 	private Location getValidLocation(int newY, int newX) {
 		Location newL = null;
-		if ((newX >= 0 && newX < locations[0].length) && (newY >= 0 && newY < locations.length))
+		if ((newX >= 0 && newX < locations.length) && (newY >= 0 && newY < locations[0].length))
 			newL = locations[newX][newY];
-		assertTrue("The new Location is currently out of bounds", newL != null);
+		assertTrue("The new Location " + newX + " " + newY + " is currently out of bounds " + locations[0].length + " "
+				+ locations.length, newL != null);
 		return newL;
 	}
 
