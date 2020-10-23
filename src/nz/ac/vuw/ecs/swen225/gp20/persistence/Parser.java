@@ -35,7 +35,7 @@ public class Parser {
 			map = new Location[row][col];
 			for (int i = 0; i < row; i++) {
 				JsonArray rowArr = arr.get(i).asJsonArray();
-				for (int j = 0; j < col; j++) {
+				for (int j = 0; j < rowArr.asJsonArray().size(); j++) {
 					int obj = rowArr.getInt(j);
 					switch (obj) {
 					// Chap's initial place
@@ -95,7 +95,7 @@ public class Parser {
 					case 14:
 						map[i][j] = new Location(i, j, TileName.INFO);
 						break;
-					// Level 1 Help
+					// Level 2 Help
 					case 17:
 						map[i][j] = new Location(i, j, TileName.INFO);
 						break;

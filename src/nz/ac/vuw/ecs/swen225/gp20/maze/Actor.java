@@ -30,6 +30,19 @@ public abstract class Actor {
 	}
 
 	/**
+	 * Actor constructor with direction parameter
+	 * 
+	 * @param actorName - Enum for type of actor.
+	 * @param location  - location in which the actor is currently on.
+	 * @param d         - Direction enum
+	 */
+	public Actor(ActorName actorName, Location location, Direction d) {
+		this.actorName = actorName;
+		this.location = location;
+		this.dir = d;
+	}
+
+	/**
 	 * Manages the interaction between the current actor and new location actors and
 	 * tiles.
 	 * 
@@ -94,6 +107,8 @@ public abstract class Actor {
 	}
 
 	/**
+	 * Returns the location object
+	 * 
 	 * @return location object
 	 */
 	public Location getLocation() {
@@ -101,6 +116,8 @@ public abstract class Actor {
 	}
 
 	/**
+	 * Returns the actorName enum
+	 * 
 	 * @return actorName enum
 	 */
 	public ActorName getActorName() {

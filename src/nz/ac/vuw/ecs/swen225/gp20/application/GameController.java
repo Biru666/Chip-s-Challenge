@@ -1,5 +1,6 @@
 package nz.ac.vuw.ecs.swen225.gp20.application;
 
+import java.awt.Component;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.nio.file.Files;
@@ -48,7 +49,7 @@ public class GameController {
 
 	public void saveLevel() {
 		SaveGame sg = new SaveGame(maze, currentLevel);
-		sg.save("SavedMap");
+		sg.save("SavedMap.json");
 	}
 
 	public void resumeSavedGame() {
@@ -81,8 +82,7 @@ public class GameController {
 				return;
 			} else if (action != Action.WALL) {
 				renderMap();
-				if (action == Action.ITEM
-						|| action == Action.DOOR) {
+				if (action == Action.ITEM || action == Action.DOOR) {
 					GameInfoModel model = new GameInfoModel();
 					model.setChipsLeft(maze.getChap().getTotalChips() - maze.getChap().getChips());
 					Map<String, Integer> inventory = maze.getChap().getInventory();
@@ -96,10 +96,10 @@ public class GameController {
 					for (Location[] loc : locations) {
 						for (Location l : loc) {
 							if (l.getTile() instanceof Info) {
-								Info info = (Info)l.getTile();
+								Info info = (Info) l.getTile();
 								System.out.println(info.getInfo());
 								gameInfoRenderer.popupInfo(info.getInfo());
-								
+
 							}
 						}
 					}
@@ -214,10 +214,15 @@ public class GameController {
 		if (tickTimer != null) {
 			tickTimer.start();
 		}
+		
 	}
 
 	public GameStatus getStatus() {
 		return status;
+	}
+
+	public void setStatus(GameStatus status) {
+		this.status = status;
 	}
 
 	public void setGameInfoRenderer(GameInfoRenderer gameInfoRenderer) {
