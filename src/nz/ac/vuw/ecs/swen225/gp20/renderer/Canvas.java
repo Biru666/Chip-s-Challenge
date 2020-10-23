@@ -16,14 +16,13 @@ import nz.ac.vuw.ecs.swen225.gp20.maze.Tile;
 import nz.ac.vuw.ecs.swen225.gp20.maze.Variation;
 
 /**
- * @author phoenix
+ * Class for create the canvas for maze.
+ * @author Phoenix Xie
  *
  */
+
 public class Canvas extends JPanel {
 
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 1L;
 
 	public static final int VIEW_SIZE = 9;
@@ -36,12 +35,12 @@ public class Canvas extends JPanel {
 	private double height = 500;
 
 	/**
-	 * 
+	 * Initialize the tile name to be display.
 	 */
 	public Canvas() {
 		this.setLayout(new GridLayout(9, 9, 2, 2));
 
-		// Initialize the tile name to be display
+		
 		for (int i = 0; i < VIEW_SIZE; i++) {
 			for (int j = 0; j < VIEW_SIZE; j++) {
 				displayTiles[i][j] = new JLabel();
@@ -53,6 +52,9 @@ public class Canvas extends JPanel {
 
 	}
 
+	/**
+	 * Painting tiles.
+	 */
 	public void paintTiles() {
 		if (map == null || width == 0 || height == 0) {
 			return;
@@ -65,6 +67,11 @@ public class Canvas extends JPanel {
 		}
 	}
 
+	/**
+	 * Method for getting the image for current location.
+	 * @param l Current location
+	 * @return icon image add to canvas
+	 */
 	private Image getImage(Location l) {
 		if (l.getActor() != null) {
 			if (l.getActor().getActorName() == ActorName.CHAP) {
@@ -120,10 +127,6 @@ public class Canvas extends JPanel {
 		}
 
 		String name = l.getTile().getTileName().toString();
-
-		// TODO needs to be fix for color choose
-		// String color = l.getTile().getVariation().toString();
-		// String color = name.getTileName() ;
 		String s = name + ".png";
 
 		URL url = getClass().getResource("/" + s);
@@ -132,6 +135,10 @@ public class Canvas extends JPanel {
 		return icon.getScaledInstance(50, 50, Image.SCALE_DEFAULT);
 	}
 
+	/**
+	 * Set the current tiles.
+	 * @param tiles
+	 */
 	public void setGameTiles(Location[][] tiles) {
 		this.map = tiles;
 		paintTiles();

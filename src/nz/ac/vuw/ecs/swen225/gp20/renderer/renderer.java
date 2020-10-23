@@ -22,8 +22,8 @@ public class renderer {
 	private Canvas canvas;
 	private Location[][] maze; //this will be received in an update object from application
 	
-	/**The players position**/public Location playerPos;
-	/**The corner position**/ public Location cornerPos;
+	/*The players position*/public Location playerPos;
+	/*The corner position*/ public Location cornerPos;
 
 	
 	public renderer(Main game) {
@@ -33,13 +33,6 @@ public class renderer {
 		 // Send the canvas to the game
 	}
 	
-//	public Location[][] createGrid() {
-//
-//		
-//
-//		
-//		return maze ;
-//	}
 	
 	/**
 	 * Get the canvas.
@@ -50,6 +43,10 @@ public class renderer {
 	}
 	
 
+	/**
+	 * Set maze.
+	 * @param maze
+	 */
 	public void setMaze(Location[][] maze) {
 		this.maze = maze;
 	}
@@ -94,6 +91,9 @@ public class renderer {
 		canvas.setGameTiles(map);
 	}
 
+	/**
+	 * If a chap die re paint tiles.
+	 */
 	public void chapDie() {
 		canvas.paintTiles();
 	}
