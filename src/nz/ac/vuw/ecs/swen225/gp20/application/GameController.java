@@ -44,12 +44,12 @@ public class GameController {
 	private GameInfoModel gameInfoModel = new GameInfoModel(); ////
 	
 	public void startLevel1() {
-		startLevel(currentLevel = 2);
+		startLevel(currentLevel = 1);
 	}
 
 	public void saveLevel() {
 		SaveGame sg = new SaveGame(maze, currentLevel);
-		sg.save("SavedMap.json");
+		sg.save("SavedMap.json", 30);
 	}
 
 	public void resumeSavedGame() {
