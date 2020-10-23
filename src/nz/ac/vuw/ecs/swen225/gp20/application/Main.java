@@ -38,12 +38,12 @@ public class Main extends JFrame {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setLocationByPlatform(true);
 		JPanel mazeContainer = new JPanel();
-		mazeContainer.setBackground(Color.GREEN);
+		mazeContainer.setBackground(Color.BLACK);
 		mazeRenderer = new renderer(this);
 		mazeContainer.add(mazeRenderer.getCanvas());
 		this.add(mazeContainer);
 		JPanel infoContainer = new JPanel();
-		infoContainer.setBackground(Color.GREEN);
+		infoContainer.setBackground(Color.BLACK);
 		infoContainer.add(gameInfoView);
 		infoContainer.setPreferredSize(new Dimension(270, 600));
 		this.add(infoContainer, BorderLayout.EAST);

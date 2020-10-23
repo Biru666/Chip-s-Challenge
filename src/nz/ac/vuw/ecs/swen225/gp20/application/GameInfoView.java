@@ -32,7 +32,7 @@ public class GameInfoView extends JPanel {
 	private JTextField chipsLeftText;
 	private InventoryBag keysCollected;
 	public GameInfoView() {
-		setBackground(Color.YELLOW);
+		setBackground(Color.DARK_GRAY);
 		setPreferredSize(new Dimension(250, 500));
 		setBorder(BorderFactory.createEmptyBorder(10, 30, 10, 10));
 		setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
