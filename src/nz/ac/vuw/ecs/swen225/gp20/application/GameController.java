@@ -44,7 +44,7 @@ public class GameController {
 	private GameInfoModel gameInfoModel = new GameInfoModel(); ////
 	
 	public void startLevel1() {
-		startLevel(currentLevel = 2);
+		startLevel(currentLevel = 1);
 	}
 
 	public void saveLevel() {
