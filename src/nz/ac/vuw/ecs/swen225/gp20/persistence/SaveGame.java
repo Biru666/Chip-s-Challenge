@@ -7,6 +7,7 @@ import java.util.Map;
 import javax.json.Json;
 import javax.json.JsonArray;
 import javax.json.JsonArrayBuilder;
+import javax.json.JsonObject;
 import javax.json.JsonObjectBuilder;
 import javax.json.JsonWriter;
 
@@ -51,29 +52,31 @@ public class SaveGame {
 	 */
 	public void save(String filename, int time) {
 		Map<String, Integer> inventory = maze.getChap().getInventory();
-		int leftChips = maze.getChap().getTotalChips() - maze.getChap().getChips();
+		int Chips = maze.getChap().getChips();
 
 		// map writer
 		JsonWriter jw = null;
 		try {
-			FileWriter fw = new FileWriter("levels/" + filename);
-			
+			FileWriter fw = new FileWriter("levels/" + filename);		
 			jw = Json.createWriter(fw);
+			
 			JsonArrayBuilder rows = Json.createArrayBuilder();
 			for (int i = 0; i < currentMap.length; i++) {
 				JsonArrayBuilder cols = Json.createArrayBuilder();
 				for (int j = 0; j < currentMap[i].length; j++) {
 					jsonValues(i, j, cols);
 				}
-				rows.add(cols.build());
+				JsonArray colArr = cols.build().asJsonArray();
+				rows.add(colArr);
 			}
 
 			// level, time and chip writer
 			JsonObjectBuilder infoBuilds = Json.createObjectBuilder();
 			infoBuilds.add("Time", time);
-			infoBuilds.add("NumOfChips", leftChips);
+			infoBuilds.add("NumOfChips", Chips);
 			infoBuilds.add("Level", currLevel);
-			rows.add(infoBuilds);
+			JsonObject infoObj = infoBuilds.build().asJsonObject();
+			rows.add(infoObj);
 
 			// inventory writer
 			JsonObjectBuilder inv = Json.createObjectBuilder();
@@ -83,9 +86,10 @@ public class SaveGame {
 //				invArr.add(invBuild);
 			}
 			inv.add("Inventory", invBuild);
-			rows.add(inv);
+			JsonObject invObj = invBuild.build().asJsonObject();
+			rows.add(invObj);
 
-			JsonArray arr = rows.build();
+			JsonArray arr = rows.build().asJsonArray();
 			jw.writeArray(arr);
 			jw.close();
 		} catch (IOException e) {

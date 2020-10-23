@@ -39,7 +39,7 @@ public class Parser {
 	/**
 	 * the number of chips Chap've collected.
 	 */
-	public int leftChips;
+	public int Chips;
 
 	/**
 	 * the level of saved game.
@@ -51,10 +51,10 @@ public class Parser {
 	 */
 	public Map<String, Integer> inventory = new HashMap<String, Integer>();
 
-	private String Info1 = "Chap needs to pick up all the chips in time to pass this level.\r\n"
+	protected String Info1 = "Chap needs to pick up all the chips in time to pass this level.\r\n"
 			+ "Chips are distributed around the map and some of them are locked in rooms.\r\n"
 			+ "To open the doors, Chap needs to collect corresponding colored keys.";
-	private String Info2 = "When Chap falls into Lava, he will die.\r\n"
+	protected String Info2 = "When Chap falls into Lava, he will die.\r\n"
 			+ "Also, if Chap touches the bug, he will die as well.";
 
 	/**
@@ -64,6 +64,7 @@ public class Parser {
 	 */
 	public Parser(String filename) {
 		load(filename);
+
 	}
 
 	/**
@@ -101,10 +102,10 @@ public class Parser {
 		for (JsonValue obj : arr) {
 			if (obj.getValueType() == ValueType.OBJECT) {
 				JsonObject object = obj.asJsonObject();
-				time = object.getInt("Time", 0);
-				leftChips = object.getInt("NumOfChips", 0);
-				currLevel = object.getInt("Level", 0);
-				
+				time = object.getInt("Time", 30);
+				Chips = object.getInt("NumOfChips", 9);
+				currLevel = object.getInt("Level", 1);
+
 				if (object.containsKey("Inventory")) {
 					JsonObject invObj = object.get("Inventory").asJsonObject();
 					for (String keys : invObj.keySet()) {
@@ -124,8 +125,6 @@ public class Parser {
 	 */
 	private void loadMap(int row, int col, JsonArray arr) {
 		map = new Location[row][col];
-
-//		System.out.println(col);
 		for (int i = 0; i < row; i++) {
 			JsonArray rowArr = arr.get(i).asJsonArray();
 			for (int j = 0; j < col; j++) {
@@ -185,11 +184,11 @@ public class Parser {
 					break;
 				// Level 1 Help
 				case 14:
-					map[i][j] = new Location(i, j, TileName.INFO, Info1);
+					map[i][j] = new Location(i, j, TileName.INFO, getInfo1());
 					break;
 				// Level 2 Help
 				case 17:
-					map[i][j] = new Location(i, j, TileName.INFO, Info2);
+					map[i][j] = new Location(i, j, TileName.INFO, getInfo2());
 					break;
 				// Bug
 				case 15:
@@ -208,12 +207,28 @@ public class Parser {
 	}
 
 	/**
-	 * @param args
+	 * get level 1 info
+	 * 
+	 * @return level 1 info
 	 */
-	public static void main(String[] args) {
-		Maze m = new Maze();
-		Parser p = new Parser("levels/SavedMap.json");
-		m.setLevel(p.map);
-		System.out.println(m.toString());
+	public String getInfo1() {
+		return Info1;
+	}
+
+	/**
+	 * set level 1 info
+	 * 
+	 * @param info1
+	 */
+	public void setInfo1(String info1) {
+		Info1 = info1;
+	}
+
+	public String getInfo2() {
+		return Info2;
+	}
+
+	public void setInfo2(String info2) {
+		Info2 = info2;
 	}
 }
