@@ -50,7 +50,7 @@ import nz.ac.vuw.ecs.swen225.gp20.maze.Variation;
 
 /**
  * Class to record game play and replay it.
- * @author Jasmine Liang
+ * @author 300457588 Jasmine Liang
  *
  */
 public class RecordAndReplay {
