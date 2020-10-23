@@ -40,16 +40,12 @@ public class Menu extends JMenuBar {
 		JMenu help = new JMenu("Help");
 		JMenu record = new JMenu("Record"); //
 		JMenu replay = new JMenu("Replay"); //
-		JMenuItem stepReplay = new JMenuItem("Step Replay"); //
-		JMenuItem autoReplay = new JMenuItem("Auto Replay"); ////
 		this.add(game);
 		this.add(options);
 		this.add(level);
 		this.add(help);
 		this.add(record); //
 		this.add(replay); //
-		this.add(stepReplay); //
-		this.add(autoReplay); ////
 		// Menu Items in Game.
 		JMenuItem startLevel1 = new JMenuItem("Start Level 1");
 		JMenuItem resumeSavedGame = new JMenuItem("Resume A Saved Game");
@@ -84,9 +80,13 @@ public class Menu extends JMenuBar {
 		JMenuItem halfSpeed = new JMenuItem("0.5 Speed"); //
 		JMenuItem oneSpeed = new JMenuItem("1.0 Speed"); //
 		JMenuItem twiceSpeed = new JMenuItem("2.0 Speed"); //
+		JMenuItem stepReplay = new JMenuItem("Step Replay"); //
+		JMenuItem autoReplay = new JMenuItem("Auto Replay"); ////
 		replay.add(halfSpeed); //
 		replay.add(oneSpeed); //
 		replay.add(twiceSpeed); //
+		replay.add(stepReplay);
+		replay.add(autoReplay);
 		registerHalfSpeed(halfSpeed);//
 		registerOneSpeed(oneSpeed); //
 		registerTwiceSpeed(twiceSpeed); //
