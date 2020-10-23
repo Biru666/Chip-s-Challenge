@@ -2,7 +2,6 @@ package nz.ac.vuw.ecs.swen225.gp20.persistence;
 
 import java.io.FileNotFoundException;
 import java.io.FileReader;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -13,8 +12,6 @@ import javax.json.JsonValue;
 import javax.json.JsonValue.ValueType;
 import javax.json.stream.JsonParser;
 import javax.json.stream.JsonParser.Event;
-
-import com.sun.xml.internal.bind.v2.runtime.unmarshaller.XsiNilLoader.Array;
 
 import nz.ac.vuw.ecs.swen225.gp20.maze.ActorName;
 import nz.ac.vuw.ecs.swen225.gp20.maze.Location;
