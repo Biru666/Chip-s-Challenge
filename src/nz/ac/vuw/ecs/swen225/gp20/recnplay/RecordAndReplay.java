@@ -62,7 +62,7 @@ public class RecordAndReplay {
 	private static boolean isRecording = false;
 	private static boolean isReplaying = false;
 	private static boolean isStepReplay = false;
-	private static boolean isAutoReplay = true;
+	private static boolean isAutoReplay = false;
 	
 	private static int chipsLeft = 11;
 	private static int level = 1;
@@ -307,6 +307,7 @@ public class RecordAndReplay {
 	 * @param gc game controller
 	 */
 	public static void autoReplay(GameController gc) {
+		if(!isAutoReplay) {
 		isAutoReplay = true;
 		isStepReplay = false;
 		if(isReplaying && !isRecording) {
@@ -326,6 +327,7 @@ public class RecordAndReplay {
 			}else {
 				isReplaying = false;
 			}
+		}
 		}
 	}
 	
@@ -362,7 +364,7 @@ public class RecordAndReplay {
 	
 	/**
 	 * Set delay number to change the speed of replay
-	 * @param speed times
+	 * @param d speed times
 	 */
 	public static void setDelay(double d) {
 		if(d==0.5) {
@@ -519,7 +521,7 @@ public class RecordAndReplay {
 	
 	/**
 	 * Get isRecording
-	 * @return
+	 * @return boolean isRecording
 	 */
 	public static boolean isRecording() {
 		return isRecording;
@@ -527,7 +529,7 @@ public class RecordAndReplay {
 	
 	/**
 	 * Get isReplaying
-	 * @return
+	 * @return boolean isReplaying
 	 */
 	public static boolean isReplaying() {
 		return isReplaying;
@@ -535,15 +537,15 @@ public class RecordAndReplay {
 	
 	/**
 	 * Get isStepReplay
-	 * @return
+	 * @return boolean isStepReplay
 	 */
 	public static boolean isStepReplay() {
 		return isStepReplay;
 	}
 	
 	/**
-	 * Get isStepReplay
-	 * @return
+	 * Get isAutoReplay
+	 * @return boolean isAutoReplay
 	 */
 	public static boolean isAutoReplay() {
 		return isAutoReplay;
@@ -552,7 +554,7 @@ public class RecordAndReplay {
 	
 	/**
 	 * Get actions list
-	 * @return
+	 * @return actionList
 	 */
 	public ArrayList<KeyEvent> getActionList(){
 		return actionList;
@@ -560,7 +562,7 @@ public class RecordAndReplay {
 	
 	/**
 	 * Get directions list
-	 * @return
+	 * @return directionList
 	 */
 	public ArrayList<String> getDirectionList(){
 		return directionList;
@@ -568,7 +570,7 @@ public class RecordAndReplay {
 	
 	/**
 	 * Get file name
-	 * @return
+	 * @return fileName
 	 */
 	public String getFileName() {
 		return fileName;
@@ -576,7 +578,7 @@ public class RecordAndReplay {
 	
 	/**
 	 * Get board
-	 * @return
+	 * @return board
 	 */
 	public String getBoard() {
 		return board;
@@ -584,7 +586,7 @@ public class RecordAndReplay {
 	
 	/**
 	 * Get delay
-	 * @return
+	 * @return delay
 	 */
 	public int getDelay() {
 		return delay;
