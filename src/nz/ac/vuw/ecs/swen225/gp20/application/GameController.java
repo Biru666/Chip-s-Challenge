@@ -41,8 +41,10 @@ public class GameController {
 	private int currentLevel = 1;
 	private Timer tickTimer = null;
 
+	private GameInfoModel gameInfoModel = new GameInfoModel(); ////
+	
 	public void startLevel1() {
-		startLevel(currentLevel = 1);
+		startLevel(currentLevel = 2);
 	}
 
 	public void saveLevel() {
@@ -115,6 +117,13 @@ public class GameController {
 		gameInfoRenderer.pause();
 		resume();
 	}
+	
+	public void stopCountdown() { ////
+		if (tickTimer != null) {
+			tickTimer.stop();
+		}
+		gameInfoRenderer.stopCountdown();
+	}
 
 	public void timeout() {
 		status = GameStatus.LEVEL_FINISHED;
@@ -125,7 +134,6 @@ public class GameController {
 		maze.setLevel(parser.map);
 
 		// Maze - get a new Maze from level 1.
-		GameInfoModel gameInfoModel = new GameInfoModel();
 		gameInfoModel.setLevel(level);
 		gameInfoModel.setTime(LEVEL_TIME.get(level));
 		gameInfoModel.setChipsLeft(maze.getChap().getTotalChips() - maze.getChap().getChips());
@@ -161,6 +169,47 @@ public class GameController {
 		mazeRenderer.Corner();
 	}
 
+	public void startRecording() { //
+		RecordAndReplay.startNewRecord("record.json", this);
+		System.out.println("start record");
+	}
+	
+	public void saveRecording() { //
+		RecordAndReplay.saveRecording(this);
+		System.out.println("save recording");
+	}
+	
+	public void loadRecording() { //
+		RecordAndReplay.loadRecording("record.json", this);
+		System.out.println("load recording");
+	}
+	
+	public void stepReplay() { //
+		RecordAndReplay.stepReplay(this);
+		System.out.println("step replay");
+	}
+	
+	public void autoReplay() {
+		RecordAndReplay.autoReplay(this);
+		System.out.println("auto replay");
+	}
+	
+	public void oneSpeed() { //
+		RecordAndReplay.setDelay(1);
+		System.out.println("1.0 speed replay");
+	}
+	
+	public void halfSpeed() { //
+		RecordAndReplay.setDelay(0.5);
+		System.out.println("0.5 speed replay");
+	}
+	
+	public void twiceSpeed() { //
+		RecordAndReplay.setDelay(2);
+		System.out.println("2.0 speed replay");
+	}
+	
+
 	public void resume() {
 		if (tickTimer != null) {
 			tickTimer.start();
@@ -184,56 +233,29 @@ public class GameController {
 		this.mazeRenderer = mazeRenderer;
 	}
 
-	public void startRecording() {
-		RecordAndReplay.startNewRecord("record.json", this);
-		System.out.println("start recording");
+	public void setMaze(Maze m) { //
+		this.maze = m;
 	}
-
-	public void saveRecording() {
-		RecordAndReplay.saveRecording(this);
-		System.out.println("save recording");
+	
+	public void setInfoModel(GameInfoModel model) { ////
+		this.gameInfoModel = model;
 	}
-
-	public void loadRecording() {
-		RecordAndReplay.loadRecording("record.json", this);
-		System.out.println("load recording");
+	
+	
+	public Maze getMaze() { //
+		return this.maze;
 	}
-
-	public void halfSpeed() {
-		RecordAndReplay.setDelay(0.5);
-		System.out.println("0.5 speed replay");
-	}
-
-	public void oneSpeed() {
-		RecordAndReplay.setDelay(1);
-		System.out.println("1.0 speed replay");
-
-	}
-
-	public void twiceSpeed() {
-		RecordAndReplay.setDelay(2);
-		System.out.println("2.0 speed replay");
-	}
-
-	public void stepReplay() {
-		RecordAndReplay.stepReplay(this);
-		System.out.println("step replay");
-	}
-
-	public renderer getRenderer() {
+	
+	public renderer getRenderer() { //
 		return this.mazeRenderer;
 	}
-
-	public GameInfoRenderer setInfoRenderer() { //
+	
+	public GameInfoRenderer getInfoRenderer() { ////
 		return this.gameInfoRenderer;
 	}
-
-	public void setMaze(Maze maze2) {
-		this.maze = maze2;
-	}
-
-	public Maze getMaze() {
-		return this.maze;
+	
+	public GameInfoModel getInfoModel() { ////
+		return this.gameInfoModel;
 	}
 
 }

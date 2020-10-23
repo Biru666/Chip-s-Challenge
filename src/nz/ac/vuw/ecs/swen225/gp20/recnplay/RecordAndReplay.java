@@ -64,8 +64,8 @@ public class RecordAndReplay {
 	private static boolean isStepReplay = false;
 	private static boolean isAutoReplay = true;
 	
-	private static int chipsLeft;
-	private static int level;
+	private static int chipsLeft = 11;
+	private static int level = 1;
 	private static Map<String,Integer> inventoryMap = new HashMap<String,Integer>();
 	
 	
@@ -261,8 +261,10 @@ public class RecordAndReplay {
 			}
 
 			// load game information
-			chipsLeft = object.getInt("chips");
-			level = object.getInt("level");
+			if(object!=null) {
+				chipsLeft = object.getInt("chips");
+				level = object.getInt("level");
+				}
 			GameInfoModel model = gc.getInfoModel();
 			model.setChipsLeft(chipsLeft);
 			if(level==1) model.setTime(100);
