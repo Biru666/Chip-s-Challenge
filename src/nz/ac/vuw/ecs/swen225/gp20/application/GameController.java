@@ -258,4 +258,12 @@ public class GameController {
 		return this.gameInfoModel;
 	}
 
+	/**
+	 * 
+	 * Getter of GameStatus for testing
+	 *
+	 */
+	public GameStatus getGameStatus() {
+		return this.status;
+	}
 }
