@@ -1,6 +1,5 @@
 package nz.ac.vuw.ecs.swen225.gp20.application;
 
-import java.awt.Component;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.nio.file.Files;
@@ -21,12 +20,22 @@ import nz.ac.vuw.ecs.swen225.gp20.recnplay.RecordAndReplay;
 import nz.ac.vuw.ecs.swen225.gp20.renderer.renderer;
 
 /**
+ * GameController is responsible for connecting all modules,
+ * especially connection view modules with engine modules.
  * 
  * @author Wang Conglang 300472254
  *
  */
 public class GameController {
+	/**
+	 * Mapping level number with their time limits.
+	 * For example, level 1 100 seconds, level 2 60 seconds, etc.
+	 */
 	private static Map<Integer, Integer> LEVEL_TIME = new HashMap<>();
+
+	// Ideally level time information is stored together with level map in level json files.
+	// As levels json files are not designed in that way initially, the level time information is temporarily
+	// stored in memory.
 	static {
 		LEVEL_TIME.put(1, 100);
 		LEVEL_TIME.put(2, 60);
@@ -34,26 +43,72 @@ public class GameController {
 		LEVEL_TIME.put(4, 200);
 		LEVEL_TIME.put(5, 250);
 	}
+
+	/**
+	 * This is the file name which stores the game state when the player hits Save & Quit.
+	 */
+	private static final String SAVE_LEVEL_FILE_NAME = "SavedMap.json";
+
+	/**
+	 * gameInfoRenderer is responsible for rendering the panel on the right side of the window.
+	 * It effectively changes level number, time count-down, chips number and keys held.
+	 */
 	private GameInfoRenderer gameInfoRenderer;
+	/**
+	 * mazeRenderer is responsible for rendering the main part of the game - the game map.
+	 * It holds a Maze object and render a portion of the maze around the chap.
+	 * It repaints after the chap successfully moves.
+	 * It also repaints after a tick successfully moves Actors (Game Bots, aka bugs).
+	 */
 	private renderer mazeRenderer;
+
+	/**
+	 * A Maze instance is the engine of the Game.
+	 * Players operations will be passed to maze to change the game state.
+	 * Renderer will then repaint the game map according to maze instance.
+	 */
 	private Maze maze = new Maze();
+
+	/**
+	 * Enum GameStatus helps to decide whether a player's operation should be reacted.
+	 * A player can only move the chap when GameStatus is LEVEL_STARTED.
+	 * tickTimer will also only ask maze to move Bots when GameStatus is LEVEL_STARTED.
+	 */
 	private GameStatus status = GameStatus.NOT_STARTED;
+	/**
+	 * Represents the current level the player is playing.
+	 * It is used to determine the next level when level is successful,
+	 * or what level should be restarted when level is unsuccessful.
+	 */
 	private int currentLevel = 1;
+
+	/**
+	 * tickTimer is an auto timer that ticks maze, which will move game BOTs around.
+	 */
 	private Timer tickTimer = null;
 
 	private GameInfoModel gameInfoModel = new GameInfoModel(); ////
-	
+
+	/**
+	 * Starts the game from level 1.
+	 */
 	public void startLevel1() {
 		startLevel(currentLevel = 1);
 	}
 
+	/**
+	 * Saves the current level state into a file, so next time the player can start from exactly where they quit.
+	 */
 	public void saveLevel() {
 		SaveGame sg = new SaveGame(maze, currentLevel);
-		sg.save("SavedMap.json", 30);
+		sg.save(SAVE_LEVEL_FILE_NAME, 30);
 	}
 
+	/**
+	 * Start game from last save point.
+	 */
 	public void resumeSavedGame() {
-		startLevel(1);
+		
 	}
 
 	public void startLastUnfinishedGame() {
