@@ -64,15 +64,17 @@ public class RecordAndReplay {
 	private static boolean isStepReplay = false;
 	private static boolean isAutoReplay = true;
 	
-	private static int chipsLeft;
-	private static int level;
+	private static int chipsLeft = 11;
+	private static int level = 1;
 	private static Map<String,Integer> inventoryMap = new HashMap<String,Integer>();
 	
-	private static int delay = 700;  // origin delay
+	
+	private static int delay = 700;
 
 	/**
 	 * To start a new record
 	 * @param name the file name to save
+	 * @param gc current game controller
 	 */
 	public static void startNewRecord(String name, GameController gc) {
 		if(!isRecording && !isReplaying) {
@@ -148,7 +150,6 @@ public class RecordAndReplay {
 					.add("game", board)
 					.add("chips", chipsLeft)
 					.add("level", level)
-					//.add("inventory", (JsonValue) inventory)
 			        .add("moves", arrayBuilder);
 			// write text to json file
 			Writer writer = new StringWriter();
@@ -260,8 +261,10 @@ public class RecordAndReplay {
 			}
 
 			// load game information
-			chipsLeft = object.getInt("chips");
-			level = object.getInt("level");
+			if(object!=null) {
+				chipsLeft = object.getInt("chips");
+				level = object.getInt("level");
+				}
 			GameInfoModel model = gc.getInfoModel();
 			model.setChipsLeft(chipsLeft);
 			if(level==1) model.setTime(100);
@@ -283,6 +286,10 @@ public class RecordAndReplay {
 		}
 	}
 	
+	/**
+	 * Replay by step
+	 * @param gc game controller
+	 */
 	public static void stepReplay(GameController gc) {
 		isStepReplay = true;
 		isAutoReplay = false;
@@ -295,6 +302,10 @@ public class RecordAndReplay {
 		}
 	}
 	
+	/**
+	 * Auto replay
+	 * @param gc game controller
+	 */
 	public static void autoReplay(GameController gc) {
 		isAutoReplay = true;
 		isStepReplay = false;
@@ -318,6 +329,10 @@ public class RecordAndReplay {
 		}
 	}
 	
+	/**
+	 * Replay the load actions
+	 * @param gc game controller
+	 */
 	private static void replay(GameController gc) {
 		String direction = directionList.get(0);
 		AtomicBoolean isBusy = new AtomicBoolean(false);
@@ -343,13 +358,26 @@ public class RecordAndReplay {
 			});
 		}
 		directionList.remove(0);
-
+	}
+	
+	/**
+	 * Set delay number to change the speed of replay
+	 * @param speed times
+	 */
+	public static void setDelay(double d) {
+		if(d==0.5) {
+			delay = 1400;
+		}else if(d==1) {
+			delay = 700;
+		}else {
+			delay = 350;
+		}
 	}
 	
 	/**
 	 * Get the game state
-	 * @param gc
-	 * @return
+	 * @param gc game controller
+	 * @return String game state
 	 */
 	private static String getGameState(GameController gc) {
 		String gamestate = "";
@@ -477,15 +505,6 @@ public class RecordAndReplay {
 		return gamestate;
 	}
 	
-	public static void setDelay(double d) {
-		if(d==0.5) {
-			delay = 1400;
-		}else if(d==1) {
-			delay = 700;
-		}else {
-			delay = 350;
-		}
-	}
 	
 	
 	/**
@@ -521,6 +540,15 @@ public class RecordAndReplay {
 	public static boolean isStepReplay() {
 		return isStepReplay;
 	}
+	
+	/**
+	 * Get isStepReplay
+	 * @return
+	 */
+	public static boolean isAutoReplay() {
+		return isAutoReplay;
+	}
+	
 	
 	/**
 	 * Get actions list
