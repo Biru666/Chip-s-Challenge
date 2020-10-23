@@ -17,6 +17,7 @@ import com.sun.xml.internal.bind.v2.runtime.unmarshaller.XsiNilLoader.Array;
 
 import nz.ac.vuw.ecs.swen225.gp20.maze.ActorName;
 import nz.ac.vuw.ecs.swen225.gp20.maze.Location;
+import nz.ac.vuw.ecs.swen225.gp20.maze.Maze;
 import nz.ac.vuw.ecs.swen225.gp20.maze.TileName;
 import nz.ac.vuw.ecs.swen225.gp20.maze.Variation;
 
@@ -198,5 +199,15 @@ public class Parser {
 				}
 			}
 		}
+	}
+	
+	/**
+	 * @param args
+	 */
+	public static void main(String[] args) {
+		Maze m = new Maze();
+		Parser p = new Parser("levels/SavedMap.json");
+		m.setLevel(p.map);
+		System.out.println(m.toString());
 	}
 }
