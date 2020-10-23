@@ -87,13 +87,12 @@ public class SaveGame {
 
 			// inventory writer
 			JsonObjectBuilder inv = Json.createObjectBuilder();
-			JsonArrayBuilder invArr = Json.createArrayBuilder();
-			for (String itemName : inventory.keySet()) {	
-				JsonObjectBuilder invBuild = Json.createObjectBuilder();
+			JsonObjectBuilder invBuild = Json.createObjectBuilder();
+			for (String itemName : inventory.keySet()) {				
 				invBuild.add(itemName, inventory.get(itemName));
-				invArr.add(invBuild);
+//				invArr.add(invBuild);
 			}
-			inv.add("Inventory", invArr);
+			inv.add("Inventory", invBuild);
 			rows.add(inv);
 
 			JsonArray arr = rows.build();
