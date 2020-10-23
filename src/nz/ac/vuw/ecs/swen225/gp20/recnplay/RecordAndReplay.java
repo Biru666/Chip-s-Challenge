@@ -78,7 +78,16 @@ public class RecordAndReplay {
 	 */
 	public static void startNewRecord(String name, GameController gc) {
 		if(!isRecording && !isReplaying) {
+			// initialize
 			actionList.clear();
+			board = null;
+			directionList.clear();
+			isRecording = false;
+			isReplaying = false;
+			isStepReplay = false;
+			isAutoReplay = false;
+			delay = 700;
+			// read game state and game info
 			isRecording = true;
 			fileName = name;
 			board = getGameState(gc);
@@ -175,7 +184,7 @@ public class RecordAndReplay {
 		if(!isRecording) {
 			isReplaying = true;
 			fileName = name;
-			gc.stopCountdown();
+			if(level==1) gc.stopCountdown();
 			// load game state
 			// select the gamestate from json file
 			String line;
