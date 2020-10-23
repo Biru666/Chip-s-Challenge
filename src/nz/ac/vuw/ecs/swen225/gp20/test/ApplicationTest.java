@@ -263,6 +263,31 @@ public class ApplicationTest {
 		assertTrue(maze.getAction().equals(Action.DIE));
 		
 	}
+
+	@Test
+	public void replay() throws Exception, InstantiationException, IllegalAccessException{
+		Main m = new Main();
+		GameController gc = m.getGameController();
+		GameInfoView gv = m.getGameInfoView();
+		
+		gc.startLevel1();
+		gc.startRecording();
+		gc.startNextLevel();
+	    Maze maze = gc.getMaze();
+	    KeyEvent left = new KeyEvent(m, KeyEvent.KEY_PRESSED, System.currentTimeMillis(), 0,  KeyEvent.VK_LEFT,'Z');
+	    KeyEvent up = new KeyEvent(m, KeyEvent.KEY_PRESSED, System.currentTimeMillis(), 0,  KeyEvent.VK_UP,'Z');
+	    // go left
+	    move(10, left, m);
+	    Thread.sleep(2000);
+	    move(1, up, m);
+	    Thread.sleep(1000);
+	    gc.saveRecording();
+	    gc.loadRecording();
+	    gc.autoReplay();
+	    
+		assertTrue(maze.getAction().equals(Action.BOT_DIE));
+		
+	}
 	
 	private void move(int step, KeyEvent k, Main m) {
 		for(int i = 0; i < step; i++) {
