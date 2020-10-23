@@ -2,11 +2,6 @@ package nz.ac.vuw.ecs.swen225.gp20.persistence;
 
 import org.junit.Test;
 
-import nz.ac.vuw.ecs.swen225.gp20.maze.ActorName;
-import nz.ac.vuw.ecs.swen225.gp20.maze.Location;
-import nz.ac.vuw.ecs.swen225.gp20.maze.Maze;
-import nz.ac.vuw.ecs.swen225.gp20.maze.TileName;
-
 /**
  * @author Biru Lin 300456889
  *

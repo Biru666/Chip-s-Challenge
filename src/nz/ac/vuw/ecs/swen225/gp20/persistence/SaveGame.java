@@ -2,29 +2,19 @@ package nz.ac.vuw.ecs.swen225.gp20.persistence;
 
 import java.io.FileWriter;
 import java.io.IOException;
-import java.util.HashMap;
 import java.util.Map;
 
 import javax.json.Json;
 import javax.json.JsonArray;
 import javax.json.JsonArrayBuilder;
-import javax.json.JsonBuilderFactory;
-import javax.json.JsonObject;
 import javax.json.JsonObjectBuilder;
 import javax.json.JsonWriter;
-import javax.json.JsonWriterFactory;
-import javax.json.stream.JsonGenerator;
-import javax.json.stream.JsonParser.Event;
-import javax.swing.Timer;
 
-import nz.ac.vuw.ecs.swen225.gp20.application.GameController;
-import nz.ac.vuw.ecs.swen225.gp20.application.GameStatus;
 import nz.ac.vuw.ecs.swen225.gp20.maze.ActorName;
 import nz.ac.vuw.ecs.swen225.gp20.maze.Door;
 import nz.ac.vuw.ecs.swen225.gp20.maze.Key;
 import nz.ac.vuw.ecs.swen225.gp20.maze.Location;
 import nz.ac.vuw.ecs.swen225.gp20.maze.Maze;
-import nz.ac.vuw.ecs.swen225.gp20.maze.Tile;
 import nz.ac.vuw.ecs.swen225.gp20.maze.TileName;
 import nz.ac.vuw.ecs.swen225.gp20.maze.Variation;
 
