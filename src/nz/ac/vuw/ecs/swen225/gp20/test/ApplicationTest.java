@@ -87,23 +87,23 @@ public class ApplicationTest {
 		assertTrue(t.isRunning());
 	}
 	
-//	@Test
-//	public void TimeOut_test() throws Exception, InstantiationException, IllegalAccessException{
-//		Main m = new Main();
-//		GameController gc = m.getGameController();
-//		GameInfoView gv = m.getGameInfoView();
-//		
-//		gc.startLevel1();
-//		//GameInfoModel model = gc.getGameInfoModel();
-//		//gv.setTimeText("0");
-//	    
-//	    //model.setTime(0);
-//		//gc.getGameInfoRenderer().render(model);
-//		Timer t = gc.getInfoRenderer().getTimer();
-//		Thread.sleep(100000);
-//		assertFalse(t.isRunning());
-//		assertTrue(gc.getGameStatus().equals(GameStatus.LEVEL_FINISHED));
-//	}
+	@Test
+	public void TimeOut_test() throws Exception, InstantiationException, IllegalAccessException{
+		Main m = new Main();
+		GameController gc = m.getGameController();
+		GameInfoView gv = m.getGameInfoView();
+		
+		gc.startLevel1();
+		//GameInfoModel model = gc.getGameInfoModel();
+		//gv.setTimeText("0");
+	    
+	    //model.setTime(0);
+		//gc.getGameInfoRenderer().render(model);
+		Timer t = gc.getInfoRenderer().getTimer();
+		Thread.sleep(100000);
+		assertFalse(t.isRunning());
+		assertTrue(gc.getGameStatus().equals(GameStatus.LEVEL_FINISHED));
+	}
 	
 	@Test
 	public void keyPressed_Dir() throws Exception, InstantiationException, IllegalAccessException{
@@ -188,60 +188,60 @@ public class ApplicationTest {
 		assertTrue(gv.getKeysCollected().equals("{KEY BLUE=1}"));
 	}
 	
-//	@Test
-//	public void keyPressed_GameSuccess() throws Exception, InstantiationException, IllegalAccessException{
-//		Main m = new Main();
-//		GameController gc = m.getGameController();
-//		GameInfoView gv = m.getGameInfoView();
-//
-//		gc.startLevel1();
-//	    Maze maze = gc.getMaze();
-//	    KeyEvent left = new KeyEvent(m, KeyEvent.KEY_PRESSED, System.currentTimeMillis(), 0,  KeyEvent.VK_LEFT,'Z');
-//	    KeyEvent down = new KeyEvent(m, KeyEvent.KEY_PRESSED, System.currentTimeMillis(), 0,  KeyEvent.VK_DOWN,'Z');
-//	    KeyEvent up = new KeyEvent(m, KeyEvent.KEY_PRESSED, System.currentTimeMillis(), 0,  KeyEvent.VK_UP,'Z');
-//	    KeyEvent right = new KeyEvent(m, KeyEvent.KEY_PRESSED, System.currentTimeMillis(), 0,  KeyEvent.VK_RIGHT,'Z');
-//
-//		move(2, left, m);
-//		move(1, down, m);
-//		move(3, up, m);
-//		move(3, left, m);
-//		move(1, down, m);
-//		move(1, right, m);
-//		move(1, up ,m);
-//		move(6, right, m);
-//		move(4, down, m);
-//		move(3, right, m);
-//		move(1, up, m);
-//		move(1, left, m);
-//		move(1, down, m);
-//		move(3, left, m);		
-//		move(4, down, m);		
-//		move(4, up, m);		
-//		move(6, left, m);
-//		move(1, up, m);
-//		move(1, right, m);
-//		move(1, down, m);
-//		move(2, right, m);
-//		move(7, up, m);
-//		move(1, left, m);
-//		move(1, down, m);
-//		move(1, right, m);
-//		move(2, down, m);
-//		move(7, right, m);
-//		move(1, down, m);
-//		move(1, up, m);
-//		move(3, left, m);
-//		move(2, up, m);
-//		move(1, right, m);
-//		move(1, left, m);
-//		move(6, down, m);
-//		move(3, left, m);
-//		move(3, down, m);
-//		move(7, up, m);
-//		move(1, right, m);
-//		move(2, up, m);
-//		assertTrue(gc.getGameStatus().equals(GameStatus.LEVEL_FINISHED));
-//	}
+	@Test
+	public void keyPressed_GameSuccess() throws Exception, InstantiationException, IllegalAccessException{
+		Main m = new Main();
+		GameController gc = m.getGameController();
+		GameInfoView gv = m.getGameInfoView();
+
+		gc.startLevel1();
+	    Maze maze = gc.getMaze();
+	    KeyEvent left = new KeyEvent(m, KeyEvent.KEY_PRESSED, System.currentTimeMillis(), 0,  KeyEvent.VK_LEFT,'Z');
+	    KeyEvent down = new KeyEvent(m, KeyEvent.KEY_PRESSED, System.currentTimeMillis(), 0,  KeyEvent.VK_DOWN,'Z');
+	    KeyEvent up = new KeyEvent(m, KeyEvent.KEY_PRESSED, System.currentTimeMillis(), 0,  KeyEvent.VK_UP,'Z');
+	    KeyEvent right = new KeyEvent(m, KeyEvent.KEY_PRESSED, System.currentTimeMillis(), 0,  KeyEvent.VK_RIGHT,'Z');
+
+		move(2, left, m);
+		move(1, down, m);
+		move(3, up, m);
+		move(3, left, m);
+		move(1, down, m);
+		move(1, right, m);
+		move(1, up ,m);
+		move(6, right, m);
+		move(4, down, m);
+		move(3, right, m);
+		move(1, up, m);
+		move(1, left, m);
+		move(1, down, m);
+		move(3, left, m);		
+		move(4, down, m);		
+		move(4, up, m);		
+		move(6, left, m);
+		move(1, up, m);
+		move(1, right, m);
+		move(1, down, m);
+		move(2, right, m);
+		move(7, up, m);
+		move(1, left, m);
+		move(1, down, m);
+		move(1, right, m);
+		move(2, down, m);
+		move(7, right, m);
+		move(1, down, m);
+		move(1, up, m);
+		move(3, left, m);
+		move(2, up, m);
+		move(1, right, m);
+		move(1, left, m);
+		move(6, down, m);
+		move(3, left, m);
+		move(3, down, m);
+		move(7, up, m);
+		move(1, right, m);
+		move(2, up, m);
+		assertTrue(gc.getGameStatus().equals(GameStatus.LEVEL_FINISHED));
+	}
 	
 	@Test
 	public void lev2_ChapDie() throws Exception, InstantiationException, IllegalAccessException{
