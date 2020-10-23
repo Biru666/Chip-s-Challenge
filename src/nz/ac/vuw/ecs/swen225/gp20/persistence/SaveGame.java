@@ -2,6 +2,7 @@ package nz.ac.vuw.ecs.swen225.gp20.persistence;
 
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.Map;
 
 import javax.json.Json;
@@ -11,7 +12,10 @@ import javax.json.JsonBuilderFactory;
 import javax.json.JsonObject;
 import javax.json.JsonObjectBuilder;
 import javax.json.JsonWriter;
+import javax.json.JsonWriterFactory;
+import javax.json.stream.JsonGenerator;
 import javax.json.stream.JsonParser.Event;
+import javax.swing.Timer;
 
 import nz.ac.vuw.ecs.swen225.gp20.application.GameController;
 import nz.ac.vuw.ecs.swen225.gp20.application.GameStatus;
@@ -27,13 +31,14 @@ import nz.ac.vuw.ecs.swen225.gp20.maze.Variation;
 /**
  * Save the current game states like map, inventory, level info and time. Export
  * as an formatted .json file.
- * @author Biru
+ * 
+ * @author Biru Lin 300456889
  *
  */
 public class SaveGame {
-	public Maze maze;
-	public int currLevel;
-	public Location[][] currentMap;
+	private Maze maze;
+	private int currLevel;
+	private Location[][] currentMap;
 
 	/**
 	 * Constructor of SaveGame Class.
@@ -49,13 +54,20 @@ public class SaveGame {
 	}
 
 	/**
-	 * Write a new json file for current map using Writer in Javax.json. 
+	 * Write a new json file for current map using Writer in Javax.json.
+	 * 
 	 * @param filename
+	 * @param time
 	 */
-	public void save(String filename) {
+	public void save(String filename, int time) {
+		Map<String, Integer> inventory = maze.getChap().getInventory();
+		int leftChips = maze.getChap().getTotalChips() - maze.getChap().getChips();
+
+		// map writer
 		JsonWriter jw = null;
 		try {
 			FileWriter fw = new FileWriter("levels/" + filename);
+			
 			jw = Json.createWriter(fw);
 			JsonArrayBuilder rows = Json.createArrayBuilder();
 			for (int i = 0; i < currentMap.length; i++) {
@@ -65,6 +77,25 @@ public class SaveGame {
 				}
 				rows.add(cols.build());
 			}
+
+			// level, time and chip writer
+			JsonObjectBuilder infoBuilds = Json.createObjectBuilder();
+			infoBuilds.add("Time", time);
+			infoBuilds.add("NumOfChips", leftChips);
+			infoBuilds.add("Level", currLevel);
+			rows.add(infoBuilds);
+
+			// inventory writer
+			JsonObjectBuilder inv = Json.createObjectBuilder();
+			JsonArrayBuilder invArr = Json.createArrayBuilder();
+			for (String itemName : inventory.keySet()) {	
+				JsonObjectBuilder invBuild = Json.createObjectBuilder();
+				invBuild.add(itemName, inventory.get(itemName));
+				invArr.add(invBuild);
+			}
+			inv.add("Inventory", invArr);
+			rows.add(inv);
+
 			JsonArray arr = rows.build();
 			jw.writeArray(arr);
 			jw.close();
@@ -75,9 +106,10 @@ public class SaveGame {
 
 	/**
 	 * Assign the corresponding values to tiles and actors.
-	 * @param cols = Array Builder for each array 
-	 * @param i = row index.
-	 * @param j = column index.
+	 * 
+	 * @param cols: Array Builder for each array
+	 * @param i:    row index.
+	 * @param j:    column index.
 	 */
 	private void jsonValues(int i, int j, JsonArrayBuilder cols) {
 		if (currentMap[i][j].getActor() != null) {

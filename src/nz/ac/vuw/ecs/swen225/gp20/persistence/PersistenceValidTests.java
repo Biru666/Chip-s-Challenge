@@ -7,14 +7,27 @@ import nz.ac.vuw.ecs.swen225.gp20.maze.Location;
 import nz.ac.vuw.ecs.swen225.gp20.maze.Maze;
 import nz.ac.vuw.ecs.swen225.gp20.maze.TileName;
 
+/**
+ * @author Biru Lin 300456889
+ *
+ */
 public class PersistenceValidTests {
+	
+	/**
+	 * test whether the save() method works
+	 */
 	@Test
 	public void test_save() {
 		Maze m = maze();
 		SaveGame saveGame = new SaveGame(m, 1);
-		
+		//saveGame.save("testSave.json");
+		Parser parse = new Parser("testSave.json");
+		m.setLevel(parse.map);
 	}
 
+	/*
+	 * Help method: generate new maze
+	 */
 	private Maze maze() {
 		Maze m = new Maze();
 		int x = 3;
