@@ -8,6 +8,11 @@ import java.net.URI;
 import java.net.URL;
 
 
+/**
+ * A class generate sound effect.
+ * @author Phoenix Xie
+ *
+ */
 public class Music{
 	    
 	private String name = "bgm.wav";
@@ -16,12 +21,19 @@ public class Music{
 	private URI uri;
 	private  AudioClip clip; 
 	
+	/**
+	 * Set music name.
+	 * @param name music name.
+	 */
 	void setMusic(String name){
        this.name=name;
    }
-  public Music(){     
-    try
-    {  
+	
+	/**
+	 * Loading music file.
+	 */
+	public Music(){     
+    try {  
        uri=f.toURI();
        url = uri.toURL();
        clip = Applet.newAudioClip(url); 
@@ -33,14 +45,25 @@ public class Music{
            System.out.println("error");
        }
    }
-  public void stopMusic(){
+  /**
+ * Stopping music playing.
+ */
+	public void stopMusic(){
       clip.stop();
   }
-  public void playMusic()
-  {
+  
+/**
+ * Start play music.
+ */
+	public void playMusic(){
       clip.play();
   }
-  public void loopMusic()
+
+
+  /**
+ *Looping current music file. 
+ */
+public void loopMusic()
   {
       clip.loop();
   }
