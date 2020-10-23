@@ -3,6 +3,7 @@ package nz.ac.vuw.ecs.swen225.gp20.persistence;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.Map;
 
 import javax.json.Json;
@@ -36,7 +37,7 @@ public class Parser {
 	/**
 	 * remaining game time.
 	 */
-	public int Time;
+	public int time;
 
 	/**
 	 * the number of chips Chap've collected.
@@ -51,7 +52,13 @@ public class Parser {
 	/**
 	 * the inventory for Chap.
 	 */
-	public Map<String, Integer> inventory;
+	public Map<String, Integer> inventory = new HashMap<String, Integer>();
+
+	private String Info1 = "Chap needs to pick up all the chips in time to pass this level.\r\n"
+			+ "Chips are distributed around the map and some of them are locked in rooms.\r\n"
+			+ "To open the doors, Chap needs to collect corresponding colored keys.";
+	private String Info2 = "When Chap falls into Lava, he will die.\r\n"
+			+ "Also, if Chap touches the bug, he will die as well.";
 
 	/**
 	 * Constructor for Parser.
@@ -96,14 +103,15 @@ public class Parser {
 	private void loadInfo(JsonArray arr) {
 		for (JsonValue obj : arr) {
 			if (obj.getValueType() == ValueType.OBJECT) {
-				Time = obj.asJsonObject().getInt("Time");
-				leftChips = obj.asJsonObject().getInt("NumofChips");
-				currLevel = obj.asJsonObject().getInt("Level");
-				if (obj.asJsonObject().containsKey("Inventory")) {
-					for (JsonValue obs : obj.asJsonObject().get("Inventory").asJsonArray()) {
-						for(String keys : obs.asJsonObject().keySet()) {
-							inventory.put(keys, obs.asJsonObject().getInt(keys));
-						}
+				JsonObject object = obj.asJsonObject();
+				time = object.getInt("Time", 0);
+				leftChips = object.getInt("NumOfChips", 0);
+				currLevel = object.getInt("Level", 0);
+				
+				if (object.containsKey("Inventory")) {
+					JsonObject invObj = object.get("Inventory").asJsonObject();
+					for (String keys : invObj.keySet()) {
+						inventory.put(keys, invObj.getInt(keys));
 					}
 				}
 			}
@@ -119,9 +127,11 @@ public class Parser {
 	 */
 	private void loadMap(int row, int col, JsonArray arr) {
 		map = new Location[row][col];
+
+//		System.out.println(col);
 		for (int i = 0; i < row; i++) {
 			JsonArray rowArr = arr.get(i).asJsonArray();
-			for (int j = 0; j < rowArr.asJsonArray().size(); j++) {
+			for (int j = 0; j < col; j++) {
 				int obj = rowArr.getInt(j);
 				switch (obj) {
 				// Chap's initial place
@@ -147,7 +157,6 @@ public class Parser {
 				// Green Key
 				case 6:
 					map[i][j] = new Location(i, j, TileName.KEY, Variation.GREEN);
-
 					break;
 				// Blue Key
 				case 7:
@@ -179,11 +188,11 @@ public class Parser {
 					break;
 				// Level 1 Help
 				case 14:
-					map[i][j] = new Location(i, j, TileName.INFO);
+					map[i][j] = new Location(i, j, TileName.INFO, Info1);
 					break;
 				// Level 2 Help
 				case 17:
-					map[i][j] = new Location(i, j, TileName.INFO);
+					map[i][j] = new Location(i, j, TileName.INFO, Info2);
 					break;
 				// Bug
 				case 15:
@@ -200,7 +209,7 @@ public class Parser {
 			}
 		}
 	}
-	
+
 	/**
 	 * @param args
 	 */
